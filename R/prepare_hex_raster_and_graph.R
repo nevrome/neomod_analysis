@@ -73,7 +73,7 @@ distmat <- rgeos::gDistance(nodes_spdf, byid = TRUE)
 #   dplyr::mutate(distance = runif(nrow(.), 0, 100) %>% round(0))
 
 # aproach2:  
-edges <- distmat %>% 
+edges_step_1 <- distmat %>% 
   # convert distmat to a tall, tidy format
   reshape2::melt() %>%
   tibble::as.tibble() %>%
@@ -89,15 +89,35 @@ edges <- distmat %>%
     # transform distance from meter to kilometer
     distance = distance/1000
   ) %>%
-  # group by from
-  dplyr::group_by(from) %>%
+  dplyr::arrange(from) %>%
+  # remove autocorrelation
   dplyr::filter(
-    # remove autocorrelation
-    distance != 0,
-    # reduce connections to every node within 100km
-    distance <= 100
+    distance != 0
   ) %>%
-  dplyr::arrange(from)
+  dplyr::mutate(
+    # mark connections to every node within 100km
+    connection = ifelse(distance <= 100, TRUE, FALSE)
+  ) #%>% 
+  # # group by from
+  # dplyr::group_by(from) %>%
+  # # count number of connections per node
+  # dplyr::mutate(
+  #   n_con = sum(connection == TRUE)
+  # )
+
+edges_step_2 <- edges_step_1 %>% dplyr::left_join(
+  nodes, by = c("from" = "name")
+  ) %>% dplyr::rename(
+    "x.from" = "x",
+    "y.from" = "y"
+  ) %>% dplyr::left_join(
+    nodes, by = c("to" = "name")
+  ) %>% dplyr::rename(
+    "x.to" = "x",
+    "y.to" = "y"
+  )
+
+#https://gis.stackexchange.com/questions/154689/how-to-find-the-coordinates-of-the-intersection-points-between-two-spatiallines    
 
 # distance value
 # ?
