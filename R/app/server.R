@@ -1,16 +1,20 @@
 function(input, output, session) {
   
   library(magrittr)
-  
-  # clusters <- reactive({
-  #   kmeans(selectedData(), input$clusters)
-  # })
+  library(gluesless)
   
   # load data
   load("/home/clemens/neomod/neomod_datapool/model_data/hex_graph.RData")
   load("/home/clemens/neomod/neomod_datapool/model_data/research_area_df.RData")
   load("/home/clemens/neomod/neomod_datapool/model_data/research_area_hex_df.RData")
 
+  output$state_nr_control <- renderUI({
+    sliderInput(
+      "state_nr", "Floooeeet!",
+      min = 1, max = length(states()), value = 1
+    )
+  })
+  
   #run model
   states <- reactive({
 
@@ -32,7 +36,9 @@ function(input, output, session) {
   )
     
   output$plot1 <- renderPlot({
-    worldplot %>%
-      plot_state(states = states(), input$state_nr)
+    if(input$state_nr %>% is.null %>% `!`) {
+      worldplot %>%
+        plot_state(states = states(), input$state_nr)
+    }
   })
 }
