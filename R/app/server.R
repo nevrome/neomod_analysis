@@ -10,8 +10,8 @@ function(input, output, session) {
 
   output$state_nr_control <- renderUI({
     sliderInput(
-      "state_nr", "Floooeeet!",
-      min = 1, max = length(states()), value = 1
+      "state_nr", "state / timestep!",
+      min = 0, max = length(states()), value = 0, step = 5
     )
   })
   
@@ -29,16 +29,23 @@ function(input, output, session) {
 
   })
   
+  # prepare base plot
   worldplot <- gluesless::plot_world(
     graph = hex_graph, 
     world = research_area_df, 
     hex = research_area_hex_df
   )
-    
-  output$plot1 <- renderPlot({
-    if(input$state_nr %>% is.null %>% `!`) {
+  
+  # add ideas to base plot  
+  output$map <- renderPlot({
+    if(
+      input$state_nr %>% is.null %>% `!` &&
+      input$state_nr > 0
+    ) {
       worldplot %>%
         plot_state(states = states(), input$state_nr)
+    } else {
+      worldplot
     }
-  })
+  }, height = 700, width = 1000)
 }

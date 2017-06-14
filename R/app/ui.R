@@ -1,12 +1,10 @@
 pageWithSidebar(
   headerPanel('Simulation'),
   sidebarPanel(
-    actionButton("do", "Click Me"),
     uiOutput("state_nr_control"),
-    numericInput('iterations', 'iter', 30,
-                 min = 10, max = 100)
+    numericInput("iterations", "number of model iteration", 50)
   ),
   mainPanel(
-    plotOutput('plot1')
+    plotOutput("map", width = "100%")
   )
 )
