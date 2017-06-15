@@ -54,7 +54,11 @@ nodes_spdf <- sp::SpatialPointsDataFrame(
     sp::CRS(moll_crs)
   )
 
+<<<<<<< HEAD
 # plot(nodes_spdf@coords)
+=======
+#plot(nodes_spdf@coords)
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
 # plot(nodes_spdf, cex = 0.01)
 # text(nodes_spdf, cex = 0.4)
 
@@ -77,9 +81,14 @@ distmat <- rgeos::gDistance(nodes_spdf, byid = TRUE)
 #   dplyr::mutate(distance = runif(nrow(.), 0, 100) %>% round(0))
 
 # aproach2:  
+<<<<<<< HEAD
 
 # prepare distance table
 edges_complete <- distmat %>% 
+=======
+# prepare distance table
+edges_step_1 <- distmat %>% 
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
   # convert distmat to a tall, tidy format
   reshape2::melt() %>%
   tibble::as.tibble() %>%
@@ -104,12 +113,27 @@ edges_complete <- distmat %>%
   dplyr::group_by(from) %>%
   # count number of connections per "from" node
   dplyr::mutate(
+<<<<<<< HEAD
     n_con = sum(distance <= 100)
   ) %>%
   # ungroup
   dplyr::ungroup() %>%
   # join with node coordinate information
   dplyr::left_join(
+=======
+    # mark connections to every node within 100km
+    con_1 = ifelse(distance <= 100, TRUE, FALSE)
+  ) #%>% 
+  # # group by from
+  # dplyr::group_by(from) %>%
+  # # count number of connections per node
+  # dplyr::mutate(
+  #   n_con = sum(connection == TRUE)
+  # )
+
+# join with coordinates
+edges_step_2 <- edges_step_1 %>% dplyr::left_join(
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
   nodes, by = c("from" = "name")
   ) %>% dplyr::rename(
     "x.from" = "x",
@@ -121,8 +145,20 @@ edges_complete <- distmat %>%
     "y.to" = "y"
   )
 
+<<<<<<< HEAD
 # filter to get potential over-water connections
 edges_over_water <- edges_complete %>%
+=======
+edges_step_3 <- edges_step_2 %>%
+  # group by "from"
+  dplyr::group_by(from) %>%
+  # count number of connections per "from" node
+  dplyr::mutate(
+    n_con = sum(con_1 == TRUE)
+  ) %>%
+  # ungroup
+  dplyr::ungroup() %>%
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
   # remove connections with "from" nodes with the usual 6 or 
   # more connections
   dplyr::filter(
@@ -137,11 +173,19 @@ edges_over_water <- edges_complete %>%
     distance <= 300
   )
 
+<<<<<<< HEAD
 research_area_lines <- as(research_area, "SpatialLines")
 # plot(research_area_lines)
 
 # determine number of intersections (Edges & Land)
 number_of_intersections <- edges_over_water %>%
+=======
+fnup <- as(research_area, "SpatialLines")
+plot(fnup)
+
+
+hu <- edges_step_3 %>%
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
   apply(1, function(x) {SpatialLines(
     cbind(c(x["x.from"], x["x.to"]), c(x["y.from"], x["y.to"])) %>%
       sp::Line() %>%
@@ -152,11 +196,20 @@ number_of_intersections <- edges_over_water %>%
   lapply(
     function(x){
       rgeos::gIntersection(
+<<<<<<< HEAD
         x, research_area_lines
       )
     }
   ) %>%
   # get vector with number of intersections
+=======
+        x, fnup
+      )
+    }
+  )
+
+pu <- hu %>%
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
   lapply(function(x){
     if(class(x) == "SpatialPoints") {
       x %>% coordinates %>% nrow
@@ -165,6 +218,7 @@ number_of_intersections <- edges_over_water %>%
     }
   }) %>% unlist
 
+<<<<<<< HEAD
 # add intersections information to connection information
 edges_over_water %<>%
   dplyr::select(from, to) %>%
@@ -184,6 +238,15 @@ edges <- edges_complete %>%
     distance <= 100 |
       (distance <= 300 & inter == 2)
   )
+=======
+
+# edges_step_5 <- edges_step_4 %>%
+#   dplyr::mutate(
+#     con_2_d = ifelse(!is.na(cross_count) & cross_count == 2 , TRUE, FALSE)
+#   )
+
+#https://gis.stackexchange.com/questions/154689/how-to-find-the-coordinates-of-the-intersection-points-between-two-spatiallines    
+>>>>>>> dff752147d4b7a8a3a4faaa8127d0655873fa855
 
 # distance value
 # ?
