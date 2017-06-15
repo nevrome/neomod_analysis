@@ -42,16 +42,21 @@ nodes <- research_area_hex_df %>%
   ) %>%
   dplyr::select(name, x, y)
 
+wgs_crs <- proj4string(research_area)
+moll_crs <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
 # transform from wgs84 to mollweide and create SpatialPointsDataFrame
 nodes_spdf <- sp::SpatialPointsDataFrame(
     coords = dplyr::select_(nodes, "x", "y"), data = nodes,
-    proj4string = sp::CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    proj4string = sp::CRS(wgs_crs)
   ) %>% 
   sp::spTransform(
-    sp::CRS("+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+    sp::CRS(moll_crs)
   )
 
 #plot(nodes_spdf@coords)
+# plot(nodes_spdf, cex = 0.01)
+# text(nodes_spdf, cex = 0.4)
 
 # node distance point matrix
 distmat <- rgeos::gDistance(nodes_spdf, byid = TRUE)
@@ -73,6 +78,7 @@ distmat <- rgeos::gDistance(nodes_spdf, byid = TRUE)
 #   dplyr::mutate(distance = runif(nrow(.), 0, 100) %>% round(0))
 
 # aproach2:  
+# prepare distance table
 edges_step_1 <- distmat %>% 
   # convert distmat to a tall, tidy format
   reshape2::melt() %>%
@@ -96,7 +102,7 @@ edges_step_1 <- distmat %>%
   ) %>%
   dplyr::mutate(
     # mark connections to every node within 100km
-    connection = ifelse(distance <= 100, TRUE, FALSE)
+    con_1 = ifelse(distance <= 100, TRUE, FALSE)
   ) #%>% 
   # # group by from
   # dplyr::group_by(from) %>%
@@ -105,6 +111,7 @@ edges_step_1 <- distmat %>%
   #   n_con = sum(connection == TRUE)
   # )
 
+# join with coordinates
 edges_step_2 <- edges_step_1 %>% dplyr::left_join(
   nodes, by = c("from" = "name")
   ) %>% dplyr::rename(
@@ -116,6 +123,64 @@ edges_step_2 <- edges_step_1 %>% dplyr::left_join(
     "x.to" = "x",
     "y.to" = "y"
   )
+
+edges_step_3 <- edges_step_2 %>%
+  # group by "from"
+  dplyr::group_by(from) %>%
+  # count number of connections per "from" node
+  dplyr::mutate(
+    n_con = sum(con_1 == TRUE)
+  ) %>%
+  # ungroup
+  dplyr::ungroup() %>%
+  # remove connections with "from" nodes with the usual 6 or 
+  # more connections
+  dplyr::filter(
+    n_con < 6
+  ) %>%
+  # remove connections with "to" partnernodes respectively
+  dplyr::filter(
+    to %in% unique(.$from)
+  ) %>%
+  # remove every edge with a distance value > 300km 
+  dplyr::filter(
+    distance <= 300
+  )
+
+fnup <- as(research_area, "SpatialLines")
+plot(fnup)
+
+
+hu <- edges_step_3 %>%
+  apply(1, function(x) {SpatialLines(
+    cbind(c(x["x.from"], x["x.to"]), c(x["y.from"], x["y.to"])) %>%
+      sp::Line() %>%
+      sp::Lines(ID = "a") %>%
+      list,
+    proj4string = CRS(wgs_crs)
+  )}) %>%
+  lapply(
+    function(x){
+      rgeos::gIntersection(
+        x, fnup
+      )
+    }
+  )
+
+pu <- hu %>%
+  lapply(function(x){
+    if(class(x) == "SpatialPoints") {
+      x %>% coordinates %>% nrow
+    } else {
+      NA
+    }
+  }) %>% unlist
+
+
+# edges_step_5 <- edges_step_4 %>%
+#   dplyr::mutate(
+#     con_2_d = ifelse(!is.na(cross_count) & cross_count == 2 , TRUE, FALSE)
+#   )
 
 #https://gis.stackexchange.com/questions/154689/how-to-find-the-coordinates-of-the-intersection-points-between-two-spatiallines    
 
