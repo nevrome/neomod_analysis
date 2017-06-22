@@ -42,6 +42,8 @@ nodes <- research_area_hex_df %>%
   ) %>%
   dplyr::select(name, x, y)
 
+save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
+
 wgs_crs <- proj4string(research_area)
 moll_crs <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 
@@ -185,8 +187,16 @@ edges <- edges_complete %>%
       (distance <= 300 & inter == 2)
   )
 
+save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
+
 # distance value
-# ?
+load("../neomod_datapool/model_data/hex_graph_egdes.RData")
+load("../neomod_datapool/model_data/hex_graph_nodes.RData")
+
+edges %<>% dplyr::mutate(
+  spatial_dist = distance,
+  distance = nrow(.) %>% runif(., min = 0, max = 3) %>% abs %>% round(0)
+)
 
 # create graph from nodes and edges  
 g <- igraph::graph_from_data_frame(
@@ -200,6 +210,8 @@ g <- igraph::graph_from_data_frame(
 
 hex_graph <- set.graph.attribute(g, "graph_name", "testgraph")
 
+# load("../neomod_datapool/model_data/research_area_df.RData")
 gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
 
 save(hex_graph, file = "../neomod_datapool/model_data/hex_graph.RData")
+# gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
