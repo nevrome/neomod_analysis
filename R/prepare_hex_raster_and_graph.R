@@ -2,20 +2,32 @@ library(ggplot2)
 library(magrittr)
 library(igraph)
 library(gluesless)
+library(pbapply)
 
 #### research area ####
 area <- rgdal::readOGR(
   dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
+  #dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
 )
+
+#plot(area)
 
 research_area_border <- rgdal::readOGR(
   dsn = "../neomod_datapool/geodata/research_areas/extent.shp"
 )
 
-research_area <- rgeos::gIntersection(
+research_area_highres <- rgeos::gIntersection(
   area, research_area_border, byid = TRUE,
   drop_lower_td = TRUE
 )
+
+# plot(research_area_highres)
+# research_area <- research_area_highres %>%
+#   rgeos::gSimplify(tol = 0.4, topologyPreserve=TRUE) %>%
+#   rgeos::gSimplify(tol = 0.2)
+# plot(research_area)
+research_area <- research_area_highres
+
 
 research_area_df <- ggplot2::fortify(research_area)
 
@@ -26,7 +38,8 @@ research_area_hex_df <- gluesless::hexify(
   area = research_area,
   hexproj  = "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs",
   bufferwidth = 2000,
-  hexcellsize = 75000
+  #hexcellsize = 75000
+  hexcellsize = 70000
   ) %>%
   ggplot2::fortify(region = "id")
 
@@ -151,13 +164,20 @@ number_of_intersections <- edges_over_water %>%
       list,
     proj4string = CRS(wgs_crs)
   )}) %>%
-  lapply(
-    function(x){
-      rgeos::gIntersection(
-        x, research_area_lines
-      )
-    }
-  ) %>%
+  # (!) most time consuming
+  # lapply(
+  #   function(x){
+  #     rgeos::gIntersection(
+  #       x, research_area_lines
+  #     )
+  #   }
+  # ) %>%
+  pbapply::pblapply(function(x){
+        rgeos::gIntersection(
+          x, research_area_lines
+        )
+      }
+    ) %>%
   # get vector with number of intersections
   lapply(function(x){
     if(class(x) == "SpatialPoints") {
@@ -210,8 +230,18 @@ g <- igraph::graph_from_data_frame(
 
 hex_graph <- set.graph.attribute(g, "graph_name", "testgraph")
 
-# load("../neomod_datapool/model_data/research_area_df.RData")
 gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
 
 save(hex_graph, file = "../neomod_datapool/model_data/hex_graph.RData")
-# gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
+
+#####
+
+load("../neomod_datapool/model_data/research_area_hex_df.RData")
+load("../neomod_datapool/model_data/research_area_df.RData")
+load("../neomod_datapool/model_data/hex_graph.RData")
+gluesless::plot_world(
+  hex_graph, 
+  world = research_area_df, 
+  hex = research_area_hex_df,
+  plotedges = FALSE
+)
