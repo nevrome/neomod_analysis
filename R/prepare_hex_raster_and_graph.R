@@ -5,9 +5,12 @@ library(gluesless)
 library(pbapply)
 
 #### research area ####
+
+# load data
 area <- rgdal::readOGR(
-  dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
-  #dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
+  #dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
+  dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
+  #dsn = "../neomod_datapool/geodata/land_shapes/ne_10m_land.shp"
 )
 
 #plot(area)
@@ -21,13 +24,21 @@ research_area_highres <- rgeos::gIntersection(
   drop_lower_td = TRUE
 )
 
-# plot(research_area_highres)
-# research_area <- research_area_highres %>%
-#   rgeos::gSimplify(tol = 0.4, topologyPreserve=TRUE) %>%
-#   rgeos::gSimplify(tol = 0.2)
-# plot(research_area)
-research_area <- research_area_highres
+#plot(research_area_highres)
 
+# adjust map
+crs_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" 
+crs_wgs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
+
+rahm <- research_area_highres %>% 
+  sp::spTransform(CRS(crs_moll)) %>%
+  gBuffer(width = 15000) %>%
+  rgeos::gSimplify(tol = 15000, topologyPreserve = TRUE) %>%
+  sp::spTransform(CRS(crs_wgs))
+
+#plot(rahm)
+
+research_area <- rahm
 
 research_area_df <- ggplot2::fortify(research_area)
 
@@ -57,16 +68,13 @@ nodes <- research_area_hex_df %>%
 
 save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
 
-wgs_crs <- proj4string(research_area)
-moll_crs <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
-
 # transform from wgs84 to mollweide and create SpatialPointsDataFrame
 nodes_spdf <- sp::SpatialPointsDataFrame(
     coords = dplyr::select_(nodes, "x", "y"), data = nodes,
-    proj4string = sp::CRS(wgs_crs)
+    proj4string = sp::CRS(crs_wgs)
   ) %>% 
   sp::spTransform(
-    sp::CRS(moll_crs)
+    sp::CRS(crs_moll)
   )
 
 # plot(nodes_spdf@coords)
@@ -147,9 +155,9 @@ edges_over_water <- edges_complete %>%
   dplyr::filter(
     to %in% unique(.$from)
   ) %>%
-  # remove every edge with a distance value > 300km 
+  # remove every edge with a distance value > 250km 
   dplyr::filter(
-    distance <= 300
+    distance <= 250
   )
 
 research_area_lines <- as(research_area, "SpatialLines")
@@ -162,7 +170,7 @@ number_of_intersections <- edges_over_water %>%
       sp::Line() %>%
       sp::Lines(ID = "a") %>%
       list,
-    proj4string = CRS(wgs_crs)
+    proj4string = CRS(crs_wgs)
   )}) %>%
   # (!) most time consuming
   # lapply(
@@ -204,7 +212,7 @@ edges_complete %<>%
 edges <- edges_complete %>%
   dplyr::filter(
     distance <= 100 |
-      (distance <= 300 & inter == 2)
+      (distance <= 250 & inter == 2)
   )
 
 save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
