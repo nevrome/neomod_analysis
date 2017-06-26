@@ -3,6 +3,14 @@ library(magrittr)
 library(igraph)
 library(gluesless)
 library(pbapply)
+library(sf)
+library(readr)
+library(dplyr)
+library(purrr)
+library(sp)
+library(rgeos)
+
+
 
 #### research area ####
 
@@ -32,7 +40,7 @@ crs_wgs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
 
 rahm <- research_area_highres %>% 
   sp::spTransform(CRS(crs_moll)) %>%
-  gBuffer(width = 15000) %>%
+  rgeos::gBuffer(width = 15000) %>%
   rgeos::gSimplify(tol = 15000, topologyPreserve = TRUE) %>%
   sp::spTransform(CRS(crs_wgs))
 
@@ -43,6 +51,8 @@ research_area <- rahm
 research_area_df <- ggplot2::fortify(research_area)
 
 save(research_area_df, file = "../neomod_datapool/model_data/research_area_df.RData")
+
+
 
 #### research area hex ####
 research_area_hex_df <- gluesless::hexify(
@@ -56,7 +66,10 @@ research_area_hex_df <- gluesless::hexify(
 
 save(research_area_hex_df, file = "../neomod_datapool/model_data/research_area_hex_df.RData")
 
-#### graph ####
+
+
+#### construct nodes and edges ####
+
 # get node point coordinates as the mean coordinates of the hex cell corners
 nodes <- research_area_hex_df %>%
   dplyr::group_by_("id") %>%
@@ -170,7 +183,7 @@ number_of_intersections <- edges_over_water %>%
       sp::Line() %>%
       sp::Lines(ID = "a") %>%
       list,
-    proj4string = CRS(crs_wgs)
+    proj4string = sp::CRS(crs_wgs)
   )}) %>%
   # (!) most time consuming
   # lapply(
@@ -217,22 +230,97 @@ edges <- edges_complete %>%
 
 save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
-# distance value
+
+
+#### determine distance values for graph edges ####
+
+# random distance values: 
+# edges %<>% dplyr::mutate(
+#   spatial_dist = distance,
+#   distance = nrow(.) %>% runif(., min = 0, max = 3) %>% abs %>% round(0)
+# )
+
+# load already present data
 load("../neomod_datapool/model_data/hex_graph_egdes.RData")
 load("../neomod_datapool/model_data/hex_graph_nodes.RData")
 
-edges %<>% dplyr::mutate(
-  spatial_dist = distance,
-  distance = nrow(.) %>% runif(., min = 0, max = 3) %>% abs %>% round(0)
+wgs <- 4326
+
+# load gronenborn map shape
+neo_gron <- sf::st_read(
+  dsn = "~/neomod/neomod_datapool/neolithic_expansion/gronenborn_map/neolithic.shp"
 )
 
-# create graph from nodes and edges  
+# load meta info for polygons
+starts <- read_csv("~/neomod/neomod_datapool/neolithic_expansion/gronenborn_map/gronenborn.txt")
+
+neo_gron %<>% 
+  # increase polygon size by buffering
+  st_buffer(70000) %>%
+  # transform to wgs84
+  sf::st_transform(wgs) %>% 
+  # merge with meta info
+  dplyr::left_join(
+    starts, "id"
+  ) %>% dplyr::mutate(
+    shape_index = 1:nrow(.)
+  )
+
+# nodes as sf object
+nodes_sf <- nodes %>% sf::st_as_sf(
+    coords = c("x", "y"),
+    crs = wgs
+  )
+
+# join graph info with gronenborn map info:
+# intersect and find oldest present date
+nodes_sf %<>% mutate(
+    within = st_within(., neo_gron),
+    start = map_int(within, function(x){
+      if (length(x) > 0) {
+        map_int(x, function(x){
+          neo_gron$start[which(x == neo_gron$shape_index)]
+        }) %>% max %>% return
+      } else {
+        NA
+      }
+    })
+  )
+
+nodes %>% 
+  # add new info to nodes df
+  mutate(start = nodes_sf$start) %>% 
+  # calculate resistance value from start
+  mutate(
+    resistance = (max(start, na.rm = TRUE)/start) %>% round(., 2)
+  )
+
+#nodes %>% ggplot(aes(x, y, color = resistance)) + geom_point()
+
+# add resistance to edges 
+edges %<>% dplyr::mutate(
+  spatial_dist = distance,
+  distance = map2_dbl(from, to, function(x, y){
+      fr <- nodes[which(x == nodes$name), ]$resistance
+      tr <- nodes[which(y == nodes$name), ]$resistance
+      if (!is.na(fr) | !is.na(tr)) {
+        res <- min(c(fr, tr), na.rm = TRUE)
+      } else {
+        res <- max(nodes$resistance, na.rm = TRUE) + 0.5
+      }
+      return(res)
+    }
+  )
+)
+
+
+
+#### create graph from nodes and edges with distance info ####  
 g <- igraph::graph_from_data_frame(
-  edges,
-  directed = FALSE,
-  vertices = nodes
-  ) %>%
-  igraph::simplify(
+    edges,
+    directed = FALSE,
+    vertices = nodes
+  ) %>% igraph::simplify(
     edge.attr.comb = "mean"
   )
 
@@ -250,6 +338,6 @@ load("../neomod_datapool/model_data/hex_graph.RData")
 gluesless::plot_world(
   hex_graph, 
   world = research_area_df, 
-  hex = research_area_hex_df,
-  plotedges = FALSE
+  #hex = research_area_hex_df,
+  plotedges = T
 )
