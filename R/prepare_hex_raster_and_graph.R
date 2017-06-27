@@ -287,12 +287,12 @@ nodes_sf %<>% mutate(
     })
   )
 
-nodes %>% 
+nodes %<>% 
   # add new info to nodes df
   mutate(start = nodes_sf$start) %>% 
   # calculate resistance value from start
   mutate(
-    resistance = (max(start, na.rm = TRUE)/start) %>% round(., 2)
+    resistance = abs(start/max(start, na.rm = TRUE) - 1) %>% round(., 2)
   )
 
 #nodes %>% ggplot(aes(x, y, color = resistance)) + geom_point()
@@ -326,7 +326,7 @@ g <- igraph::graph_from_data_frame(
 
 hex_graph <- set.graph.attribute(g, "graph_name", "testgraph")
 
-gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
+#gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
 
 save(hex_graph, file = "../neomod_datapool/model_data/hex_graph.RData")
 
