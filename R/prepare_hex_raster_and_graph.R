@@ -215,7 +215,7 @@ edges_over_water %<>%
   )
 
 # join and filter
-edges <- edges_complete %>%
+edges_complete_sel <- edges_complete %>%
   # join to have interaction information in complete distance table
   dplyr::left_join(
     edges_over_water, by = c("from", "to")
@@ -226,28 +226,47 @@ edges <- edges_complete %>%
       (distance <= 250 & inter == 2)
   )
 
-
-# edges %>%
-#   dplyr::mutate(
-#     inter_too_much_land =
-#       apply(., 1, function(x){
-#         if (x$inter == 2) {
-#           #pu <- as.data.frame(x$inter_raw)
-#           # attach start and endpoint to intersection points
-#           startpoint <- data.frame(
-#             x = x$x.from,
-#             y = x$y.from
-#           )
-#           endpoint <- data.frame(
-#             x = x$x.to,
-#             y = x$y.to
-#           )
-#           fourpoints <- rbind(startpoint, x$inter_raw, endpoint)
-#         }
-#       }
-#     )
-#   )
-
+# check, if over sea connections are actually over land connections 
+# and remove the bad ones
+edges <- edges_complete_sel %>%
+  dplyr::mutate(
+    inter_too_much_land =
+      apply(., 1, function(x){
+        if (!is.na(x$inter) && x$inter == 2) {
+          
+          # define start-, intersection- and endpoints 
+          startpoint <- data.frame(
+            x = x$x.from,
+            y = x$y.from
+          )
+          midpoints <- coordinates(x$inter_raw)
+          endpoint <- data.frame(
+            x = x$x.to,
+            y = x$y.to
+          )
+          
+          # combine points to data.frame  
+          disi <- rbind(startpoint, midpoints, endpoint) %>% 
+            # create Spatial.Points Object
+            SpatialPoints(proj4string = sp::CRS(crs_wgs)) %>% 
+            # transform coordinates
+            sp::spTransform(sp::CRS(crs_moll)) %>%
+            # calculate 
+            rgeos::gDistance(byid = TRUE)
+          
+          # check if distance over land is bigger than 
+          # distance over sea
+          return(disi[1,2] + disi[3,4] > disi[2,3])
+        } else {
+          return(FALSE)
+        }
+      }
+    ) %>% unlist
+  ) %>% 
+  # remove the bad ones (where inter_too_much_land == TRUE) 
+  dplyr::filter(
+    !inter_too_much_land
+  )
 
 save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
