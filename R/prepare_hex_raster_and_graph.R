@@ -214,23 +214,40 @@ edges_over_water %<>%
     inter = number_of_intersections
   )
 
-# remove intersections with too much over land distance
-
-## TODO
-
-
-# join to have interaction information in complete distance table
-edges_complete %<>%
+# join and filter
+edges <- edges_complete %>%
+  # join to have interaction information in complete distance table
   dplyr::left_join(
     edges_over_water, by = c("from", "to")
-  )
-  
-# filter edges_complete to fit every criteria
-edges <- edges_complete %>%
+  ) %>%
+  # filter edges_complete to fit every criteria
   dplyr::filter(
     distance <= 100 |
       (distance <= 250 & inter == 2)
   )
+
+
+# edges %>%
+#   dplyr::mutate(
+#     inter_too_much_land =
+#       apply(., 1, function(x){
+#         if (x$inter == 2) {
+#           #pu <- as.data.frame(x$inter_raw)
+#           # attach start and endpoint to intersection points
+#           startpoint <- data.frame(
+#             x = x$x.from,
+#             y = x$y.from
+#           )
+#           endpoint <- data.frame(
+#             x = x$x.to,
+#             y = x$y.to
+#           )
+#           fourpoints <- rbind(startpoint, x$inter_raw, endpoint)
+#         }
+#       }
+#     )
+#   )
+
 
 save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
