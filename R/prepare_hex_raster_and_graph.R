@@ -27,6 +27,7 @@ research_area_border <- rgdal::readOGR(
   dsn = "../neomod_datapool/geodata/research_areas/extent.shp"
 )
 
+# clip map to research area 
 research_area_highres <- rgeos::gIntersection(
   area, research_area_border, byid = TRUE,
   drop_lower_td = TRUE
@@ -34,7 +35,7 @@ research_area_highres <- rgeos::gIntersection(
 
 #plot(research_area_highres)
 
-# adjust map
+# adjust map with buffering and simplification
 crs_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" 
 crs_wgs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
 
@@ -55,6 +56,8 @@ save(research_area_df, file = "../neomod_datapool/model_data/research_area_df.RD
 
 
 #### research area hex ####
+
+# create hex raster
 research_area_hex_df <- gluesless::hexify(
   area = research_area,
   hexproj  = "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs",
@@ -177,7 +180,7 @@ research_area_lines <- as(research_area, "SpatialLines")
 # plot(research_area_lines)
 
 # determine number of intersections (Edges & Land)
-number_of_intersections <- edges_over_water %>%
+intersections <- edges_over_water %>%
   apply(1, function(x) {SpatialLines(
     cbind(c(x["x.from"], x["x.to"]), c(x["y.from"], x["y.to"])) %>%
       sp::Line() %>%
@@ -186,20 +189,15 @@ number_of_intersections <- edges_over_water %>%
     proj4string = sp::CRS(crs_wgs)
   )}) %>%
   # (!) most time consuming
-  # lapply(
-  #   function(x){
-  #     rgeos::gIntersection(
-  #       x, research_area_lines
-  #     )
-  #   }
-  # ) %>%
   pbapply::pblapply(function(x){
-        rgeos::gIntersection(
-          x, research_area_lines
-        )
-      }
-    ) %>%
-  # get vector with number of intersections
+      rgeos::gIntersection(
+        x, research_area_lines
+      )
+    }
+  )
+
+# get vector with number of intersections
+number_of_intersections <- intersections %>%
   lapply(function(x){
     if(class(x) == "SpatialPoints") {
       x %>% coordinates %>% nrow
@@ -212,8 +210,14 @@ number_of_intersections <- edges_over_water %>%
 edges_over_water %<>%
   dplyr::select(from, to) %>%
   dplyr::mutate(
+    inter_raw = intersections,
     inter = number_of_intersections
   )
+
+# remove intersections with too much over land distance
+
+## TODO
+
 
 # join to have interaction information in complete distance table
 edges_complete %<>%
