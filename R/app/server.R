@@ -11,7 +11,8 @@ function(input, output, session) {
   output$state_nr_control <- renderUI({
     sliderInput(
       "state_nr", "state / timestep!",
-      min = 0, max = length(states()), value = 0, step = 5
+      min = 0, max = input$iterations - 1, value = 0, 
+      step = 10^(floor(log10(input$iterations)) - 1)
     )
   })
   
@@ -45,7 +46,7 @@ function(input, output, session) {
       input$state_nr > 0
     ) {
       worldplot %>%
-        plot_state(states = states(), input$state_nr)
+        plot_state(states = states(), which(names(states()) == paste(input$state_nr)))
     } else {
       worldplot
     }
