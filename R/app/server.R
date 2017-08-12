@@ -15,12 +15,14 @@ function(input, output, session) {
     )
   })
   
+  graphstring <- graphwrite(hex_graph)
+  
   #run model
   states <- reactive({
 
     new(
       "model_builder",
-      networkland_env = graphwrite(hex_graph),
+      networkland_env = graphstring,
       number_iterations = input$iterations
     ) %>%
       run() %$%
