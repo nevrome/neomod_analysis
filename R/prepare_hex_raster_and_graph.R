@@ -274,37 +274,37 @@ save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
 #### determine distance values for graph edges ####
 
-# random distance values: 
-# edges %<>% dplyr::mutate(
-#   spatial_dist = distance,
-#   distance = nrow(.) %>% runif(., min = 0, max = 3) %>% abs %>% round(0)
-# )
-
 # load already present data
 load("../neomod_datapool/model_data/hex_graph_egdes.RData")
 load("../neomod_datapool/model_data/hex_graph_nodes.RData")
 
 wgs <- 4326
 
-# load gronenborn map shape
-neo_gron <- sf::st_read(
-  dsn = "~/neomod/neomod_datapool/neolithic_expansion/gronenborn_map/neolithic.shp"
+# load rivers and lake shapes
+rivers <- raster::shapefile(
+  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_10m_rivers_lake_centerlines"
+)
+lakes <- raster::shapefile(
+  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_10m_lakes"
 )
 
-# load meta info for polygons
-starts <- read_csv("~/neomod/neomod_datapool/neolithic_expansion/gronenborn_map/gronenborn.txt")
+# get research area border
+research_area_border <- rgdal::readOGR(
+  dsn = "../neomod_datapool/geodata/research_areas/extent.shp"
+)
 
-neo_gron %<>% 
-  # increase polygon size by buffering
-  st_buffer(70000) %>%
-  # transform to wgs84
-  sf::st_transform(wgs) %>% 
-  # merge with meta info
-  dplyr::left_join(
-    starts, "id"
-  ) %>% dplyr::mutate(
-    shape_index = 1:nrow(.)
-  )
+# clip rivers and lakes to research area 
+rivers_research_area <- rgeos::gIntersection(
+  rivers, research_area_border, byid = TRUE,
+  drop_lower_td = TRUE
+)
+
+lakes_research_area <- rgeos::gIntersection(
+  lakes, research_area_border, byid = TRUE,
+  drop_lower_td = TRUE
+)
+
+###
 
 # nodes as sf object
 nodes_sf <- nodes %>% sf::st_as_sf(
