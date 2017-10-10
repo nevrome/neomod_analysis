@@ -58,13 +58,24 @@ save(research_area_df, file = "../neomod_datapool/model_data/research_area_df.RD
 #### research area hex ####
 
 # create hex raster
-research_area_hex_df <- gluesless::hexify(
+research_area_hex <- gluesless::hexify(
   area = research_area,
   hexproj  = "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs",
   bufferwidth = 2000,
   #hexcellsize = 75000
   hexcellsize = 70000
-  ) %>%
+  )
+
+save(research_area_hex, file = "../neomod_datapool/model_data/research_area_hex.RData")
+
+rgdal::writeOGR(
+  obj = as(research_area_hex, "SpatialPolygonsDataFrame"), 
+  dsn = "../neomod_datapool/model_data/shapes",
+  layer = "research_area_hex",
+  driver = "ESRI Shapefile"
+)
+  
+research_area_hex_df <- research_area_hex %>%
   ggplot2::fortify(region = "id")
 
 save(research_area_hex_df, file = "../neomod_datapool/model_data/research_area_hex_df.RData")
@@ -80,7 +91,7 @@ nodes <- research_area_hex_df %>%
   dplyr::mutate_(
     "name" = ~seq(from = 0, to = length(id) - 1, by = 1)
   ) %>%
-  dplyr::select(name, x, y)
+  dplyr::select(name, x, y, id)
 
 save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
 
@@ -274,79 +285,82 @@ save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
 #### determine distance values for graph edges ####
 
-# load already present data
-load("../neomod_datapool/model_data/hex_graph_egdes.RData")
-load("../neomod_datapool/model_data/hex_graph_nodes.RData")
-
-wgs <- 4326
-
-# load rivers and lake shapes
-rivers <- raster::shapefile(
-  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_10m_rivers_lake_centerlines"
-)
-lakes <- raster::shapefile(
-  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_10m_lakes"
-)
-
 # get research area border
 research_area_border <- rgdal::readOGR(
   dsn = "../neomod_datapool/geodata/research_areas/extent.shp"
 )
 
-# clip rivers and lakes to research area 
-rivers_research_area <- rgeos::gIntersection(
-  rivers, research_area_border, byid = TRUE,
+# load already present data
+load("../neomod_datapool/model_data/research_area_hex.RData")
+load("../neomod_datapool/model_data/hex_graph_egdes.RData")
+load("../neomod_datapool/model_data/hex_graph_nodes.RData")
+
+wgs <- 4326
+
+# load and clip rivers and lake shapes
+rivers <- raster::shapefile(
+  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank"
+  ) %>% rgeos::gIntersection(
+    ., research_area_border, byid = TRUE,
+    drop_lower_td = TRUE
+  )
+
+lakes <- raster::shapefile(
+  "~/neomod/neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes"
+  ) %>% rgeos::gIntersection(
+  ., research_area_border, byid = TRUE,
   drop_lower_td = TRUE
 )
 
-lakes_research_area <- rgeos::gIntersection(
-  lakes, research_area_border, byid = TRUE,
-  drop_lower_td = TRUE
-)
+# intersect rivers and lakes with hexagons
 
-###
+rivers_hex <- rivers %>% raster::intersect(
+  research_area_hex, .
+  ) %>%
+  as(., "SpatialPolygonsDataFrame")
 
-# nodes as sf object
-nodes_sf <- nodes %>% sf::st_as_sf(
-    coords = c("x", "y"),
-    crs = wgs
-  )
+# plot(research_area_hex)
+# plot(rivers_hex, col = "red", add = T)
 
-# join graph info with gronenborn map info:
-# intersect and find oldest present date
-nodes_sf %<>% mutate(
-    within = st_within(., neo_gron),
-    start = map_int(within, function(x){
-      if (length(x) > 0) {
-        map_int(x, function(x){
-          neo_gron$start[which(x == neo_gron$shape_index)]
-        }) %>% max %>% return
-      } else {
-        NA
-      }
-    })
-  )
+lakes_hex <- as(lakes, 'SpatialLines') %>% raster::intersect(
+  research_area_hex, .
+  ) %>%
+  as(., "SpatialPolygonsDataFrame")
 
-nodes %<>% 
-  # add new info to nodes df
-  mutate(start = nodes_sf$start) %>% 
+# plot(research_area_hex)
+# plot(lakes_hex, col = "red", add = T)
+
+# combine river and lake hex fields 
+
+rivers_lakes_hex <- rbind(rivers_hex, lakes_hex)
+
+# get hex ideas with rivers and nodes
+
+river_lake_nodes_ids <- rivers_lakes_hex %>%
+  as(., "SpatialPolygons") %>%
+  ggplot2::fortify(region = "id") %$%
+  unique(id)
+
+# add info if they are part of the river-lake network to nodes
+
+nodes_resistance <- nodes %>% 
   # calculate resistance value from start
   mutate(
-    resistance = abs(start/max(start, na.rm = TRUE) - 1) %>% round(., 2)
+    resistance = ifelse(.$id %in% river_lake_nodes_ids, TRUE, FALSE)
   )
 
-#nodes %>% ggplot(aes(x, y, color = resistance)) + geom_point()
+#nodes_resistance %>% ggplot(aes(x, y, color = resistance)) + geom_point()
 
 # add resistance to edges 
 edges %<>% dplyr::mutate(
   spatial_dist = distance,
   distance = map2_dbl(from, to, function(x, y){
-      fr <- nodes[which(x == nodes$name), ]$resistance
-      tr <- nodes[which(y == nodes$name), ]$resistance
-      if (!is.na(fr) | !is.na(tr)) {
-        res <- min(c(fr, tr), na.rm = TRUE)
+      fr <- nodes_resistance[which(x == nodes_resistance$name), ]$resistance
+      tr <- nodes_resistance[which(y == nodes_resistance$name), ]$resistance
+      if (fr && tr) {
+        res <- 1
       } else {
-        res <- max(nodes$resistance, na.rm = TRUE) + 0.5
+        res <- 2
       }
       return(res)
     }
