@@ -72,7 +72,8 @@ rgdal::writeOGR(
   obj = as(research_area_hex, "SpatialPolygonsDataFrame"), 
   dsn = "../neomod_datapool/model_data/shapes",
   layer = "research_area_hex",
-  driver = "ESRI Shapefile"
+  driver = "ESRI Shapefile",
+  overwrite_layer = TRUE
 )
   
 research_area_hex_df <- research_area_hex %>%
@@ -169,6 +170,8 @@ edges_complete <- distmat %>%
   ) %>% dplyr::rename(
     "x.to" = "x",
     "y.to" = "y"
+  ) %>% dplyr::select(
+    -id.x, -id.y
   )
 
 # filter to get potential over-water connections
@@ -367,6 +370,7 @@ edges %<>% dplyr::mutate(
   )
 )
 
+save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
 
 
 #### define node attributes with different proxies #### 
@@ -382,12 +386,14 @@ load("../neomod_datapool/model_data/hex_graph_nodes.RData")
 
 c14_neol_sp <- c14_neol
 
+# make dates to geo object
 sp::coordinates(c14_neol_sp) <- ~lon+lat
 sp::proj4string(c14_neol_sp) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
 
 # plot(research_area_hex)
 # plot(c14_neol_sp, add = T, col = "red")
 
+# get dates per hex
 dates_per_hex <- c14_neol_sp %>% sp::over(
   research_area_hex, ., returnList = T
 )
@@ -404,19 +410,34 @@ neol_dater <- function(x, start, stop) {
     calage
 }
 
-hu <- lapply(
+# find specific date per hex
+date_per_hex <- lapply(
   dates_per_hex,
   function(x) {
     if(nrow(x) > 0) {
       neol_dater(x, 14000, 5000)
     } else {
-      NA
+      -1
     }
   }
-) %>% unlist
+  ) %>% plyr::ldply(
+    ., data.frame
+  ) %>% 
+  dplyr::rename(
+    "id" = ".id",
+    "ioi" = "X..i.."
+  )
 
+# merge nodes with date_per_hex
+nodes <- nodes %>% dplyr::left_join(
+  ., date_per_hex, by = "id"
+  ) %>% dplyr::select(
+    -id
+  )
 
+save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
 
+# ggplot() + geom_point(data = hu, aes(x, y, color = ioi))
 
 
 #### create graph from nodes and edges with distance info ####  
