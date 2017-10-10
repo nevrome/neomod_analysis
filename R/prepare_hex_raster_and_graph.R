@@ -369,6 +369,56 @@ edges %<>% dplyr::mutate(
 
 
 
+#### define node attributes with different proxies #### 
+
+## C14 dates: ##
+
+load(file = "~/neomod/neomod_datapool/C14_dates/neol_c14_dates.Rdata")
+
+# load already present data
+load("../neomod_datapool/model_data/research_area_hex.RData")
+load("../neomod_datapool/model_data/hex_graph_egdes.RData")
+load("../neomod_datapool/model_data/hex_graph_nodes.RData")
+
+c14_neol_sp <- c14_neol
+
+sp::coordinates(c14_neol_sp) <- ~lon+lat
+sp::proj4string(c14_neol_sp) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
+
+# plot(research_area_hex)
+# plot(c14_neol_sp, add = T, col = "red")
+
+dates_per_hex <- c14_neol_sp %>% sp::over(
+  research_area_hex, ., returnList = T
+)
+
+# function: gives back oldest age that fits into defined frame
+neol_dater <- function(x, start, stop) {
+  dplyr::arrange(
+    x, calage
+  ) %>%
+    filter(
+      calage < start & calage > stop
+    ) %>%
+    magrittr::extract(nrow(.),) %$%
+    calage
+}
+
+hu <- lapply(
+  dates_per_hex,
+  function(x) {
+    if(nrow(x) > 0) {
+      neol_dater(x, 14000, 5000)
+    } else {
+      NA
+    }
+  }
+) %>% unlist
+
+
+
+
+
 #### create graph from nodes and edges with distance info ####  
 g <- igraph::graph_from_data_frame(
     edges,
