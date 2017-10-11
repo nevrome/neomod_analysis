@@ -315,6 +315,31 @@ lakes <- raster::shapefile(
   drop_lower_td = TRUE
 )
 
+# load and clip elevation contour lines
+# from: https://topotools.cr.usgs.gov/gmted_viewer/
+elevation_world <- raster::raster(
+  "~/neomod/neomod_datapool/geodata/world_elevation_raster/mn30_grd/hdr.adf"
+)
+
+elevation_research_area <- raster::crop(
+  elevation_world,
+  research_area_border
+)
+
+elevation_research_area_small <- raster::aggregate(
+  elevation_research_area, fact = 500
+)
+
+elevation_per_hex <- raster::extract(
+  x = elevation_research_area_small, 
+  y = research_area_hex, 
+  fun = mean,
+  df = TRUE
+)
+
+###
+
+
 # intersect rivers and lakes with hexagons
 
 rivers_hex <- rivers %>% raster::intersect(
@@ -371,6 +396,7 @@ edges %<>% dplyr::mutate(
 )
 
 save(edges, file = "../neomod_datapool/model_data/hex_graph_egdes.RData")
+
 
 
 #### define node attributes with different proxies #### 
