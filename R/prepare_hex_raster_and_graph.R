@@ -315,36 +315,11 @@ lakes <- raster::shapefile(
   drop_lower_td = TRUE
 )
 
-# load and clip elevation contour lines
-# from: https://topotools.cr.usgs.gov/gmted_viewer/
-elevation_world <- raster::raster(
-  "~/neomod/neomod_datapool/geodata/world_elevation_raster/mn30_grd/hdr.adf"
-)
-
-elevation_research_area <- raster::crop(
-  elevation_world,
-  research_area_border
-)
-
-elevation_research_area_small <- raster::aggregate(
-  elevation_research_area, fact = 500
-)
-
-elevation_per_hex <- raster::extract(
-  x = elevation_research_area_small, 
-  y = research_area_hex, 
-  fun = mean,
-  df = TRUE
-)
-
-###
-
-
 # intersect rivers and lakes with hexagons
 
 rivers_hex <- rivers %>% raster::intersect(
   research_area_hex, .
-  ) %>%
+) %>%
   as(., "SpatialPolygonsDataFrame")
 
 # plot(research_area_hex)
@@ -352,7 +327,7 @@ rivers_hex <- rivers %>% raster::intersect(
 
 lakes_hex <- as(lakes, 'SpatialLines') %>% raster::intersect(
   research_area_hex, .
-  ) %>%
+) %>%
   as(., "SpatialPolygonsDataFrame")
 
 # plot(research_area_hex)
@@ -374,22 +349,92 @@ river_lake_nodes_ids <- rivers_lakes_hex %>%
 nodes_resistance <- nodes %>% 
   # calculate resistance value from start
   mutate(
-    resistance = ifelse(.$id %in% river_lake_nodes_ids, TRUE, FALSE)
+    river_lakes = ifelse(.$id %in% river_lake_nodes_ids, TRUE, FALSE)
   )
 
-#nodes_resistance %>% ggplot(aes(x, y, color = resistance)) + geom_point()
+# load and crop elevation raster
+# from: https://topotools.cr.usgs.gov/gmted_viewer/
+elevation_world <- raster::raster(
+  "~/neomod/neomod_datapool/geodata/world_elevation_raster/mn30_grd/hdr.adf"
+)
+
+elevation_research_area <- raster::crop(
+  elevation_world,
+  research_area_border
+)
+
+elevation_research_area_small <- raster::aggregate(
+  elevation_research_area, fact = 50
+)
+
+mean_elevation_per_hex <- raster::extract(
+  x = elevation_research_area_small,
+  y = research_area_hex,
+  fun = mean,
+  df = TRUE
+)
+
+diffy <- function(x, ...) {
+  diff(range(x))
+}
+
+range_elevation_per_hex <- raster::extract(
+  x = elevation_research_area_small,
+  y = research_area_hex,
+  fun = diffy,
+  df = TRUE
+)
+
+elevation_per_hex <- dplyr::full_join(
+  mean_elevation_per_hex, sd_elevation_per_hex, by = "ID"
+) %>% dplyr::rename(
+  "elevation" = "hdr.x",
+  "range" = "hdr.y"
+)
+
+high_hex_selection <- elevation_per_hex %>%
+  dplyr::filter(
+    elevation >= 1000 | range > 700
+  ) %$%
+  ID
+  
+# plot(research_area_hex)
+# plot(research_area_hex[high_hex], col = "red", add = T)
+
+high_hex <- research_area_hex[high_hex_selection]
+
+# get hex ids with mountains
+
+high_hex_nodes_ids <- high_hex %>%
+  ggplot2::fortify(region = "id") %$%
+  unique(id)
+
+# add info if they are part of the river-lake network to nodes
+
+nodes_resistance <- nodes_resistance %>% 
+  # calculate resistance value from start
+  mutate(
+    mountains = ifelse(.$id %in% high_hex_nodes_ids, TRUE, FALSE)
+  )
+
+
+###
 
 # add resistance to edges 
 edges %<>% dplyr::mutate(
   spatial_dist = distance,
   distance = map2_dbl(from, to, function(x, y){
-      fr <- nodes_resistance[which(x == nodes_resistance$name), ]$resistance
-      tr <- nodes_resistance[which(y == nodes_resistance$name), ]$resistance
-      if (fr && tr) {
+      rl1 <- nodes_resistance[which(x == nodes_resistance$name), ]$river_lakes
+      rl2 <- nodes_resistance[which(y == nodes_resistance$name), ]$river_lakes
+      m1 <- nodes_resistance[which(x == nodes_resistance$name), ]$mountains
+      m2 <- nodes_resistance[which(y == nodes_resistance$name), ]$mountains
+      if (rl1 && rl2) {
         res <- 1
-      } else {
+      } else if (m1 | m2) {
+        res <- 3
+      } else (
         res <- 2
-      }
+      )
       return(res)
     }
   )
@@ -467,6 +512,8 @@ save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
 
 
 #### create graph from nodes and edges with distance info ####  
+load("../neomod_datapool/model_data/hex_graph_nodes.RData")
+
 g <- igraph::graph_from_data_frame(
     edges,
     directed = FALSE,
