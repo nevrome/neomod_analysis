@@ -386,7 +386,7 @@ range_elevation_per_hex <- raster::extract(
 )
 
 elevation_per_hex <- dplyr::full_join(
-  mean_elevation_per_hex, sd_elevation_per_hex, by = "ID"
+  mean_elevation_per_hex, range_elevation_per_hex, by = "ID"
 ) %>% dplyr::rename(
   "elevation" = "hdr.x",
   "range" = "hdr.y"
