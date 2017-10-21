@@ -508,7 +508,8 @@ nodes <- nodes %>% dplyr::left_join(
 
 save(nodes, file = "../neomod_datapool/model_data/hex_graph_nodes.RData")
 
-# ggplot() + geom_point(data = hu, aes(x, y, color = ioi))
+# load("../neomod_datapool/model_data/hex_graph_nodes.RData")
+# ggplot() + geom_point(data = nodes, aes(x, y, color = ioi))
 
 
 #### create graph from nodes and edges with distance info ####  
