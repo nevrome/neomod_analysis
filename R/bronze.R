@@ -38,17 +38,23 @@ bronze2 <- bronze %>%
     )
   ) %>% 
   dplyr::mutate(
+    calage = calage - 1950
+  ) %>%
+  dplyr::mutate(
     age_class = cut(
       calage, 
-      breaks = seq(2500, 5000, 250), 
-      labels = paste0(seq(2500, 4750, 250), "-", seq(2750, 5000, 250))
-    )
+      breaks = seq(500, 3000, 250), 
+      labels = paste0(seq(750, 3000, 250), "-", seq(500, 2750, 250), "calBC")
+    ) %>% as.factor %>% factor(levels = rev(levels(.)))
   ) %>%
   dplyr::filter(
     lat > 20, lon < 37
   ) %>%
   dplyr::filter(
     !(burial_type == "unknown" & burial_construction == "unknown")
+  ) %>%
+  dplyr::arrange(
+    desc(burial_construction)
   )
 
 hu <- ggplot()+
@@ -58,28 +64,46 @@ hu <- ggplot()+
       x = "long", y = "lat",
       group = "group"
     ),
-    fill = NA, colour = "black"
+    fill = NA, colour = "black",
+    size = 0.1
   ) +
   geom_point(
     data = bronze2, 
     aes(x = lon, y = lat, color = burial_type, shape = burial_construction),
-    size = 2
+    size = 1
   ) +
   theme_bw() +
   coord_map(
     "ortho", orientation = c(48, 13, 0)
   ) + 
   facet_wrap(
+    nrow = 1,
     ~age_class
   ) +
   scale_shape_manual(
     values = c(
-      "flat" = 13,
-      "mound" = 20,
-      "unknown" = 3
+      "flat" = "\u268A",
+      "mound" = "\u25E0",
+      "unknown" = "\u2715"
     )
-  )
+  ) +
+  scale_color_manual(
+    values = c(
+      "cremation" = "red",
+      "inhumation" = "darkgreen",
+      "unknown" = "grey"
+    )
+  ) 
 
+hu %>%
+  ggsave(
+    "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
+    plot = .,
+    device = "jpeg",
+    scale = 5,
+    dpi = 600,
+    width = 33, height = 3, units = "cm"
+  )
 
 
 bronze2 %>%  
