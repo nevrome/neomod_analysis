@@ -8,6 +8,7 @@ bronze <- c14bazAAR::get_RADONB() %>%
   c14bazAAR::calibrate()
 
 save(bronze, file = "../neomod_datapool/bronze_age/bronze.RData")
+load("../neomod_datapool/bronze_age/bronze.RData")
 
 bronze2 <- bronze %>%
   dplyr::select(
@@ -40,6 +41,9 @@ bronze2 <- bronze %>%
   dplyr::mutate(
     calage = calage - 1950
   ) %>%
+  dplyr::filter(
+    calage >= 500 & calage <= 3000
+  ) %>%
   dplyr::mutate(
     age_class = cut(
       calage, 
@@ -56,6 +60,8 @@ bronze2 <- bronze %>%
   dplyr::arrange(
     desc(burial_construction)
   )
+
+save(bronze2, file = "../neomod_datapool/bronze_age/bronze2.RData")
 
 hu <- ggplot()+
   geom_polygon(
@@ -102,7 +108,7 @@ hu %>%
     device = "jpeg",
     scale = 5,
     dpi = 600,
-    width = 33, height = 3, units = "cm"
+    width = 22, height = 3, units = "cm"
   )
 
 
