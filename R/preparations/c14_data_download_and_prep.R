@@ -2,7 +2,15 @@ library(magrittr)
 library(ggplot2)
 library(ggmap)
 
-load("/home/clemens/neomod/neomod_datapool/model_data/research_area_df.RData")
+read_ogr
+
+area <- rgdal::readOGR(
+  #dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
+  dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
+  #dsn = "../neomod_datapool/geodata/land_shapes/ne_10m_land.shp"
+) %>% ggplot2::fortify()
+
+#load("/home/clemens/neomod/neomod_datapool/model_data/research_area_df.RData")
 
 bronze <- c14bazAAR::get_RADONB() %>%
   c14bazAAR::calibrate()
@@ -65,7 +73,7 @@ save(bronze2, file = "../neomod_datapool/bronze_age/bronze2.RData")
 
 hu <- ggplot()+
   geom_polygon(
-    data = research_area_df,
+    data = area,
     aes_string(
       x = "long", y = "lat",
       group = "group"
@@ -80,10 +88,11 @@ hu <- ggplot()+
   ) +
   theme_bw() +
   coord_map(
-    "ortho", orientation = c(48, 13, 0)
+    "ortho", orientation = c(48, 13, 0),
+    xlim = c(-10, 30), ylim = c(35, 65)
   ) + 
   facet_wrap(
-    nrow = 1,
+    #nrow = 1,
     ~age_class
   ) +
   scale_shape_manual(
@@ -97,21 +106,34 @@ hu <- ggplot()+
     values = c(
       "cremation" = "red",
       "inhumation" = "darkgreen",
-      "unknown" = "grey"
+      "unknown" = "darkgrey"
     )
-  ) 
+  )
+  
+
+# hu %>%
+#   ggsave(
+#     "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
+#     plot = .,
+#     device = "jpeg",
+#     scale = 5,
+#     dpi = 600,
+#     width = 22, height = 3, units = "cm"
+#   )
 
 hu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
     plot = .,
     device = "jpeg",
-    scale = 5,
-    dpi = 600,
-    width = 22, height = 3, units = "cm"
+    scale = 1,
+    dpi = 300,
+    width = 297, height = 210, units = "mm",
+    limitsize = F
   )
 
 
-bronze2 %>%  
-  ggplot +
-    geom_density(aes(x = calage))
+# bronze2 %>%  
+#   ggplot +
+#     geom_density(aes(x = calage))
+
