@@ -8,7 +8,15 @@ area <- rgdal::readOGR(
 
 load("../neomod_datapool/bronze_age/bronze2.RData")
 
-hu <- ggplot()+
+bronze2_slices <- bronze2 %>%
+  dplyr::filter(
+    age %in% seq(2500, 500, by = -250)
+  ) %>%
+  dplyr::mutate(
+    age_slice = factor(age, levels = seq(2500, 500, by = -250))
+  )
+
+hu <- ggplot() +
   geom_polygon(
     data = area,
     aes_string(
@@ -19,9 +27,13 @@ hu <- ggplot()+
     size = 0.1
   ) +
   geom_point(
-    data = bronze2, 
-    aes(x = lon, y = lat, color = burial_type, shape = burial_construction),
-    size = 2.5
+    data = bronze2_slices, 
+    aes(
+      x = lon, y = lat, 
+      color = burial_type, 
+      shape = burial_construction,
+      size = burial_construction
+    )
   ) +
   theme_bw() +
   coord_map(
@@ -30,13 +42,20 @@ hu <- ggplot()+
   ) + 
   facet_wrap(
     nrow = 2,
-    ~age_class
+    ~age_slice
   ) +
   scale_shape_manual(
     values = c(
       "flat" = "\u268A",
       "mound" = "\u25E0",
       "unknown" = "\u2715"
+    )
+  ) +
+  scale_size_manual(
+    values = c(
+      "flat" = 3,
+      "mound" = 3,
+      "unknown" = 2
     )
   ) +
   scale_color_manual(
@@ -58,17 +77,6 @@ hu <- ggplot()+
     legend.position="bottom"
   )
 
-
-# hu %>%
-#   ggsave(
-#     "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
-#     plot = .,
-#     device = "jpeg",
-#     scale = 5,
-#     dpi = 600,
-#     width = 22, height = 3, units = "cm"
-#   )
-
 hu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
@@ -79,9 +87,3 @@ hu %>%
     width = 297, height = 210, units = "mm",
     limitsize = F
   )
-
-
-# bronze2 %>%  
-#   ggplot +
-#     geom_density(aes(x = calage))
-
