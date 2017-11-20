@@ -1,14 +1,20 @@
 library(magrittr)
-library(ggplot2)
 
+# birth of libby
+bol <- 1950
+# 2sigma range probability threshold
+threshold <- (1 - 0.9545) / 2
+
+# data download
 bronze <- c14bazAAR::get_RADONB() %>%
   # remove dates without age
   dplyr::filter(!is.na(c14age) & !is.na(c14std)) %>%
   # remove dates outside of calibration range
   dplyr::filter(!(c14age < 71) & !(c14age > 46401))
 
-#bronze <- bronze[1:1000,]
+#bronze <- bronze[1:100,]
 
+# calibration
 bronze <- bronze %>%
   dplyr::mutate(
     calage_density_distribution = Bchron::BchronCalibrate(
@@ -18,28 +24,38 @@ bronze <- bronze %>%
       eps       = 1e-06
     ) %>% lapply(
       function(x) {
-        tibble::tibble(age = x$ageGrid, dens_dist = x$densities) 
+        x$densities %>% cumsum -> a      # cumulated density
+        bottom <- x$ageGrid[which(a <= threshold) %>% max]
+        top <- x$ageGrid[which(a > 1-threshold) %>% min]
+        tibble::tibble(
+          age = x$ageGrid, 
+          dens_dist = x$densities,
+          norm_dens = x$densities/max(x$densities),
+          two_sigma = x$ageGrid >= bottom & x$ageGrid <= top 
+        ) 
       }
     ) 
   )
 
 save(bronze, file = "../neomod_datapool/bronze_age/bronze.RData")
 
-# plot(
-#   bronze$calage_density_distribution[[3]]$age, 
-#   bronze$calage_density_distribution[[3]]$dens_dist
-# )
+# library(ggplot2)
+# bronze$calage_density_distribution[[3]] %>%
+#   ggplot() +
+#   geom_point(aes(age, norm_dens, color = two_sigma))
 
 load("../neomod_datapool/bronze_age/bronze.RData")
-
-bol <- 1950
 
 # time filter
 bronze0 <- bronze %>% 
   dplyr::mutate(
     in_time_of_interest = 
       purrr::map(calage_density_distribution, function(x){
-        any(x$age <= (2500 + bol) & x$age >= (500 + bol))
+        any(
+          x$age <= (2500 + bol) & 
+            x$age >= (500 + bol) &
+            x$two_sigma
+        )
       }
     )
   ) %>%
@@ -48,6 +64,7 @@ bronze0 <- bronze %>%
   ) %>%
   dplyr::select(-in_time_of_interest)
 
+# question filter and prep
 bronze1 <- bronze0 %>%
   dplyr::select(
     -sourcedb, -c14age, -c14std, - c13val, -country, -shortref
@@ -80,8 +97,12 @@ bronze1 <- bronze0 %>%
     lat > 20, lon < 37
   )
 
+# open up to diachron perspective
 bronze2 <- bronze1 %>%
   tidyr::unnest(calage_density_distribution) %>%
+  dplyr::filter(
+    two_sigma == TRUE
+  ) %>%
   dplyr::mutate(
     age = age - bol
   ) %>%
