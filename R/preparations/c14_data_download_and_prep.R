@@ -1,6 +1,5 @@
 library(magrittr)
 library(ggplot2)
-library(ggmap)
 
 read_ogr
 
@@ -84,7 +83,7 @@ hu <- ggplot()+
   geom_point(
     data = bronze2, 
     aes(x = lon, y = lat, color = burial_type, shape = burial_construction),
-    size = 1
+    size = 2.5
   ) +
   theme_bw() +
   coord_map(
@@ -108,6 +107,16 @@ hu <- ggplot()+
       "inhumation" = "darkgreen",
       "unknown" = "darkgrey"
     )
+  ) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
+    legend.position = c(1, 0), legend.justification = c(1, 0)
   )
   
 
