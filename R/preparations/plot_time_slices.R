@@ -112,7 +112,8 @@ for(i in 2500:500) {
         x = lon, y = lat, 
         color = burial_type, 
         shape = burial_construction,
-        size = burial_construction
+        size = burial_construction,
+        alpha = norm_dens
       )
     ) +
     theme_bw() +
@@ -141,6 +142,7 @@ for(i in 2500:500) {
         "unknown" = "darkgrey"
       )
     ) +
+    scale_alpha(guide = FALSE) +
     theme(
       axis.title.x = element_blank(),
       axis.text.x = element_blank(),
@@ -151,7 +153,8 @@ for(i in 2500:500) {
       panel.grid.major = element_line(colour = "lightgrey", size = 0.1)#,
       # legend.position = c(1, 0), legend.justification = c(1, 0)
       #legend.position = "bottom"
-    )
+    ) +
+    ggtitle(paste0(i, "calBC"))
   
   hu %>%
     ggsave(
@@ -166,4 +169,4 @@ for(i in 2500:500) {
 
 }
 
-# ffmpeg -r 20 -start_number 0 -i movie/%d.jpeg -r 7 -vcodec mpeg4 -r 20 the_movie.avi
+# ffmpeg -r 30 -start_number 0 -i movie/%d.jpeg -vcodec mpeg4 -r 30 the_movie.avi
