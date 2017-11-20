@@ -1,8 +1,6 @@
 library(magrittr)
 library(ggplot2)
 
-read_ogr
-
 area <- rgdal::readOGR(
   #dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
   dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
@@ -49,21 +47,21 @@ bronze2 <- bronze %>%
     calage = calage - 1950
   ) %>%
   dplyr::filter(
-    calage >= 500 & calage <= 3000
+    calage >= 500 & calage <= 2500
   ) %>%
   dplyr::mutate(
     age_class = cut(
       calage, 
-      breaks = seq(500, 3000, 250), 
-      labels = paste0(seq(750, 3000, 250), "-", seq(500, 2750, 250), "calBC")
+      breaks = seq(500, 2500, 250), 
+      labels = paste0(seq(750, 2500, 250), "-", seq(500, 2250, 250), "calBC")
     ) %>% as.factor %>% factor(levels = rev(levels(.)))
   ) %>%
   dplyr::filter(
     lat > 20, lon < 37
   ) %>%
-  dplyr::filter(
-    !(burial_type == "unknown" & burial_construction == "unknown")
-  ) %>%
+  # dplyr::filter(
+  #   !(burial_type == "unknown" & burial_construction == "unknown")
+  # ) %>%
   dplyr::arrange(
     desc(burial_construction)
   )
@@ -91,7 +89,7 @@ hu <- ggplot()+
     xlim = c(-10, 30), ylim = c(35, 65)
   ) + 
   facet_wrap(
-    #nrow = 1,
+    nrow = 2,
     ~age_class
   ) +
   scale_shape_manual(
@@ -116,7 +114,8 @@ hu <- ggplot()+
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
     panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
-    legend.position = c(1, 0), legend.justification = c(1, 0)
+    # legend.position = c(1, 0), legend.justification = c(1, 0)
+    legend.position="bottom"
   )
   
 
