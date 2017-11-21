@@ -94,8 +94,10 @@ bronze1 <- bronze0 %>%
     )
   ) %>%
   dplyr::filter(
-    lat > 20, lon < 37
+   !is.na(lat) | !is.na(lon)
   )
+
+save(bronze1, file = "../neomod_datapool/bronze_age/bronze1.RData")
 
 # open up to diachron perspective
 bronze2 <- bronze1 %>%
