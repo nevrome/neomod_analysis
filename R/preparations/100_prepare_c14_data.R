@@ -98,6 +98,7 @@ bronze1 <- bronze0 %>%
   )
 
 save(bronze1, file = "../neomod_datapool/bronze_age/bronze1.RData")
+load("../neomod_datapool/bronze_age/bronze1.RData")
 
 # open up to diachron perspective
 bronze2 <- bronze1 %>%
