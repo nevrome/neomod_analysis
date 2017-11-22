@@ -33,8 +33,8 @@ proportion_per_hex <- dates_per_hex %>%
       if (nrow(bt_basic) == 0) {
         bt <- tibble::tibble(
           age = double(),
-          cremation = character(), 
-          inhumation = character()
+          cremation = double(), 
+          inhumation = double()
         )
       } else {
         bt <- bt_basic %>%
@@ -48,8 +48,10 @@ proportion_per_hex <- dates_per_hex %>%
           fncols(c("cremation", "inhumation")) %>%
           dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0))) %>%
           dplyr::mutate(
-            cremation = cremation/sum(cremation, inhumation),
-            inhumation = inhumation/sum(cremation, inhumation)
+            cremation = cremation/(cremation + inhumation)
+          ) %>%
+          dplyr::mutate(
+            inhumation = 1 - cremation
           ) %>%
           dplyr::ungroup()
       }
@@ -61,8 +63,8 @@ proportion_per_hex <- dates_per_hex %>%
         if (nrow(bc_basic) == 0) {
           bc <- tibble::tibble(
             age = double(),
-            mound = character(), 
-            flat = character()
+            mound = double(), 
+            flat = double()
           )
         } else {
           bc <- bc_basic %>%
@@ -76,8 +78,10 @@ proportion_per_hex <- dates_per_hex %>%
             fncols(c("mound", "flat")) %>%
             dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0))) %>%
             dplyr::mutate(
-              mound = mound/sum(mound, flat),
-              flat = flat/sum(mound, flat)
+              mound = mound/(mound + flat)
+            ) %>%
+            dplyr::mutate(
+              flat = 1 - mound
             ) %>%
             dplyr::ungroup()
         }
@@ -90,5 +94,5 @@ proportion_per_hex <- dates_per_hex %>%
     return(res)
   })
 
-
-
+proportion_per_hex_df <- proportion_per_hex %>% 
+  purrr::map_dfr(as.data.frame, .id = "id")
