@@ -11,12 +11,21 @@ regions_df <- rgdal::readOGR(
 nodes <- regions_df %>%
   dplyr::group_by_("id") %>%
   dplyr::summarize_("x" = ~mean(long), "y" = ~mean(lat)) %>%
-  dplyr::mutate_(
-    "name" = ~seq(from = 0, to = length(id) - 1, by = 1)
-  ) %>%
-  dplyr::select(name, x, y, id)
+  dplyr::select(id, x, y)
 
-save(nodes, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_nodes_no_values.RData")
+save(nodes, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_nodes.RData")
+
+# merge nodes with proportions df
+load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
+nodes_info <- nodes %>%
+  dplyr::left_join(
+    proportion_per_region_df, by = "id"
+  ) %>%
+  dplyr::select(
+    id, dplyr::everything()
+  )
+
+save(nodes_info, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_nodes_info.RData")
 
 from = c()
 for(i in 1:nrow(nodes)) {
@@ -27,7 +36,7 @@ to <- rep(nodes$id, nrow(nodes))
 edges <- tibble::tibble(
   from = from,
   to = to,
-  distance = runif(nrow(nodes)^2)
+  distance = 0
 )
 
-save(edges, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_egdes_random_distance.RData")
+save(edges, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_egdes.RData")
