@@ -15,18 +15,7 @@ nodes <- regions_df %>%
 
 save(nodes, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_nodes.RData")
 
-# merge nodes with proportions df
-load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
-nodes_info <- nodes %>%
-  dplyr::left_join(
-    proportion_per_region_df, by = "id"
-  ) %>%
-  dplyr::select(
-    id, dplyr::everything()
-  )
-
-save(nodes_info, file = "../neomod_datapool/bronze_age/space_and_network/region_graph_nodes_info.RData")
-
+# prepare edges
 from = c()
 for(i in 1:nrow(nodes)) {
   from <- append(from, rep(nodes$id[i], nrow(nodes)))

@@ -8,7 +8,7 @@ regions <- rgdal::readOGR(
 
 load("../neomod_datapool/bronze_age/bronze2.RData")
 bronze_sp <- bronze2 %>% as.data.frame() %>%
-  SpatialPointsDataFrame(
+  sp::SpatialPointsDataFrame(
     coords = .[c("lon", "lat")],
     proj4string = sp::CRS(crs_wgs)
   )
@@ -99,6 +99,14 @@ proportion_per_region <- dates_per_region %>%
   })
 
 proportion_per_region_df <- proportion_per_region %>% 
-  purrr::map_dfr(as.data.frame, .id = "id")
+  purrr::map_dfr(as.data.frame, .id = "id") %>%
+  dplyr::mutate_("id" = ~as.numeric(id)) %>%
+  dplyr::rename(
+    "timestep" = "age",
+    "vertices" = "id"
+  ) %>%
+  tidyr::gather(
+    ideas, proportion, -timestep, -vertices
+  )
 
 save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
