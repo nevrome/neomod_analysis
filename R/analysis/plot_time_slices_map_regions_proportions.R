@@ -20,9 +20,21 @@ gluesless::plot_world(
   world_polygon = land_outline,
   regions = regions,
   nodes = NULL,
-  plotedges = T
+  plotedges = F
 ) -> worldplot
 
-gluesless::plot_state(worldplot, states = nodes_info_spread, 2000)
+for(i in 2001:1) {
+  hu <- gluesless::plot_state(worldplot, states = nodes_info_spread, i)
+  hu %>%
+    ggsave(
+      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 2001 - i ,".jpeg"),
+      plot = .,
+      device = "jpeg",
+      scale = 1,
+      dpi = 300,
+      width = 200, height = 150, units = "mm",
+      limitsize = F
+    )
+}
 
 
