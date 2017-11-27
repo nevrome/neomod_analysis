@@ -1,11 +1,4 @@
-library(magrittr)
-
-area <- rgdal::readOGR(
-  #dsn = "../neomod_datapool/geodata/land_shapes/ne_110m_land.shp"
-  dsn = "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
-  #dsn = "../neomod_datapool/geodata/land_shapes/ne_10m_land.shp"
-) %>% ggplot2::fortify()
-
+load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
 load("../neomod_datapool/bronze_age/bronze2.RData")
 
 bronze2_slices <- bronze2 %>%
@@ -16,13 +9,11 @@ bronze2_slices <- bronze2 %>%
     age_slice = factor(age, levels = seq(2500, 500, by = -250))
   )
 
+library(ggplot2)
+
 hu <- ggplot() +
-  geom_polygon(
-    data = area,
-    aes_string(
-      x = "long", y = "lat",
-      group = "group"
-    ),
+  geom_sf(
+    data = land_outline,
     fill = NA, colour = "black",
     size = 0.1
   ) +
@@ -36,8 +27,7 @@ hu <- ggplot() +
     )
   ) +
   theme_bw() +
-  coord_map(
-    "ortho", orientation = c(48, 13, 0),
+  coord_sf(
     xlim = c(-10, 30), ylim = c(35, 65)
   ) + 
   facet_wrap(
