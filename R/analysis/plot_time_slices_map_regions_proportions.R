@@ -37,4 +37,4 @@ for(i in 2001:1) {
     )
 }
 
-
+# ffmpeg -r 30 -start_number 0 -i movie/%d.jpeg -vcodec mpeg4 -r 30 the_movie_2.avi
