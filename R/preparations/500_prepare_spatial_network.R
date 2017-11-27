@@ -14,8 +14,9 @@ nodes <- regions %>%
   dplyr::transmute(
     "id" = ID,
     "x" = X, 
-    "y" = Y, 
-    "name" = as.character(NAME)
+    "y" = Y,
+    "region_name" = as.character(NAME),
+    "name" = ID
   )
 
 # plot(nodes$x, nodes$y)

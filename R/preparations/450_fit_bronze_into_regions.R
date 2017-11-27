@@ -10,7 +10,7 @@ bronze_sf <- bronze2 %>%
     coords = c("lon", "lat"), crs = 4326
   )
 
-bronze_sf2 <- bronze_sf[1:200,]
+#bronze_sf2 <- bronze_sf[1:200,]
 
 region_index_of_date <- bronze_sf %>% sf::st_intersects(regions) %>%
   sapply(function(z) if (length(z)==0) NA_integer_ else z[1])
