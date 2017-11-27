@@ -11,11 +11,14 @@ bronze2_slices <- bronze2 %>%
 
 library(ggplot2)
 
+limit <- sf::st_bbox(land_outline)
+xlimit <- limit[c(1, 3)]  
+ylimit <- limit[c(2, 4)]  
+
 hu <- ggplot() +
   geom_sf(
     data = land_outline,
-    fill = NA, colour = "black",
-    size = 0.1
+    fill = NA, colour = "black", size = 0.1
   ) +
   geom_point(
     data = bronze2_slices, 
@@ -28,7 +31,7 @@ hu <- ggplot() +
   ) +
   theme_bw() +
   coord_sf(
-    xlim = c(-10, 30), ylim = c(35, 65)
+    xlim = xlimit, ylim = ylimit
   ) + 
   facet_wrap(
     nrow = 2,
@@ -62,9 +65,9 @@ hu <- ggplot() +
     axis.title.y = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
-    panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
+    # panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
     # legend.position = c(1, 0), legend.justification = c(1, 0)
-    legend.position="bottom"
+    legend.position = "bottom"
   )
 
 hu %>%
@@ -140,8 +143,7 @@ for(i in 2500:500) {
       axis.title.y = element_blank(),
       axis.text.y = element_blank(),
       axis.ticks.y = element_blank(),
-      panel.grid.major = element_line(colour = "lightgrey", size = 0.1)#,
-      # legend.position = c(1, 0), legend.justification = c(1, 0)
+      legend.position = c(1, 0), legend.justification = c(1, 0)
       #legend.position = "bottom"
     ) +
     ggtitle(paste0(i, "calBC"))
