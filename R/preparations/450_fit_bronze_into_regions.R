@@ -1,22 +1,33 @@
-crs_wgs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
-
 # load regions
-regions <- rgdal::readOGR(
-  dsn = "manually_changed_data/regionen2017g.shp"
-) %>%
-  sp::spTransform(sp::CRS(crs_wgs))
+regions <- sf::st_read(
+  "manually_changed_data/regionen2017g.shp"
+) %>% 
+  sf::st_transform(4326)
 
 load("../neomod_datapool/bronze_age/bronze2.RData")
-bronze_sp <- bronze2 %>% as.data.frame() %>%
-  sp::SpatialPointsDataFrame(
-    coords = .[c("lon", "lat")],
-    proj4string = sp::CRS(crs_wgs)
+bronze_sf <- bronze2 %>%
+  sf::st_as_sf(
+    coords = c("lon", "lat"), crs = 4326
   )
 
-dates_per_region <- bronze_sp %>% sp::over(
-  regions, ., returnList = T
-)
+bronze_sf2 <- bronze_sf[1:200,]
 
+region_index_of_date <- bronze_sf %>% sf::st_intersects(regions) %>%
+  sapply(function(z) if (length(z)==0) NA_integer_ else z[1])
+
+region_of_date <- regions$ID[region_index_of_date]
+region_of_date_name <- as.character(regions$NAME[region_index_of_date])
+
+dates_per_region <- bronze2 %>%
+  dplyr::mutate(
+    region_id = region_of_date,
+    region_name = region_of_date_name
+  ) %>% 
+  dplyr::filter(
+    !is.na(region_id)
+  ) %>%
+  plyr::dlply("region_id")
+  
 fncols <- function(data, cname) {
   add <- cname[!cname %in% names(data)]
   if (length(add) != 0) {data[add] <- NA_real_}
@@ -30,12 +41,14 @@ proportion_per_region <- dates_per_region %>%
          all(x$burial_construction == "unknown"))) {
       res <- NULL
     } else {
+      
       bt_basic <- x %>% 
         dplyr::filter(
           burial_type != "unknown"
         ) 
       if (nrow(bt_basic) == 0) {
         bt <- tibble::tibble(
+          region_name = character(),
           age = double(),
           cremation = double(), 
           inhumation = double()
@@ -44,7 +57,7 @@ proportion_per_region <- dates_per_region %>%
         bt <- bt_basic %>%
           dplyr::group_by(age, burial_type) %>%
           dplyr::summarise(
-            count = n()
+            count = n(), region_name = .$region_name[1]
           ) %>% 
           tidyr::spread(
             key = burial_type, value = count
@@ -60,38 +73,39 @@ proportion_per_region <- dates_per_region %>%
           dplyr::ungroup()
       }
       
-        bc_basic <- x %>% 
-          dplyr::filter(
-            burial_construction != "unknown"
-          ) 
-        if (nrow(bc_basic) == 0) {
-          bc <- tibble::tibble(
-            age = double(),
-            mound = double(), 
-            flat = double()
-          )
-        } else {
-          bc <- bc_basic %>%
-            dplyr::group_by(age, burial_construction) %>%
-            dplyr::summarise(
-              count = n()
-            ) %>% 
-            tidyr::spread(
-              key = burial_construction, value = count
-            ) %>%
-            fncols(c("mound", "flat")) %>%
-            dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0))) %>%
-            dplyr::mutate(
-              mound = mound/(mound + flat)
-            ) %>%
-            dplyr::mutate(
-              flat = 1 - mound
-            ) %>%
-            dplyr::ungroup()
-        }
+      bc_basic <- x %>% 
+        dplyr::filter(
+          burial_construction != "unknown"
+        ) 
+      if (nrow(bc_basic) == 0) {
+        bc <- tibble::tibble(
+          region_name = character(),
+          age = double(),
+          mound = double(), 
+          flat = double()
+        )
+      } else {
+        bc <- bc_basic %>%
+          dplyr::group_by(age, burial_construction) %>%
+          dplyr::summarise(
+            count = n(), region_name = .$region_name[1]
+          ) %>% 
+          tidyr::spread(
+            key = burial_construction, value = count
+          ) %>%
+          fncols(c("mound", "flat")) %>%
+          dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0))) %>%
+          dplyr::mutate(
+            mound = mound/(mound + flat)
+          ) %>%
+          dplyr::mutate(
+            flat = 1 - mound
+          ) %>%
+          dplyr::ungroup()
+      }
         
       res <- dplyr::full_join(
-        bt, bc, by = "age"
+        bt, bc, by = c("age", "region_name")
       ) %>%
         dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0)))
     }
@@ -106,7 +120,7 @@ proportion_per_region_df <- proportion_per_region %>%
     "vertices" = "id"
   ) %>%
   tidyr::gather(
-    ideas, proportion, -timestep, -vertices
+    ideas, proportion, -timestep, -vertices, - region_name
   )
 
 save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")

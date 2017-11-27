@@ -7,7 +7,7 @@ hu <- proportion_per_region_df %>%
   geom_line(
     aes(x = timestep, y = proportion, color = ideas, linetype = ideas, alpha = ideas)
   ) +
-  facet_wrap(~vertices) +
+  facet_wrap(~region_name) +
   scale_x_reverse() +
   scale_linetype_manual(
     values = c(
