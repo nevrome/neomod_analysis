@@ -113,14 +113,13 @@ proportion_per_region <- dates_per_region %>%
   })
 
 proportion_per_region_df <- proportion_per_region %>% 
-  purrr::map_dfr(as.data.frame, .id = "id") %>%
-  dplyr::mutate_("id" = ~as.numeric(id)) %>%
+  purrr::map_dfr(as.data.frame, .id = "node") %>%
+  dplyr::mutate_("node" = ~as.numeric(node)) %>%
   dplyr::rename(
-    "timestep" = "age",
-    "vertices" = "id"
+    "timestep" = "age"
   ) %>%
   tidyr::gather(
-    ideas, proportion, -timestep, -vertices, - region_name
+    idea, proportion, -timestep, -node, -region_name
   )
 
 save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")

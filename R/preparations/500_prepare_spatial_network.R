@@ -12,11 +12,10 @@ regions <- sf::st_read(
 nodes <- regions %>%
   tibble::as.tibble() %>%
   dplyr::transmute(
-    "id" = ID,
+    "node" = ID,
     "x" = X, 
     "y" = Y,
-    "region_name" = as.character(NAME),
-    "name" = ID
+    "region_name" = as.character(NAME)
   )
 
 # plot(nodes$x, nodes$y)
@@ -27,9 +26,9 @@ save(nodes, file = "../neomod_datapool/bronze_age/space_and_network/region_graph
 # prepare edges
 from = c()
 for(i in 1:nrow(nodes)) {
-  from <- append(from, rep(nodes$id[i], nrow(nodes)))
+  from <- append(from, rep(nodes$node[i], nrow(nodes)))
 }
-to <- rep(nodes$id, nrow(nodes))
+to <- rep(nodes$node, nrow(nodes))
 
 edges <- tibble::tibble(
   from = from,
