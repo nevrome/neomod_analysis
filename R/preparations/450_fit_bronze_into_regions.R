@@ -36,8 +36,9 @@ fncols <- function(data, cname) {
 
 proportion_per_region <- dates_per_region %>%
   pbapply::pblapply(function(x) {
-    if (nrow(x) == 0 | 
-        (all(x$burial_type == "unknown") & 
+    # remove empty regions
+    if (nrow(x) == 0 |
+        (all(x$burial_type == "unknown") &
          all(x$burial_construction == "unknown"))) {
       res <- NULL
     } else {
@@ -49,7 +50,7 @@ proportion_per_region <- dates_per_region %>%
       if (nrow(bt_basic) == 0) {
         bt <- tibble::tibble(
           region_name = character(),
-          age = double(),
+          age = integer(),
           cremation = double(), 
           inhumation = double()
         )
@@ -80,7 +81,7 @@ proportion_per_region <- dates_per_region %>%
       if (nrow(bc_basic) == 0) {
         bc <- tibble::tibble(
           region_name = character(),
-          age = double(),
+          age = integer(),
           mound = double(), 
           flat = double()
         )
@@ -108,7 +109,25 @@ proportion_per_region <- dates_per_region %>%
         bt, bc, by = c("age", "region_name")
       ) %>%
         dplyr::mutate_all(dplyr::funs(replace(., is.na(.), 0)))
+      
     }
+    
+    # completion with empty information
+    if (nrow(res) < 2001) {
+      missing_ages <- c(500:2500)[!(c(500:2500) %in% res$age)]
+      res <- rbind(
+        res, 
+        tibble::tibble(
+          region_name = res$region_name[1],
+          age = missing_ages,
+          cremation = 0, 
+          inhumation = 0,
+          mound = 0,
+          flat = 0
+        )
+      )
+    }
+    
     return(res)
   })
 
