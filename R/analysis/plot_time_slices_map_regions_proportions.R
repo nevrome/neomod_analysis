@@ -9,12 +9,6 @@ regions <- sf::st_read(
 ) %>% 
   sf::st_transform(4326)
 
-nodes_info_spread <- nodes_info %>%
-  lapply(function(x){
-    x %>%
-      tidyr::spread(ideas, proportion)
-  })
-
 gluesless::plot_world(
   graph = regions_graph,
   world_polygon = land_outline,
@@ -24,7 +18,7 @@ gluesless::plot_world(
 ) -> worldplot
 
 for(i in 2001:1) {
-  hu <- gluesless::plot_state(worldplot, states = nodes_info_spread, i)
+  hu <- gluesless::plot_state(worldplot, states = nodes_info, i)
   hu %>%
     ggsave(
       paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 2001 - i ,".jpeg"),
