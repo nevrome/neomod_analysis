@@ -22,7 +22,7 @@ bronze <- bronze %>%
       ageSds    = bronze$c14std,
       calCurves = rep("intcal13", nrow(bronze)),
       eps       = 1e-06
-    ) %>% lapply(
+    ) %>% pbapply::pblapply(
       function(x) {
         x$densities %>% cumsum -> a      # cumulated density
         bottom <- x$ageGrid[which(a <= threshold) %>% max]

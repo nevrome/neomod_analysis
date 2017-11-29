@@ -10,7 +10,14 @@ g <- igraph::graph_from_data_frame(
   edge.attr.comb = "mean"
 )
 
+#plot(g)
+#plot(g, vertex.label = nodes$node)
+#plot(g, vertex.label = nodes$region_name)
+
 regions_graph <- igraph::set.graph.attribute(g, "graph_name", "bronze_age_regions")
+
+# igraph::get.vertex.attribute(regions_graph) %>%
+#   as.data.frame(stringsAsFactors = FALSE) 
 
 #gluesless::plot_world(hex_graph, world = research_area_df, plotedges = TRUE)
 
