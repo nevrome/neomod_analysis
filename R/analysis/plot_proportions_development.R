@@ -44,8 +44,13 @@ hu <- prop %>%
   scale_y_continuous(
     breaks = c(0, 0.5, 1),
     labels = c("0%", "50%", "100%")
-  )
-  
+  ) +
+  xlim(2800, 500)
+
+#img <- magick::image_read("../neomod_datapool/bronze_age/region_pictograms/test.png")
+# hu <- hu + cowplot::draw_image(img, x = -2700, y = -0.5, scale = 100)
+# https://github.com/tidyverse/ggplot2/issues/1399
+
 hu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions.jpeg",
@@ -56,4 +61,3 @@ hu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
-
