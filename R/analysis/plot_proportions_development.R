@@ -2,30 +2,49 @@ load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.
 
 library(ggplot2)
 
-hu <- proportion_per_region_df %>%
-  ggplot() +
+prop <- proportion_per_region_df %>% 
+  dplyr::filter(
+    idea != "flat" & idea != "mound"
+  )
+
+prop$idea <- as.factor(prop$idea)
+prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
+
+#hu <- proportion_per_region_df %>%
+hu <- prop %>%
+  ggplot(aes()) +
+  geom_area(
+    aes(x = timestep, y = proportion, fill = idea),
+    position = 'stack',
+    alpha = 0.6,
+    linetype = "blank"
+  ) +
   geom_line(
-    aes(x = timestep, y = proportion, color = ideas, linetype = ideas, alpha = ideas)
+    data = dplyr::filter(prop, idea == "cremation"),
+    mapping = aes(x = timestep, y = proportion),
+    color = "black",
+    size = 0.2
   ) +
-  facet_wrap(~region_name) +
+  facet_wrap(~region_name, nrow = 11) +
   scale_x_reverse() +
-  scale_linetype_manual(
+  xlab("Time in years calBC") +
+  labs(fill = "Memes (mutually exclusive)") + 
+  theme_bw() +
+  theme(
+    legend.position="bottom",
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_line(colour = "black", size = 0.3)
+  ) +
+  scale_fill_manual(
     values = c(
-      "cremation" = "solid",
-      "inhumation" = "solid",
-      "flat" = "dashed",
-      "mound" = "dashed"
+      "cremation" = "#D55E00",
+      "inhumation" = "#0072B2"
     )
   ) +
-  scale_alpha_manual(
-    values = c(
-      "cremation" = 1,
-      "inhumation" = 0.3,
-      "flat" = 1,
-      "mound" = 0.3
-    )
-  ) +
-  theme_bw()
+  scale_y_continuous(
+    breaks = c(0, 0.5, 1),
+    labels = c("0%", "50%", "100%")
+  )
   
 hu %>%
   ggsave(
@@ -34,6 +53,7 @@ hu %>%
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    width = 297, height = 210, units = "mm",
+    width = 210, height = 297, units = "mm",
     limitsize = F
   )
+
