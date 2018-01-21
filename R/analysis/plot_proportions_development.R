@@ -11,9 +11,9 @@ prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
 #hu <- proportion_per_region_df %>%
-hu <- prop %>%
-  ggplot(aes()) +
+hu <- ggplot() +
   geom_area(
+    data = prop,
     aes(x = timestep, y = proportion, fill = idea),
     position = 'stack',
     alpha = 0.6,
@@ -47,9 +47,24 @@ hu <- prop %>%
   ) +
   xlim(2800, 500)
 
-#img <- magick::image_read("../neomod_datapool/bronze_age/region_pictograms/test.png")
-# hu <- hu + cowplot::draw_image(img, x = -2700, y = -0.5, scale = 100)
-# https://github.com/tidyverse/ggplot2/issues/1399
+gl <- lapply(1:11, function(x) {
+    img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/test", x, ".png"))
+    g <- grid::rasterGrob(
+      img, interpolate=TRUE,
+      width = 0.08, height = 0.8
+    )
+  })
+dummy <- tibble(region_name = unique(prop$region_name), grob = gl )
+
+source("R/helper/geom_grob.R")
+
+hu <- hu +
+  geom_custom(
+    data = dummy, 
+    aes(grob = grob), 
+    inherit.aes = FALSE,
+    x = 0.08, y = 0.5
+  )
 
 hu %>%
   ggsave(
