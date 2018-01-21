@@ -27,6 +27,15 @@ dates_per_region <- bronze2 %>%
     !is.na(region_id)
   ) %>%
   plyr::dlply("region_id")
+
+dates_probability_per_year_and_region_df <- dates_per_region %>% 
+  as.list() %>%
+  dplyr::bind_rows()
+
+save(
+  dates_probability_per_year_and_region_df, 
+  file = "../neomod_datapool/bronze_age/dates_probability_per_year_and_region_df.RData"
+)
   
 fncols <- function(data, cname) {
   add <- cname[!cname %in% names(data)]
