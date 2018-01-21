@@ -3,24 +3,27 @@ load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.
 library(ggplot2)
 
 prop <- proportion_per_region_df %>% 
+  # dplyr::filter(
+  #   idea != "flat" & idea != "mound"
+  # )
   dplyr::filter(
-    idea != "flat" & idea != "mound"
+    idea != "inhumation" & idea != "cremation"
   )
 
 prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
-#hu <- proportion_per_region_df %>%
 hu <- ggplot() +
   geom_area(
     data = prop,
     aes(x = timestep, y = proportion, fill = idea),
     position = 'stack',
-    alpha = 0.6,
+    #alpha = 0.6,
     linetype = "blank"
   ) +
   geom_line(
-    data = dplyr::filter(prop, idea == "cremation"),
+    # data = dplyr::filter(prop, idea == "cremation"),
+    data = dplyr::filter(prop, idea == "flat"),
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
@@ -38,7 +41,9 @@ hu <- ggplot() +
   scale_fill_manual(
     values = c(
       "cremation" = "#D55E00",
-      "inhumation" = "#0072B2"
+      "inhumation" = "#0072B2",
+      "mound" = "#CC79A7",
+      "flat" = "#009E73"
     )
   ) +
   scale_y_continuous(
@@ -70,7 +75,8 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions.jpeg",
+    # "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_mound_flat.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
