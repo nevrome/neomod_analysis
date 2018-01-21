@@ -45,13 +45,15 @@ hu <- ggplot() +
     breaks = c(0, 0.5, 1),
     labels = c("0%", "50%", "100%")
   ) +
-  xlim(2800, 500)
+  xlim(2700, 500)
 
-gl <- lapply(1:11, function(x) {
-    img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/test", x, ".png"))
+region_file_list <- unique(prop$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
+
+gl <- lapply(region_file_list, function(x) {
+    img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
     g <- grid::rasterGrob(
-      img, interpolate=TRUE,
-      width = 0.08, height = 0.8
+      img, interpolate = TRUE,
+      width = 0.06, height = 0.8
     )
   })
 dummy <- tibble(region_name = unique(prop$region_name), grob = gl )
@@ -63,7 +65,7 @@ hu <- hu +
     data = dummy, 
     aes(grob = grob), 
     inherit.aes = FALSE,
-    x = 0.08, y = 0.5
+    x = 0.07, y = 0.5
   )
 
 hu %>%
@@ -76,3 +78,4 @@ hu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
+
