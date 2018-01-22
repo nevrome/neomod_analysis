@@ -4,6 +4,7 @@ load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData
 #amount_devel <- amount_development_burial_type
 amount_devel <- amount_development_burial_construction
 
+library(ggplot2)
 spu <- ggplot() +
   geom_area(
     data = amount_devel,
