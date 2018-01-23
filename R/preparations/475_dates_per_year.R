@@ -1,27 +1,56 @@
 load("../neomod_datapool/bronze_age/dates_probability_per_year_and_region_df.RData")
 
-amount_development_burial_type <- dates_probability_per_year_and_region_df %>%
+amount_development_burial_type_without_zero <- dates_probability_per_year_and_region_df %>%
   dplyr::group_by(region_name, age, burial_type) %>%
   dplyr::rename(
     timestep = age, 
     idea = burial_type
   ) %>%
-  dplyr::tally()
+  dplyr::tally() 
+
+amount_development_burial_type <- amount_development_burial_type_without_zero %>%
+  dplyr::right_join(
+    expand.grid(
+      region_name = unique(amount_development_burial_type_without_zero$region_name),
+      idea = unique(amount_development_burial_type_without_zero$idea), 
+      timestep = 500:2500,
+      stringsAsFactors = FALSE
+    ),
+    by = c("region_name", "timestep", "idea")
+  ) %>%
+  dplyr::mutate(
+    n = replace(n, is.na(n), 0)
+  )
 
 save(
   amount_development_burial_type, 
   file = "../neomod_datapool/bronze_age/amount_development_burial_type.RData"
 )
 
-amount_development_burial_construction <- dates_probability_per_year_and_region_df %>%
+amount_development_burial_construction_without_zero <- dates_probability_per_year_and_region_df %>%
   dplyr::group_by(region_name, age, burial_construction) %>%
   dplyr::rename(
     timestep = age, 
     idea = burial_construction
   ) %>%
-  dplyr::tally()
+  dplyr::tally() 
+
+amount_development_burial_construction  <- amount_development_burial_construction_without_zero%>%
+  dplyr::right_join(
+    expand.grid(
+      region_name = unique(amount_development_burial_construction_without_zero$region_name),
+      idea = unique(amount_development_burial_construction_without_zero$idea), 
+      timestep = 500:2500,
+      stringsAsFactors = FALSE
+    ),
+    by = c("region_name", "timestep", "idea")
+  ) %>%
+  dplyr::mutate(
+    n = replace(n, is.na(n), 0)
+  )
 
 save(
   amount_development_burial_construction, 
   file = "../neomod_datapool/bronze_age/amount_development_burial_construction.RData"
 )
+
