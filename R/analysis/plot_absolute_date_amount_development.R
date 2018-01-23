@@ -1,8 +1,11 @@
-#load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
-load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
+load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
+#load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
 
-#amount_devel <- amount_development_burial_type
-amount_devel <- amount_development_burial_construction
+amount_devel <- amount_development_burial_type
+#amount_devel <- amount_development_burial_construction
+
+idea_factor <- as.factor(amount_devel$idea)
+amount_devel$idea <- factor(idea_factor, levels = rev(levels(idea_factor)))
 
 library(ggplot2)
 spu <- ggplot() +
@@ -31,7 +34,11 @@ spu <- ggplot() +
       "unknown" = "grey85"
     )
   ) +
-  xlim(2700, 500)
+  xlim(2700, 500) +
+  coord_cartesian(
+    ylim = c(0, 100)
+  )
+  
 
 region_file_list <- unique(amount_devel$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
 
@@ -56,8 +63,8 @@ spu <- spu +
 
 spu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_mound_flat.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_mound_flat.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
