@@ -1,5 +1,55 @@
 load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
 
+#load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
+load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
+
+#amount_devel <- amount_development_burial_type
+amount_devel <- amount_development_burial_construction
+
+amount_devel %<>% 
+  dplyr::filter(
+    idea != "unknown"
+  ) %>%
+  dplyr::group_by(region_name, timestep) %>%
+  dplyr::summarise(
+    n = as.integer(sum(n))
+  ) %>%
+  dplyr::ungroup()
+
+start_end <- function(amount_devel_one_region) {
+  rect_amount_devel_one_region <- tibble::tibble(start = NA, end = NA, power = NA)
+
+  pos_pointer <- 1
+  ende <- nrow(amount_devel_one_region) - 1
+  for(i in 1:ende){
+    if (i == ende) {
+      rect_amount_devel_one_region <- rbind(
+        rect_amount_devel_one_region,
+        data.frame(start = amount_devel_one_region$timestep[pos_pointer], end = amount_devel_one_region$timestep[i+1], power = amount_devel_one_region$n[i])
+      )
+      break;
+    }
+    if(amount_devel_one_region$n[i] != amount_devel_one_region$n[i+1]) {
+      rect_amount_devel_one_region <- rbind(
+        rect_amount_devel_one_region,
+        data.frame(start = amount_devel_one_region$timestep[pos_pointer], end = amount_devel_one_region$timestep[i], power = amount_devel_one_region$n[i])
+      )
+      pos_pointer <- i
+    }
+  }
+  rect_amount_devel_one_region <- rect_amount_devel_one_region[-1, ]
+  return(rect_amount_devel_one_region)
+}
+
+amount_devel %<>% base::split(.$region_name) %>%
+  purrr::map(.f = start_end) %>%
+  dplyr::bind_rows(.id = 'region_name')
+
+amount_devel %<>%
+  dplyr::filter(
+    power < 10
+  )
+
 library(ggplot2)
 
 prop <- proportion_per_region_df %>% 
@@ -22,12 +72,21 @@ hu <- ggplot() +
     linetype = "blank"
   ) +
   geom_line(
-    # data = dplyr::filter(prop, idea == "cremation"),
+    #data = dplyr::filter(prop, idea == "cremation"),
     data = dplyr::filter(prop, idea == "flat"),
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
   ) +
+  geom_rect(
+    aes(NULL, NULL, xmin = start, xmax = end),
+    ymin = 0, ymax = 1, 
+    fill = "black", 
+    alpha = 0.5,
+    color = NA,
+    data = amount_devel
+  ) +
+  scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region_name, nrow = 11) +
   scale_x_reverse() +
   xlab("Time in years calBC") +
@@ -75,7 +134,7 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    # "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
     "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_mound_flat.jpeg",
     plot = .,
     device = "jpeg",
