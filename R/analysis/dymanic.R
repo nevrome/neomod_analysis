@@ -1,29 +1,88 @@
 load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
 
-cremation <- proportion_per_region_df %>%
+proportion_per_region_df$timestep <- proportion_per_region_df$timestep * (-1)
+
+smooth_model <- function(df) {
+  smooth.spline(df$timestep, df$proportion, spar = 0.5)
+}
+
+predict_spline <- function(df, model, deriv = 1) {
+  prediction <- predict(model, rev(df$timestep), deriv = deriv)
+  tibble::tibble(
+    timestep = prediction$x,
+    prediction = prediction$y
+  )
+}
+
+kuu <- proportion_per_region_df %>%
   dplyr::filter(
-    idea != "mound" & idea != "flat" & idea != "inhumation"
+    idea != "mound" & idea != "inhumation"
   ) %>%
-  dplyr::filter(
-    region_name == "Northeast France and Benelux"
-    #region_name == "Northern Germany"
-    #region_name == "Great Britain and Ireland"
-    #region_name == "Jutland"
+  dplyr::group_by(idea, region_name) %>%
+  tidyr::nest() %>%
+  dplyr::mutate(
+    spline_model = purrr::map(
+      data, .f = smooth_model
+    )
+  ) %>%
+  dplyr::mutate(
+    spline_prediction = purrr::map2(
+      data, spline_model, .f = predict_spline
+    )
+  ) %>%
+  tidyr::unnest(spline_prediction)
+  
+kuu2 <- kuu %>% dplyr::filter(
+  idea != "flat"
+) 
+
+library(ggplot2)
+spu <- ggplot() +
+  geom_line(
+    data = kuu2,
+    aes(x = timestep, y = prediction)
+  ) +
+  facet_wrap(~region_name, nrow = 11) +
+  #scale_x_reverse() +
+  xlab("Time in years calBC") +
+  labs(fill = "Memes (mutually exclusive)") + 
+  theme_bw() +
+  theme(
+    legend.position="bottom",
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_line(colour = "black", size = 0.3)
+  ) +
+  xlim(-2700, -500)
+
+region_file_list <- unique(kuu2$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
+
+gl <- lapply(region_file_list, function(x) {
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
+  g <- grid::rasterGrob(
+    img, interpolate = TRUE,
+    width = 0.06, height = 0.8
+  )
+})
+dummy <- tibble::tibble(region_name = unique(kuu2$region_name), grob = gl )
+
+source("R/helper/geom_grob.R")
+
+spu <- spu +
+  geom_custom(
+    data = dummy, 
+    aes(grob = grob), 
+    inherit.aes = FALSE,
+    x = 0.07, y = 0.5
   )
 
-# po <- cremation %>%
-#   lm(timestep ~ proportion, data = .)
-# 
-# f_of_x <- splinefun(cremation$timestep, cremation$proportion, method = "fmm")
-# 
-# plot(cremation$timestep, cremation$proportion, "l")
-# plot(cremation$timestep, f_of_x(cremation$timestep, deriv = 0), "l", add = T, col = "red")
-# points(cremation$timestep, f_of_x(cremation$timestep, deriv = 1), "l", add = T)
-
-schmooth <- smooth.spline(cremation$timestep, cremation$proportion, spar = 0.5)
-
-plot(cremation$timestep, cremation$proportion, "l")
-lines(cremation$timestep, predict(schmooth, cremation$timestep, deriv = 0)$y, "l", col = "red")
-plot(cremation$timestep, predict(schmooth, cremation$timestep, deriv = 1)$y, "l", col = "blue")
-
-
+spu %>%
+  ggsave(
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/derivative_proportion_cremation_1.jpeg",
+    plot = .,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    width = 210, height = 297, units = "mm",
+    limitsize = F
+  )

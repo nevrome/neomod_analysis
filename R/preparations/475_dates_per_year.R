@@ -22,6 +22,6 @@ amount_development_burial_construction <- dates_probability_per_year_and_region_
   dplyr::tally()
 
 save(
-  amount_development_burial_type, 
+  amount_development_burial_construction, 
   file = "../neomod_datapool/bronze_age/amount_development_burial_construction.RData"
 )
