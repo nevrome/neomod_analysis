@@ -1,6 +1,11 @@
 load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
 load("../neomod_datapool/bronze_age/bronze2.RData")
 
+regions <- sf::st_read(
+  "manually_changed_data/regionen2017g.shp"
+) %>% 
+  sf::st_transform(4326)
+
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
     age %in% seq(2500, 500, by = -250)
@@ -20,6 +25,10 @@ hu <- ggplot() +
     data = land_outline,
     fill = NA, colour = "black", size = 0.1
   ) +
+  geom_sf(
+    data = regions,
+    fill = NA, colour = "red", size = 0.3
+  ) +
   geom_point(
     data = bronze2_slices, 
     aes(
@@ -27,6 +36,7 @@ hu <- ggplot() +
       color = burial_type, 
       shape = burial_construction,
       size = burial_construction
+      #alpha = norm_dens
     )
   ) +
   theme_bw() +
@@ -34,7 +44,7 @@ hu <- ggplot() +
     xlim = xlimit, ylim = ylimit
   ) + 
   facet_wrap(
-    nrow = 2,
+    nrow = 3,
     ~age_slice
   ) +
   scale_shape_manual(
@@ -46,15 +56,17 @@ hu <- ggplot() +
   ) +
   scale_size_manual(
     values = c(
-      "flat" = 3,
-      "mound" = 3,
-      "unknown" = 2
+      "flat" = 4,
+      "mound" = 4,
+      "unknown" = 3
     )
   ) +
   scale_color_manual(
     values = c(
-      "cremation" = "red",
-      "inhumation" = "darkgreen",
+      "cremation" = "#D55E00",
+      "inhumation" = "#0072B2",
+      "mound" = "#CC79A7",
+      "flat" = "#009E73",
       "unknown" = "darkgrey"
     )
   ) +
@@ -68,6 +80,11 @@ hu <- ggplot() +
     # panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
     # legend.position = c(1, 0), legend.justification = c(1, 0)
     legend.position = "bottom"
+  ) +
+  guides(
+    title = "Grabtyp", color = guide_legend(nrow = 3, byrow = TRUE),
+    shape = guide_legend(nrow = 3, byrow = TRUE)
+    #alpha = guide_legend(nrow = 3, byrow = TRUE)
   )
 
 hu %>%
@@ -77,7 +94,7 @@ hu %>%
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    width = 297, height = 210, units = "mm",
+    width = 210, height = 297, units = "mm",
     limitsize = F
   )
 
