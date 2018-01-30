@@ -62,13 +62,13 @@ hu <- chronology %>%
     position = position_dodge(dodge_value),
     size = 3
   ) +
-  coord_flip() + 
+  coord_flip(ylim = c(-2550, -500)) + 
   theme_bw() +
   guides(color = FALSE) +
   xlab("") +
   ylab("Time in years calBC") +
   scale_y_continuous(
-    breaks = seq(-2500, -500, 100),
+    breaks = seq(-2500, -500, 200),
     limits = c(-2550, -500)
   )
 
@@ -82,3 +82,4 @@ hu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
+
