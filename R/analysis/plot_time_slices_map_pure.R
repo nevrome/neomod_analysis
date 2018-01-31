@@ -6,6 +6,12 @@ regions <- sf::st_read(
 ) %>% 
   sf::st_transform(4326)
 
+countries <- sf::st_read(
+  "../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp"
+) %>% 
+  sf::st_transform(4326)
+
+
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
     age %in% seq(2500, 500, by = -250)
@@ -22,9 +28,13 @@ ylimit <- limit[c(2, 4)]
 
 hu <- ggplot() +
   geom_sf(
-    data = land_outline,
-    fill = NA, colour = "black", size = 0.1
+    data = countries,
+    fill = NA, colour = "black", size = 0.2
   ) +
+  # geom_sf(
+  #   data = land_outline,
+  #   fill = NA, colour = "black", size = 0.2
+  # ) +
   geom_sf(
     data = regions,
     fill = NA, colour = "red", size = 0.3
@@ -43,10 +53,10 @@ hu <- ggplot() +
   coord_sf(
     xlim = xlimit, ylim = ylimit
   ) + 
-  facet_wrap(
-    nrow = 3,
-    ~age_slice
-  ) +
+  # facet_wrap(
+  #   nrow = 3,
+  #   ~age_slice
+  # ) +
   scale_shape_manual(
     values = c(
       "flat" = "\u268A",
@@ -89,7 +99,8 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map_full.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
