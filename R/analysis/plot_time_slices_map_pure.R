@@ -32,53 +32,48 @@ bronze2_slices <- bronze2 %>%
   ) %>%
   dplyr::mutate(
     age_slice = factor(age, levels = seq(2500, 500, by = -250))
+  ) %>% st_as_sf(
+    coords = c("lon", "lat"),
+    crs = 4326
   )
 
 library(ggplot2)
 library(sf)
 
 xlimit <- c(-1600000, 1300000)
-ylimit <- c(800000, 3600000)
+ylimit <- c(800000, 3800000)
 
 hu <- ggplot() +
   geom_sf(
-    data = countries,
+    data = land_outline,
+    fill = NA, colour = "black", size = 0.4
+  ) +
+  geom_sf(
+    data = rivers,
     fill = NA, colour = "black", size = 0.2
   ) +
-  # geom_sf(
-  #   data = rivers,
-  #   fill = NA, colour = "black", size = 0.2
-  # ) +
-  # geom_sf(
-  #   data = lakes,
-  #   fill = NA, colour = "black", size = 0.2
-  # ) +
-  # geom_sf(
-  #   data = land_outline,
-  #   fill = NA, colour = "black", size = 0.2
-  # ) +
+  geom_sf(
+    data = lakes,
+    fill = NA, colour = "black", size = 0.2
+  ) +
   geom_sf(
     data = regions,
-    fill = NA, colour = "red", size = 0.3
+    fill = NA, colour = "red", size = 0.5
   ) +
-  geom_point(
+  geom_sf(
     data = bronze2_slices, 
     aes(
-      x = lon, y = lat, 
       color = burial_type, 
       shape = burial_construction,
       size = burial_construction
-      #alpha = norm_dens
-    )
+    ),
+    show.legend = "point"
   ) +
   theme_bw() +
   coord_sf(
-    xlim = xlimit, ylim = ylimit
+    xlim = xlimit, ylim = ylimit,
+    crs = st_crs(102013)
   ) + 
-  # facet_wrap(
-  #   nrow = 3,
-  #   ~age_slice
-  # ) +
   scale_shape_manual(
     values = c(
       "flat" = "\u268A",
@@ -88,9 +83,9 @@ hu <- ggplot() +
   ) +
   scale_size_manual(
     values = c(
-      "flat" = 4,
-      "mound" = 4,
-      "unknown" = 3
+      "flat" = 8,
+      "mound" = 8,
+      "unknown" = 4
     )
   ) +
   scale_color_manual(
@@ -109,15 +104,19 @@ hu <- ggplot() +
     axis.title.y = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
-    # panel.grid.major = element_line(colour = "lightgrey", size = 0.1),
-    # legend.position = c(1, 0), legend.justification = c(1, 0)
-    legend.position = "bottom"
+    plot.title = element_text(size = 30, face = "bold"),
+    legend.position = "right",
+    legend.title = element_text(size = 20, face = "bold"),
+    legend.text = element_text(size = 15)
   ) +
   guides(
-    title = "Grabtyp", color = guide_legend(nrow = 3, byrow = TRUE),
-    shape = guide_legend(nrow = 3, byrow = TRUE)
-    #alpha = guide_legend(nrow = 3, byrow = TRUE)
-  )
+    color = guide_legend(override.aes = list(size = 10))
+    #shape = guide_legend(nrow = 2, byrow = TRUE)
+  )# + 
+  # facet_wrap(
+  #   nrow = 3,
+  #   ~age_slice
+  # )
 
 hu %>%
   ggsave(
@@ -127,7 +126,8 @@ hu %>%
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    width = 210, height = 297, units = "mm",
+    #width = 210, height = 297, units = "mm",
+    width = 400, height = 300, units = "mm",
     limitsize = F
   )
 
@@ -155,11 +155,9 @@ for(i in seq(2500, 500, -10)) {
       data = lakes,
       fill = NA, colour = "black", size = 0.2
     ) +
-    #geom_point(
     geom_sf(
       data = bronze2_fine_slices, 
       aes(
-        #x = lon, y = lat,
         color = burial_type, 
         shape = burial_construction,
         size = burial_construction,
@@ -226,3 +224,4 @@ for(i in seq(2500, 500, -10)) {
 
 }
 
+#ffmpeg -r 8 -vb 20M -i movie/%*.jpeg -vcodec mpeg4 -r 8 the_movie_3.avi
