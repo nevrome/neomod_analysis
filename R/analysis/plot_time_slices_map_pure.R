@@ -37,7 +37,7 @@ bronze2_slices <- bronze2 %>%
 library(ggplot2)
 library(sf)
 
-xlimit <- c(-1600000, 1200000)
+xlimit <- c(-1600000, 1300000)
 ylimit <- c(800000, 3600000)
 
 hu <- ggplot() +
@@ -164,7 +164,8 @@ for(i in seq(2500, 500, -10)) {
         shape = burial_construction,
         size = burial_construction,
         alpha = norm_dens
-      )
+      ),
+      show.legend = "point"
     ) +
     theme_bw() +
     coord_sf(
@@ -207,8 +208,7 @@ for(i in seq(2500, 500, -10)) {
       legend.text = element_text(size = 15)
     ) +
     guides(
-      title = "Grabtyp", color = guide_legend(nrow = 3, byrow = TRUE),
-      shape = guide_legend(nrow = 3, byrow = TRUE),
+      color = guide_legend(override.aes = list(size = 10)),
       alpha = FALSE
     ) +
     ggtitle(paste0(i, "calBC"))
