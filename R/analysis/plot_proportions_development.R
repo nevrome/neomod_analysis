@@ -1,10 +1,10 @@
 load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
 
-#load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
-load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
+load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
+#load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
 
-#amount_devel <- amount_development_burial_type
-amount_devel <- amount_development_burial_construction
+amount_devel <- amount_development_burial_type
+#amount_devel <- amount_development_burial_construction
 
 amount_devel %<>% 
   dplyr::filter(
@@ -53,12 +53,12 @@ amount_devel %<>%
 library(ggplot2)
 
 prop <- proportion_per_region_df %>% 
-  # dplyr::filter(
-  #   idea != "flat" & idea != "mound"
-  # )
   dplyr::filter(
-    idea != "inhumation" & idea != "cremation"
+    idea != "flat" & idea != "mound"
   )
+  # dplyr::filter(
+  #   idea != "inhumation" & idea != "cremation"
+  # )
 
 prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
@@ -72,20 +72,20 @@ hu <- ggplot() +
     linetype = "blank"
   ) +
   geom_line(
-    #data = dplyr::filter(prop, idea == "cremation"),
-    data = dplyr::filter(prop, idea == "flat"),
+    data = dplyr::filter(prop, idea == "cremation"),
+    #data = dplyr::filter(prop, idea == "flat"),
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
   ) +
-  geom_rect(
-    aes(NULL, NULL, xmin = start, xmax = end),
-    ymin = 0, ymax = 1, 
-    fill = "black", 
-    alpha = 0.5,
-    color = NA,
-    data = amount_devel
-  ) +
+  # geom_rect(
+  #   aes(NULL, NULL, xmin = start, xmax = end),
+  #   ymin = 0, ymax = 1, 
+  #   fill = "black", 
+  #   alpha = 0.5,
+  #   color = NA,
+  #   data = amount_devel
+  # ) +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region_name, nrow = 11) +
   scale_x_reverse() +
@@ -120,7 +120,7 @@ gl <- lapply(region_file_list, function(x) {
       width = 0.06, height = 0.8
     )
   })
-dummy <- tibble(region_name = unique(prop$region_name), grob = gl )
+dummy <- tibble::tibble(region_name = unique(prop$region_name), grob = gl )
 
 source("R/helper/geom_grob.R")
 
@@ -134,8 +134,8 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_mound_flat.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_mound_flat.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
