@@ -215,7 +215,7 @@ for(i in seq(2500, 500, -10)) {
   
   hu %>%
     ggsave(
-      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 2500 - i ,".jpeg"),
+      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 250 - (i/10) ,".jpeg"),
       plot = .,
       device = "jpeg",
       scale = 1,
@@ -226,4 +226,3 @@ for(i in seq(2500, 500, -10)) {
 
 }
 
-# ffmpeg -r 30 -start_number 0 -i movie/%d.jpeg -vcodec mpeg4 -r 30 the_movie.avi
