@@ -224,4 +224,4 @@ for(i in seq(2500, 500, -10)) {
 
 }
 
-#ffmpeg -r 8 -vb 20M -i movie/%*.jpeg -vcodec mpeg4 -r 8 the_movie_3.avi
+#ffmpeg -r 8 -vb 20M -i movie/%*.jpeg -vcodec libx264 -vf scale=1280:-2 -r 8 the_movie_3.mp4
