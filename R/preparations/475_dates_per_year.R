@@ -13,7 +13,7 @@ amount_development_burial_type <- amount_development_burial_type_without_zero %>
     expand.grid(
       region_name = unique(amount_development_burial_type_without_zero$region_name),
       idea = unique(amount_development_burial_type_without_zero$idea), 
-      timestep = 500:2500,
+      timestep = 800:2200,
       stringsAsFactors = FALSE
     ),
     by = c("region_name", "timestep", "idea")
@@ -40,7 +40,7 @@ amount_development_burial_construction  <- amount_development_burial_constructio
     expand.grid(
       region_name = unique(amount_development_burial_construction_without_zero$region_name),
       idea = unique(amount_development_burial_construction_without_zero$idea), 
-      timestep = 500:2500,
+      timestep = 800:2200,
       stringsAsFactors = FALSE
     ),
     by = c("region_name", "timestep", "idea")

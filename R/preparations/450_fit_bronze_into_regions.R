@@ -1,14 +1,11 @@
 # load regions
-regions <- sf::st_read(
-  "manually_changed_data/regionen2017g.shp"
-) %>% 
-  sf::st_transform(4326)
+load("../neomod_datapool/bronze_age/regions.RData")
 
 load("../neomod_datapool/bronze_age/bronze2.RData")
 bronze_sf <- bronze2 %>%
   sf::st_as_sf(
     coords = c("lon", "lat"), crs = 4326
-  )
+  ) %>% sf::st_transform(102013)
 
 #bronze_sf2 <- bronze_sf[1:200,]
 
@@ -122,8 +119,8 @@ proportion_per_region <- dates_per_region %>%
     }
     
     # completion with empty information
-    if (nrow(res) < 2001) {
-      missing_ages <- c(500:2500)[!(c(500:2500) %in% res$age)]
+    if (nrow(res) < 1401) {
+      missing_ages <- c(800:2200)[!(c(800:2200) %in% res$age)]
       res <- rbind(
         res, 
         tibble::tibble(
