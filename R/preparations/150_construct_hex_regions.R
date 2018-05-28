@@ -44,11 +44,12 @@ regions_with_enough_graves <- schnu %>%
   ) %$%
   region_id
 
-selected_regions <- region_circles %>%
+selected_region_circles <- region_circles %>%
   dplyr::filter(region_id %in% regions_with_enough_graves)
 
 ggplot() +
   geom_sf(data = area) +
-  geom_sf(data = selected_regions, fill = NA) +
+  geom_sf(data = selected_region_circles, fill = NA) +
   geom_sf(data = schnu)
 
+save(selected_region_circles, file = "../neomod_datapool/bronze_age/selected_region_circles.RData")
