@@ -13,7 +13,7 @@ area <- sf::st_intersection(sf::st_buffer(land_outline, 0), research_area)
 library(sp)
 library(raster)
 library(rgeos)
-area <- as(area, 'Spatial')
+area_sp <- as(area, 'Spatial')
 make_grid <- function(x, cell_diameter, cell_area, clip = FALSE) {
   if (missing(cell_diameter)) {
     if (missing(cell_area)) {
@@ -40,24 +40,19 @@ make_grid <- function(x, cell_diameter, cell_area, clip = FALSE) {
   return(g)
 }
 
+set.seed(19)
+hex_grid <- make_grid(area_sp, cell_diameter = 520000, clip = FALSE)
+
+hex_grid %<>% sf::st_as_sf() 
+
 load("../neomod_datapool/bronze_age/bronze1.RData")
-bronze1 %<>% dplyr::select(-calage_density_distribution)
+bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
+sf::st_crs(bronze1) <- 4326
 
-sp::coordinates(bronze1) <- ~lon+lat
-sp::proj4string(bronze1) <- "+proj=longlat +datum=WGS84 +no_defs"
-
-bronze1 %<>% spTransform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
-
-
-hex_grid <- make_grid(area, cell_diameter = 520000, clip = TRUE)
-
-plot(area, col = "grey50", bg = "light blue", axes = FALSE)
-plot(hex_grid, border = "orange", add = TRUE)
-
-plot(bronze1, add = TRUE)
-
-hex_grid <- as(hex_grid, "SpatialPolygonsDataFrame")
-
-plot(hex_grid)
+library(ggplot2)
+ggplot() +
+  geom_sf(data = area) +
+  geom_sf(data = hex_grid, fill = NA) +
+  geom_sf(data = bronze1)
 
 
