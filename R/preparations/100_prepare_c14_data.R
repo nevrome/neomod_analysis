@@ -52,8 +52,8 @@ bronze0 <- bronze %>%
     in_time_of_interest = 
       purrr::map(calage_density_distribution, function(x){
         any(
-          x$age <= (2500 + bol) & 
-            x$age >= (500 + bol) &
+          x$age <= (2200 + bol) & 
+            x$age >= (800 + bol) &
             x$two_sigma
         )
       }
@@ -98,6 +98,15 @@ bronze1 <- bronze0 %>%
   )
 
 save(bronze1, file = "../neomod_datapool/bronze_age/bronze1.RData")
+
+# export dates as shapefile
+bronze1 %>% sf::st_as_sf(
+  coords = c("lon", "lat"),
+  crs = 4326
+) %>% 
+  sf::write_sf("../neomod_datapool/bronze_age/bronze1.shp")
+
+
 load("../neomod_datapool/bronze_age/bronze1.RData")
 
 # get some counts
@@ -140,7 +149,7 @@ bronze2 <- bronze1 %>%
     age = age - bol
   ) %>%
   dplyr::filter(
-    age <= 2500 & age >= 500
+    age <= 2200 & age >= 800
   ) %>%
   dplyr::arrange(
     desc(burial_construction)
