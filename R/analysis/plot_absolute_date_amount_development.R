@@ -34,7 +34,7 @@ spu <- ggplot() +
       "unknown" = "grey85"
     )
   ) +
-  xlim(2700, 500) +
+  xlim(2500, 800) +
   coord_cartesian(
     ylim = c(0, 100)
   )
@@ -46,10 +46,10 @@ gl <- lapply(region_file_list, function(x) {
   img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
-    width = 0.06, height = 0.8
+    width = 0.1, height = 0.8
   )
 })
-dummy <- tibble(region_name = unique(amount_devel$region_name), grob = gl )
+dummy <- tibble::tibble(region_name = unique(amount_devel$region_name), grob = gl )
 
 source("R/helper/geom_grob.R")
 
@@ -58,7 +58,7 @@ spu <- spu +
     data = dummy, 
     aes(grob = grob), 
     inherit.aes = FALSE,
-    x = 0.07, y = 0.5
+    x = 0.1, y = 0.5
   )
 
 spu %>%
