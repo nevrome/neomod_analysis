@@ -1,9 +1,8 @@
-regions <- sf::st_read(
-  "manually_changed_data/regionen2017g.shp"
-) %>% 
-  sf::st_transform(4326)
+load("../neomod_datapool/bronze_age/regions.RData")
 
 load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
+
+land_outline %<>% sf::st_transform(102013)
 
 # plot region pictograms
 
