@@ -21,18 +21,23 @@ lakes <- sf::st_read(
 ) %>% 
   sf::st_transform(4326)
 
-regions <- sf::st_read(
-  "manually_changed_data/regionen2017g.shp"
-) %>% 
+# regions <- sf::st_read(
+#   "manually_changed_data/regionen2017g.shp"
+# ) %>% 
+#   sf::st_transform(4326)
+
+research_area <- sf::st_read(
+  "manually_changed_data/research_area.shp"
+) %>%
   sf::st_transform(4326)
 
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
-    age %in% seq(2500, 500, by = -250)
+    age %in% seq(2200, 800, by = -200)
   ) %>%
   dplyr::mutate(
-    age_slice = factor(age, levels = seq(2500, 500, by = -250))
-  ) %>% st_as_sf(
+    age_slice = factor(age, levels = seq(2200, 800, by = -200))
+  ) %>% sf::st_as_sf(
     coords = c("lon", "lat"),
     crs = 4326
   )
@@ -56,8 +61,12 @@ hu <- ggplot() +
     data = lakes,
     fill = NA, colour = "black", size = 0.2
   ) +
+  # geom_sf(
+  #   data = regions,
+  #   fill = NA, colour = "red", size = 0.5
+  # ) +
   geom_sf(
-    data = regions,
+    data = research_area,
     fill = NA, colour = "red", size = 0.5
   ) +
   geom_sf(
