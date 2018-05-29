@@ -60,16 +60,28 @@ prop <- proportion_per_region_df %>%
   #   idea != "inhumation" & idea != "cremation"
   # )
 
+regions_factor <- as.factor(prop$region_name)
+prop$region_name <- factor(regions_factor, levels = c(
+  "Austria and Czech Republic",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
 prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
 hu <- ggplot() +
   geom_area(
     data = prop,
-    aes(x = timestep, y = proportion, fill = idea),
+    mapping = aes(x = timestep, y = proportion, fill = idea),
     position = 'stack',
-    #alpha = 0.6,
     linetype = "blank"
+    #alpha = 0.6
   ) +
   geom_line(
     data = dplyr::filter(prop, idea == "cremation"),
@@ -88,14 +100,18 @@ hu <- ggplot() +
   # ) +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region_name, nrow = 8) +
-  scale_x_reverse() +
   xlab("Time in years calBC") +
-  labs(fill = "Memes (mutually exclusive)") + 
+  ylab("Proportion of burials") +
+  labs(fill = "Ideas (mutually exclusive)") + 
   theme_bw() +
   theme(
-    legend.position="bottom",
-    axis.title.y = element_blank(),
-    panel.grid.major.x = element_line(colour = "black", size = 0.3)
+    legend.position = "bottom",
+    panel.grid.major.x = element_line(colour = "black", size = 0.3),
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15),
+    strip.text.x = element_text(size = 13),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15)
   ) +
   scale_fill_manual(
     values = c(
@@ -109,17 +125,19 @@ hu <- ggplot() +
     breaks = c(0, 0.5, 1),
     labels = c("0%", "50%", "100%")
   ) +
-  xlim(2700, 500)
+  scale_x_reverse(breaks = c(2200, 2000, 1500, 1000, 800), limits = c(2500, 800))
+
+
 
 region_file_list <- unique(prop$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
-    img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
-    g <- grid::rasterGrob(
-      img, interpolate = TRUE,
-      width = 0.06, height = 0.8
-    )
-  })
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
+  g <- grid::rasterGrob(
+    img, interpolate = TRUE,
+    width = 0.1, height = 0.9
+  )
+})
 dummy <- tibble::tibble(region_name = unique(prop$region_name), grob = gl )
 
 source("R/helper/geom_grob.R")
@@ -129,7 +147,7 @@ hu <- hu +
     data = dummy, 
     aes(grob = grob), 
     inherit.aes = FALSE,
-    x = 0.07, y = 0.5
+    x = 0.1, y = 0.5
   )
 
 hu %>%
