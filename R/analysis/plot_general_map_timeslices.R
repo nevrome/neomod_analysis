@@ -1,35 +1,8 @@
-#load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
 load("../neomod_datapool/bronze_age/bronze2.RData")
-
-land_outline <- sf::st_read(
-  "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
-) %>% 
-  sf::st_transform(4326)
-
-countries <- sf::st_read(
-  "../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp"
-) %>% 
-  sf::st_transform(4326)
-
-rivers <- sf::st_read(
-  "../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp"
-) %>% 
-  sf::st_transform(4326)
-
-lakes <- sf::st_read(
-  "../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp"
-) %>% 
-  sf::st_transform(4326)
-
-# regions <- sf::st_read(
-#   "manually_changed_data/regionen2017g.shp"
-# ) %>% 
-#   sf::st_transform(4326)
-
-research_area <- sf::st_read(
-  "manually_changed_data/research_area.shp"
-) %>%
-  sf::st_transform(4326)
+land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
+countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
+research_area <- sf::st_read("manually_changed_data/research_area.shp")
+load("../neomod_datapool/bronze_age/regions.RData")
 
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
@@ -42,24 +15,17 @@ bronze2_slices <- bronze2 %>%
     crs = 4326
   )
 
+ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
+xlimit <- c(ex[1], ex[2])
+ylimit <- c(ex[3], ex[4])
+
 library(ggplot2)
 library(sf)
-
-xlimit <- c(-1600000, 1300000)
-ylimit <- c(800000, 3800000)
 
 hu <- ggplot() +
   geom_sf(
     data = land_outline,
-    fill = NA, colour = "black", size = 0.4
-  ) +
-  geom_sf(
-    data = rivers,
-    fill = NA, colour = "black", size = 0.2
-  ) +
-  geom_sf(
-    data = lakes,
-    fill = NA, colour = "black", size = 0.2
+    fill = "white", colour = "black", size = 0.4
   ) +
   # geom_sf(
   #   data = regions,
@@ -70,11 +36,12 @@ hu <- ggplot() +
     fill = NA, colour = "red", size = 0.5
   ) +
   geom_sf(
-    data = bronze2_slices, 
-    aes(
-      color = burial_type, 
+    data = bronze2_slices,
+    mapping = aes(
+      color = burial_type,
       shape = burial_construction,
-      size = burial_construction
+      size = burial_construction,
+      alpha = norm_dens
     ),
     show.legend = "point"
   ) +
@@ -107,35 +74,33 @@ hu <- ggplot() +
     )
   ) +
   theme(
-    axis.title.x = element_blank(),
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.title.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
     plot.title = element_text(size = 30, face = "bold"),
-    legend.position = "right",
+    legend.position = "bottom",
     legend.title = element_text(size = 20, face = "bold"),
-    legend.text = element_text(size = 15)
+    axis.text = element_blank(),
+    legend.text = element_text(size = 20),
+    panel.grid.major = element_line(colour = "black", size = 0.3),
+    strip.text.x = element_text(size = 20)
   ) +
   guides(
-    color = guide_legend(override.aes = list(size = 10))
-    #shape = guide_legend(nrow = 2, byrow = TRUE)
-  )# + 
-  # facet_wrap(
-  #   nrow = 3,
-  #   ~age_slice
-  # )
+    color = guide_legend(title = "Burial type", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    shape = guide_legend(title = "Burial construction", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    size = FALSE,
+    alpha = FALSE
+  ) +
+  facet_wrap(
+    nrow = 3,
+    ~age_slice
+  )
 
 hu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map_full.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/general_map_research_area_timeslices.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
     dpi = 300,
     #width = 210, height = 297, units = "mm",
-    width = 400, height = 300, units = "mm",
+    width = 350, height = 360, units = "mm",
     limitsize = F
   )
