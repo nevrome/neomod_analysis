@@ -1,6 +1,22 @@
+#load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
+load("../neomod_datapool/bronze_age/bronze2.RData")
+land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
+countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
+rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
+lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
+research_area <- sf::st_read("manually_changed_data/research_area.shp")
+load("../neomod_datapool/bronze_age/regions.RData")
+
+ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
+xlimit <- c(ex[1], ex[2])
+ylimit <- c(ex[3], ex[4])
+
+library(ggplot2)
+library(sf)
+
 #### movie ####
 
-for(i in seq(2500, 500, -10)) {
+for(i in seq(2200, 800, -10)) {
   bronze2_fine_slices <- bronze2 %>%
     dplyr::filter(
       age == i
@@ -12,7 +28,7 @@ for(i in seq(2500, 500, -10)) {
   hu <- ggplot() +
     geom_sf(
       data = land_outline,
-      fill = NA, colour = "black", size = 0.4
+      fill = "white", colour = "black", size = 0.4
     ) +
     geom_sf(
       data = rivers,
@@ -22,10 +38,18 @@ for(i in seq(2500, 500, -10)) {
       data = lakes,
       fill = NA, colour = "black", size = 0.2
     ) +
+    # geom_sf(
+    #   data = regions,
+    #   fill = NA, colour = "red", size = 0.5
+    # ) +
     geom_sf(
-      data = bronze2_fine_slices, 
-      aes(
-        color = burial_type, 
+      data = research_area,
+      fill = NA, colour = "red", size = 0.5
+    ) +
+    geom_sf(
+      data = bronze2_fine_slices,
+      mapping = aes(
+        color = burial_type,
         shape = burial_construction,
         size = burial_construction,
         alpha = norm_dens
@@ -61,31 +85,29 @@ for(i in seq(2500, 500, -10)) {
       )
     ) +
     theme(
-      axis.title.x = element_blank(),
-      axis.text.x = element_blank(),
-      axis.ticks.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.y = element_blank(),
-      axis.ticks.y = element_blank(),
       plot.title = element_text(size = 30, face = "bold"),
-      legend.position = "right",
+      legend.position = "bottom",
       legend.title = element_text(size = 20, face = "bold"),
-      legend.text = element_text(size = 15)
+      axis.text = element_text(size = 15),
+      legend.text = element_text(size = 20),
+      panel.grid.major = element_line(colour = "black", size = 0.3)
     ) +
     guides(
-      color = guide_legend(override.aes = list(size = 10)),
+      color = guide_legend(title = "Burial type", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+      shape = guide_legend(title = "Burial construction", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+      size = FALSE,
       alpha = FALSE
     ) +
     ggtitle(paste0(i, "calBC"))
   
   hu %>%
     ggsave(
-      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 250 - (i/10) ,".jpeg"),
+      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 220 - (i/10) ,".jpeg"),
       plot = .,
       device = "jpeg",
       scale = 1,
       dpi = 300,
-      width = 400, height = 300, units = "mm",
+      width = 360, height = 350, units = "mm",
       limitsize = F
     )
   
