@@ -11,23 +11,25 @@ land_outline <- sf::st_read(
 area <- sf::st_intersection(sf::st_buffer(land_outline, 0), research_area)
 
 region_circles <- tibble::tibble(
-  geometry = sf::st_make_grid(area, 400000, what = "centers"),
+  geometry = sf::st_make_grid(area, 400000, what = "centers", offset = c(-900000,-130000)),
   ID = 1:length(geometry)
   ) %>% sf::st_as_sf()
 region_circles <- sf::st_intersection(region_circles, research_area)
-region_circles %<>% sf::st_buffer(dist = 300000)
-
-library(ggplot2)
-ggplot() +
-  geom_sf(data = area) +
-  geom_sf(data = region_circles, fill = NA)
+region_circles %<>% sf::st_buffer(dist = 240000)
 
 load("../neomod_datapool/bronze_age/bronze1.RData")
 bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
 sf::st_crs(bronze1) <- 4326
 bronze1 %<>% sf::st_transform(102013)
+gu <- sf::st_intersection(bronze1, research_area)
 
-schnu <- sf::st_intersection(bronze1, region_circles)
+library(ggplot2)
+ggplot() +
+  geom_sf(data = area) +
+  geom_sf(data = region_circles, fill = NA) +
+  geom_sf(data = gu)
+
+schnu <- sf::st_intersection(gu, region_circles)
 
 ggplot() +
   geom_sf(data = area) +
@@ -40,7 +42,7 @@ regions_with_enough_graves <- schnu %>%
     n = n()
   ) %>%
   dplyr::filter(
-    n >= 100
+    n >= 70
   ) %$%
   ID
 
@@ -50,7 +52,7 @@ regions <- region_circles %>%
 ggplot() +
   geom_sf(data = area) +
   geom_sf(data = regions, fill = NA) +
-  geom_sf(data = schnu)
+  geom_sf(data = gu)
 
 regions %>%
   dplyr::mutate(
