@@ -1,26 +1,11 @@
 #load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
 load("../neomod_datapool/bronze_age/bronze1.RData")
-
-land_outline <- sf::st_read(
-  "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
-)
-countries <- sf::st_read(
-  "../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp"
-)
-
-rivers <- sf::st_read(
-  "../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp"
-)
-
-lakes <- sf::st_read(
-  "../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp"
-)
-
+land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
+countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
+rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
+lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
+research_area <- sf::st_read("manually_changed_data/research_area.shp")
 load("../neomod_datapool/bronze_age/regions.RData")
-
-research_area <- sf::st_read(
-  "manually_changed_data/research_area.shp"
-)
 
 bronze1_sf <- bronze1 %>% sf::st_as_sf(
   coords = c("lon", "lat"),
@@ -100,19 +85,18 @@ hu <- ggplot() +
     panel.grid.major = element_line(colour = "black", size = 0.3)
   ) +
   guides(
-    color = guide_legend(override.aes = list(size = 10)),
-    shape = guide_legend(nrow = 2, byrow = TRUE)
+    color = guide_legend(title = "Burial type", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    shape = guide_legend(title = "Burial construction", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    size = FALSE
   )
 
 hu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/disp_map.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/disp_map_full.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/general_map.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    #width = 210, height = 297, units = "mm",
-    width = 380, height = 350, units = "mm",
+    width = 350, height = 360, units = "mm",
     limitsize = F
   )
