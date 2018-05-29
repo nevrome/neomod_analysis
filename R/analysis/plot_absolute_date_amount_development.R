@@ -4,6 +4,18 @@ load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
 amount_devel <- amount_development_burial_type
 #amount_devel <- amount_development_burial_construction
 
+regions_factor <- as.factor(amount_devel$region_name)
+amount_devel$region_name <- factor(regions_factor, levels = c(
+  "Austria and Czech Republic",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
 idea_factor <- as.factor(amount_devel$idea)
 amount_devel$idea <- factor(idea_factor, levels = rev(levels(idea_factor)))
 
@@ -15,15 +27,19 @@ spu <- ggplot() +
     position = 'stack',
     linetype = "blank"
   ) +
-  facet_wrap(~region_name, nrow = 11) +
-  scale_x_reverse() +
+  facet_wrap(~region_name, nrow = 8) +
   xlab("Time in years calBC") +
-  labs(fill = "Memes (mutually exclusive)") + 
+  ylab("Amount of burials") +
+  labs(fill = "Ideas (mutually exclusive)") + 
   theme_bw() +
   theme(
-    legend.position="bottom",
-    axis.title.y = element_blank(),
-    panel.grid.major.x = element_line(colour = "black", size = 0.3)
+    legend.position = "bottom",
+    panel.grid.major.x = element_line(colour = "black", size = 0.3),
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15),
+    strip.text.x = element_text(size = 13),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15)
   ) +
   scale_fill_manual(
     values = c(
@@ -34,10 +50,11 @@ spu <- ggplot() +
       "unknown" = "grey85"
     )
   ) +
-  xlim(2500, 800) +
   coord_cartesian(
-    ylim = c(0, 100)
-  )
+    ylim = c(0, 80)
+  ) +
+  scale_x_reverse(breaks = c(2200, 2000, 1500, 1000, 800), limits = c(2500, 800))
+  
   
 
 region_file_list <- unique(amount_devel$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
@@ -46,7 +63,7 @@ gl <- lapply(region_file_list, function(x) {
   img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
-    width = 0.1, height = 0.8
+    width = 0.1, height = 0.9
   )
 })
 dummy <- tibble::tibble(region_name = unique(amount_devel$region_name), grob = gl )
