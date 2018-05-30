@@ -88,6 +88,7 @@ for(i in seq(2200, 800, -10)) {
       plot.title = element_text(size = 30, face = "bold"),
       legend.position = "bottom",
       legend.title = element_text(size = 20, face = "bold"),
+      axis.title = element_blank(),
       axis.text = element_text(size = 15),
       legend.text = element_text(size = 20),
       panel.grid.major = element_line(colour = "black", size = 0.3)
