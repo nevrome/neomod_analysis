@@ -1,3 +1,5 @@
+#### calculate 
+
 load("../neomod_datapool/bronze_age/dates_probability_per_year_and_region_df.RData")
 
 amount_development_burial_type_without_zero <- dates_probability_per_year_and_region_df %>%
