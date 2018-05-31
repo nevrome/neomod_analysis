@@ -96,5 +96,8 @@ models_grid$simulation_results <- popgenerator::run_gluesless(
   models_to_run = models_grid$model_id
 )
 
+models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
+
 pryr::object_size(models_grid)
 
+save(models_grid, file = "R/simulation_results/sim1.RData")
