@@ -1,58 +1,78 @@
-# load regions
-load("../neomod_datapool/bronze_age/regions.RData")
+#### load data ####
 
+load("../neomod_datapool/bronze_age/regions.RData")
 load("../neomod_datapool/bronze_age/bronze2.RData")
+
+# transform to sf
 bronze_sf <- bronze2 %>%
   sf::st_as_sf(
     coords = c("lon", "lat"), crs = 4326
   ) %>% sf::st_transform(102013)
 
-#bronze_sf2 <- bronze_sf[1:200,]
 
+
+#### dates per region ####
+
+# intersect and get region id per entry
 region_index_of_date <- bronze_sf %>% sf::st_intersects(regions) %>%
   sapply(function(z) if (length(z)==0) NA_integer_ else z[1])
 
-region_of_date <- regions$ID[region_index_of_date]
-region_of_date_name <- as.character(regions$NAME[region_index_of_date])
-
 dates_per_region <- bronze2 %>%
+  # add region information to bronze2
   dplyr::mutate(
-    region_id = region_of_date,
-    region_name = region_of_date_name
+    region_id = regions$ID[region_index_of_date],
+    region_name = as.character(regions$NAME[region_index_of_date])
   ) %>% 
+  # remove entries without (outside of) regions
   dplyr::filter(
     !is.na(region_id)
   ) %>%
-  plyr::dlply("region_id")
+  # split datasets by region id
+  split(.$region_id)
 
+# merge per-region data.frame list again to one dataframe
 dates_probability_per_year_and_region_df <- dates_per_region %>% 
-  as.list() %>%
   dplyr::bind_rows()
 
 save(
   dates_probability_per_year_and_region_df, 
   file = "../neomod_datapool/bronze_age/dates_probability_per_year_and_region_df.RData"
 )
-  
+
+
+
+#### calculate per year, per region distribution of ideas ####
+
+# helper function  
 fncols <- function(data, cname) {
   add <- cname[!cname %in% names(data)]
   if (length(add) != 0) {data[add] <- NA_real_}
   return(data)
 }
 
+# main loop
 proportion_per_region <- dates_per_region %>%
+  # apply per region data.frame
   pbapply::pblapply(function(x) {
-    # remove empty regions
+    
+    # in case of empty regions or regions with only unknown graves: NULL
     if (nrow(x) == 0 |
         (all(x$burial_type == "unknown") &
-         all(x$burial_construction == "unknown"))) {
+         all(x$burial_construction == "unknown"))) 
+    {
+      
       res <- NULL
+    
+    # in case of unempty regions     
     } else {
+      
+      #### burial_type: cremation vs. inhumation ####
       
       bt_basic <- x %>% 
         dplyr::filter(
           burial_type != "unknown"
-        ) 
+        )
+      
       if (nrow(bt_basic) == 0) {
         bt <- tibble::tibble(
           region_name = character(),
@@ -80,10 +100,13 @@ proportion_per_region <- dates_per_region %>%
           dplyr::ungroup()
       }
       
+      #### burial_type: mound vs. flat ####
+      
       bc_basic <- x %>% 
         dplyr::filter(
           burial_construction != "unknown"
-        ) 
+        )
+      
       if (nrow(bc_basic) == 0) {
         bc <- tibble::tibble(
           region_name = character(),
@@ -110,6 +133,8 @@ proportion_per_region <- dates_per_region %>%
           ) %>%
           dplyr::ungroup()
       }
+      
+      # combine final result 
         
       res <- dplyr::full_join(
         bt, bc, by = c("age", "region_name")
@@ -118,7 +143,7 @@ proportion_per_region <- dates_per_region %>%
       
     }
     
-    # completion with empty information
+    # complete result with 0 for years without information
     if (nrow(res) < 1401) {
       missing_ages <- c(800:2200)[!(c(800:2200) %in% res$age)]
       res <- rbind(
@@ -137,14 +162,15 @@ proportion_per_region <- dates_per_region %>%
     return(res)
   })
 
+# merge per region information and transform to tall data.frame
 proportion_per_region_df <- proportion_per_region %>% 
-  purrr::map_dfr(as.data.frame, .id = "node") %>%
-  dplyr::mutate_("node" = ~as.numeric(node)) %>%
+  purrr::map_dfr(as.data.frame, .id = "region_id") %>%
+  dplyr::mutate_("region_id" = ~as.numeric(region_id)) %>%
   dplyr::rename(
     "timestep" = "age"
   ) %>%
   tidyr::gather(
-    idea, proportion, -timestep, -node, -region_name
+    idea, proportion, -timestep, -region_id, -region_name
   )
 
 save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
