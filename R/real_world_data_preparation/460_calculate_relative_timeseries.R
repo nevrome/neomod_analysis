@@ -130,6 +130,10 @@ proportion_per_region_df <- proportion_per_region %>%
   ) %>%
   tidyr::gather(
     idea, proportion, -timestep, -region_id, -region_name
+  ) %>% 
+  dplyr::select(
+    region_name, timestep, idea, proportion 
   )
+  
 
 save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
