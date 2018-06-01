@@ -48,8 +48,8 @@
 #     power < 10
 #   )
 
-load("../neomod_datapool/bronze_age/proportion_development_burial_type.RData")
-load("../neomod_datapool/bronze_age/proportion_development_burial_construction.RData")
+load("../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
+load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
 
 library(ggplot2)
 

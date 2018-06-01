@@ -1,5 +1,5 @@
-load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
-#load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
+load("../neomod_datapool/bronze_age/development_amount_burial_type.RData")
+load("../neomod_datapool/bronze_age/development_amount_burial_construction.RData")
 
 amount_devel <- amount_development_burial_type
 #amount_devel <- amount_development_burial_construction
@@ -68,7 +68,7 @@ gl <- lapply(region_file_list, function(x) {
 })
 dummy <- tibble::tibble(region_name = unique(amount_devel$region_name), grob = gl )
 
-source("R/helper/geom_grob.R")
+source("R/helper_functions/geom_grob.R")
 
 spu <- spu +
   geom_custom(
@@ -80,8 +80,8 @@ spu <- spu +
 
 spu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_mound_flat.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/development_amount_regions_burial_type.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_amount_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

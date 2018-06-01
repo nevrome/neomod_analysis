@@ -26,7 +26,7 @@ amount_development_burial_type <- amount_development_burial_type_without_zero %>
 
 save(
   amount_development_burial_type, 
-  file = "../neomod_datapool/bronze_age/amount_development_burial_type.RData"
+  file = "../neomod_datapool/bronze_age/development_amount_burial_type.RData"
 )
 
 amount_development_burial_construction_without_zero <- dates_probability_per_year_and_region_df %>%
@@ -53,6 +53,6 @@ amount_development_burial_construction  <- amount_development_burial_constructio
 
 save(
   amount_development_burial_construction, 
-  file = "../neomod_datapool/bronze_age/amount_development_burial_construction.RData"
+  file = "../neomod_datapool/bronze_age/development_amount_burial_construction.RData"
 )
 

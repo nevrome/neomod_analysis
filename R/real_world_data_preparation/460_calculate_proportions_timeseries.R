@@ -140,7 +140,7 @@ proportion_development_burial_type <- proportion_per_region_df %>%
 
 save(
   proportion_development_burial_type, 
-  file = "../neomod_datapool/bronze_age/proportion_development_burial_type.RData"
+  file = "../neomod_datapool/bronze_age/development_proportions_burial_type.RData"
 )
 
 proportion_development_burial_construction <- proportion_per_region_df %>% 
@@ -148,6 +148,6 @@ proportion_development_burial_construction <- proportion_per_region_df %>%
 
 save(
   proportion_development_burial_construction, 
-  file = "../neomod_datapool/bronze_age/proportion_development_burial_construction.RData"
+  file = "../neomod_datapool/bronze_age/development_proportions_burial_construction.RData"
 )
 
