@@ -135,5 +135,19 @@ proportion_per_region_df <- proportion_per_region %>%
     region_name, timestep, idea, proportion 
   )
   
+proportion_development_burial_type <- proportion_per_region_df %>% 
+  dplyr::filter(idea %in% c("cremation", "inhumation"))
 
-save(proportion_per_region_df, file = "../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
+save(
+  proportion_development_burial_type, 
+  file = "../neomod_datapool/bronze_age/proportion_development_burial_type.RData"
+)
+
+proportion_development_burial_construction <- proportion_per_region_df %>% 
+  dplyr::filter(idea %in% c("flat", "mound"))
+
+save(
+  proportion_development_burial_construction, 
+  file = "../neomod_datapool/bronze_age/proportion_development_burial_construction.RData"
+)
+
