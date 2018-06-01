@@ -44,6 +44,12 @@ prop <- models_grid$idea_proportions[[1]]
 prop$idea <- as.factor(prop$idea)
 # prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
+ann_text <- data.frame(
+  timestep = -200, proportion = 0.5, 
+  lab = as.character(unique(prop$region)),
+  region = unique(prop$region) 
+)
+
 hu <- ggplot() +
   geom_area(
     data = prop,
@@ -56,6 +62,11 @@ hu <- ggplot() +
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
+  ) +
+  geom_text(
+    data = ann_text,
+    mapping = aes(x = timestep, y = proportion, label = lab),
+    size = 15
   ) +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region, nrow = 8) +
@@ -84,7 +95,7 @@ hu <- ggplot() +
   ) +
   scale_x_continuous(
     breaks = c(0, 200, 700, 1200, 1400), 
-    limits = c(0, 1400)
+    limits = c(-300, 1400)
   )
 
 hu %>%
