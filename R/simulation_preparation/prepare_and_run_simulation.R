@@ -8,7 +8,7 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {5}
+    function(t) {200}
     #function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
@@ -46,8 +46,8 @@ models_grid <- expand.grid(
     0
   ),
   cross_unit_proportion_friend = list(
-    0,
-    0.2
+    0.2,
+    0
   ),
   weight_child_of = list(
     3
@@ -69,7 +69,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(100) %>%
+  tidyr::uncount(1) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -96,7 +96,7 @@ models_grid$simulation_results <- popgenerator::run_gluesless(
   models_to_run = models_grid$model_id
 )
 
-models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
+models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = TRUE)
 
 pryr::object_size(models_grid)
 
