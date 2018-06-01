@@ -66,7 +66,7 @@ hu <- ggplot() +
   geom_text(
     data = ann_text,
     mapping = aes(x = timestep, y = proportion, label = lab),
-    size = 15
+    size = 12
   ) +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region, nrow = 8) +
