@@ -1,5 +1,3 @@
-load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.RData")
-
 # load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
 #load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
 
@@ -50,16 +48,14 @@ load("../neomod_datapool/bronze_age/space_and_network/proportions_per_region_df.
 #     power < 10
 #   )
 
+load("../neomod_datapool/bronze_age/proportion_development_burial_type.RData")
+load("../neomod_datapool/bronze_age/proportion_development_burial_construction.RData")
+
 library(ggplot2)
 
-prop <- proportion_per_region_df %>% 
-  dplyr::filter(
-    idea != "flat" & idea != "mound"
-  )
-  # dplyr::filter(
-  #   idea != "inhumation" & idea != "cremation"
-  # )
-
+prop <- proportion_development_burial_type
+# prop <- proportion_development_burial_construction
+  
 regions_factor <- as.factor(prop$region_name)
 prop$region_name <- factor(regions_factor, levels = c(
   "Austria and Czech Republic",
@@ -140,7 +136,7 @@ gl <- lapply(region_file_list, function(x) {
 })
 dummy <- tibble::tibble(region_name = unique(prop$region_name), grob = gl )
 
-source("R/helper/geom_grob.R")
+source("R/helper_functions/geom_grob.R")
 
 hu <- hu +
   geom_custom(
@@ -152,8 +148,8 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_cremation_inhumation.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/proportions_development_regions_mound_flat.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_type.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
