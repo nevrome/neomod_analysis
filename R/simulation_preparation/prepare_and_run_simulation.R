@@ -1,5 +1,7 @@
 #### setup settings grid ####
 
+load("../neomod_datapool/bronze_age/start_proportion_burial_type.RData")
+
 # create populations_grid data.frame
 models_grid <- expand.grid(
   # general settings
@@ -8,7 +10,7 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {200}
+    function(t) {40}
     #function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
     # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
@@ -46,21 +48,22 @@ models_grid <- expand.grid(
     0
   ),
   cross_unit_proportion_friend = list(
-    0.2,
-    0
+    0,
+    0.01,
+    0.10
   ),
   weight_child_of = list(
-    3
+    5
   ),
   weight_friend = list(
-    2
+    3
   ),
   # ideas settings
   names = list(
     c("idea_1", "idea_2")
   ),
   start_distribution = list(
-    c(0.5, 0.5)
+    start_proportion_burial_type
   ), 
   strength = list(
     c(1, 1) 
@@ -69,7 +72,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(1) %>%
+  tidyr::uncount(3) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
