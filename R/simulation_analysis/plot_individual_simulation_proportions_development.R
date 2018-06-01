@@ -42,7 +42,7 @@ prop <- models_grid$idea_proportions[[1]]
 # ))
 
 prop$idea <- as.factor(prop$idea)
-# prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
+#prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
 ann_text <- data.frame(
   timestep = -200, proportion = 0.5, 
@@ -54,11 +54,11 @@ hu <- ggplot() +
   geom_area(
     data = prop,
     mapping = aes(x = timestep, y = proportion, fill = idea),
-    position = 'stack',
+    position = position_stack(reverse = T),
     linetype = "blank"
   ) +
   geom_line(
-    data = dplyr::filter(prop, idea == "idea_2"),
+    data = dplyr::filter(prop, idea == "idea_1"),
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
@@ -85,8 +85,8 @@ hu <- ggplot() +
   ) +
   scale_fill_manual(
     values = c(
-      "idea_1" = "#56b4e9",
-      "idea_2" = "#f0e442"
+      "idea_1" = "#f0e442",
+      "idea_2" = "#56b4e9"
     )
   ) +
   scale_y_continuous(
