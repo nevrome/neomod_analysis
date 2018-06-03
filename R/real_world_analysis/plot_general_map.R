@@ -34,7 +34,7 @@ hu <- ggplot() +
   # geom_sf(
   #   data = regions,
   #   fill = NA, colour = "red", size = 0.5
-  # ) +
+  # # ) +
   geom_sf(
     data = research_area,
     fill = NA, colour = "red", size = 0.5
@@ -62,9 +62,9 @@ hu <- ggplot() +
   ) +
   scale_size_manual(
     values = c(
-      "flat" = 8,
-      "mound" = 8,
-      "unknown" = 4
+      "flat" = 10,
+      "mound" = 10,
+      "unknown" = 5
     )
   ) +
   scale_color_manual(
@@ -93,7 +93,8 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/general_map.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/general_map.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/general_map_research_area_unzoomed.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

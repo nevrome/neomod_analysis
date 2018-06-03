@@ -59,9 +59,9 @@ hu <- ggplot() +
   ) +
   scale_size_manual(
     values = c(
-      "flat" = 8,
-      "mound" = 8,
-      "unknown" = 4
+      "flat" = 10,
+      "mound" = 10,
+      "unknown" = 5
     )
   ) +
   scale_color_manual(
