@@ -1,5 +1,7 @@
 load("../neomod_datapool/bronze_age/bronze1.RData")
 
+bronze1 %>% nrow()
+
 # get some counts
 bronze1 %>%
   dplyr::group_by(
