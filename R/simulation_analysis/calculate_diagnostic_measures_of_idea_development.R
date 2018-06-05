@@ -1,28 +1,32 @@
-load("R/simulation_results/sim1.RData")
+load("R/simulation_results/sim1_general.RData")
 
 idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions)
 
+moving_average <- function(x, n = 5, sides = 1) {
+  as.vector(stats::filter(x, rep(1/n, n), sides = sides))
+}
+
 huup <- idea_proportions %>%
-  dplyr::filter(variant == "idea_1") %>%
+  dplyr::filter(idea == "idea_1") %>%
   dplyr::group_by(model_id) %>%
   dplyr::mutate(
-    individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
+    proportion = moving_average(proportion, n = 50, sides = 2)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::group_by(timesteps) %>%
+  dplyr::group_by(timestep) %>%
   dplyr::mutate(
-    general_sd = sd(individuals_with_variant)
+    general_sd = sd(proportion)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::group_by(timesteps, multiplier) %>%
+  dplyr::group_by(timestep, multiplier) %>%
   dplyr::summarise(
-    min = min(individuals_with_variant),
-    max = max(individuals_with_variant),
-    mean = mean(individuals_with_variant),
-    standard_deviation = sd(individuals_with_variant),
+    min = min(proportion),
+    max = max(proportion),
+    mean = mean(proportion),
+    standard_deviation = sd(proportion),
     range = abs(min - max),
-    lower_quart = quantile(individuals_with_variant, na.rm = TRUE)[2],
-    upper_quart = quantile(individuals_with_variant, na.rm = TRUE)[4],
+    lower_quart = quantile(proportion, na.rm = TRUE)[2],
+    upper_quart = quantile(proportion, na.rm = TRUE)[4],
     inter_quart_dist = abs(upper_quart - lower_quart),
     general_sd = mean(general_sd)
   ) %>%
@@ -31,28 +35,30 @@ huup <- idea_proportions %>%
     diff_standard_deviation = standard_deviation - general_sd
   )
 
+library(ggplot2)
+
 huup %>%
   ggplot() +
-  geom_ribbon(aes(x = timesteps, ymin = min, ymax = max)) +
-  geom_line(aes(x = timesteps, y = mean)) +
-  geom_line(aes(x = timesteps, y = mean + standard_deviation), color = "red") +
-  geom_line(aes(x = timesteps, y = mean - standard_deviation), color = "red") +
-  geom_line(aes(x = timesteps, y = lower_quart), color = "darkgreen") +
-  geom_line(aes(x = timesteps, y = upper_quart), color = "darkgreen") +
+  geom_ribbon(aes(x = timestep, ymin = min, ymax = max)) +
+  geom_line(aes(x = timestep, y = mean)) +
+  geom_line(aes(x = timestep, y = mean + standard_deviation), color = "red") +
+  geom_line(aes(x = timestep, y = mean - standard_deviation), color = "red") +
+  geom_line(aes(x = timestep, y = lower_quart), color = "darkgreen") +
+  geom_line(aes(x = timestep, y = upper_quart), color = "darkgreen") +
   facet_wrap(~multiplier)
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timesteps, y = range, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = range, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timesteps, y = inter_quart_dist, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = inter_quart_dist, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timesteps, y = standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timesteps, y = diff_standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = diff_standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
