@@ -2,7 +2,7 @@
 
 load("../neomod_datapool/bronze_age/start_proportion_burial_type.RData")
 
-# create populations_grid data.frame
+# create models_grid data.frame
 models_grid <- expand.grid(
   # general settings
   timeframe = list(
@@ -10,11 +10,8 @@ models_grid <- expand.grid(
   ),
   # population settings  
   population_size_functions = c(
-    function(t) {40}
-    #function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
-    # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
-    # function(t) {round(0.0005 * (t - 1000)^2 + 100, 0)}
-    # function(t) {round(2000 - 0.95 * t, 0)}
+    function(t) {100}
+    # function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
   ),
   units_amount = c(
     8
@@ -72,7 +69,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(3) %>%
+  tidyr::uncount(30) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -104,3 +101,7 @@ models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit 
 pryr::object_size(models_grid)
 
 save(models_grid, file = "R/simulation_results/sim1.RData")
+
+models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
+
+save(models_grid, file = "R/simulation_results/sim1_general.RData")
