@@ -62,3 +62,44 @@ huup %>%
 huup %>%
   ggplot() +
   geom_line(aes(x = timestep, y = diff_standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+
+#####
+
+load("R/simulation_results/sim1.RData")
+
+idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions)
+
+huup <- idea_proportions %>%
+  dplyr::filter(idea == "idea_1") %>%
+  # dplyr::group_by(model_id) %>%
+  # dplyr::mutate(
+  #   proportion = moving_average(proportion, n = 50, sides = 2)
+  # ) %>%
+  # dplyr::ungroup() %>%
+  dplyr::group_by(multiplier, region, timestep) %>%
+  dplyr::mutate(
+    general_sd = sd(proportion)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::group_by(multiplier, timestep) %>%
+  dplyr::summarise(
+    standard_deviation = mean(general_sd)
+  ) %>%
+  dplyr::ungroup()
+
+huup %>%
+  ggplot() +
+  geom_line(
+    aes(
+      x = timestep, 
+      y = standard_deviation, 
+      color = as.factor(multiplier)
+    )
+  )
+
+
+
+
+
+
+
