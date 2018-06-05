@@ -1,31 +1,34 @@
 ####
 
-
+load("R/simulation_results/sim1.RData")
 
 library(ggplot2)
 
 idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions)
 
 idea_proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant, color = as.factor(multiplier), group = model_id)) +
+  dplyr::filter(idea == "idea_1") %>%
+  ggplot(aes(x = timestep, y = proportion, color = as.factor(multiplier), group = model_id)) +
   geom_line(alpha = 0.4) +
   theme_bw() +
-  #facet_wrap(~variant) +
-  facet_wrap(as.factor(multiplier)~variant) +
+  #facet_wrap(~idea) +
+  facet_wrap(as.factor(multiplier)~region) +
   stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
   xlab(expression(paste("t"))) 
 
+####
+
 idea_proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant, fill = variant, group = variant)) +
+  ggplot(aes(x = timestep, y = proportion, fill = idea, group = idea)) +
   geom_area() +
   geom_line(alpha = 0.4, position="stack",  color = "black") +
   theme_bw() +
-  #facet_wrap(~variant) +
+  #facet_wrap(~idea) +
   facet_wrap(~model_id) +
   xlab(expression(paste("t"))) 
 
 idea_proportions %>% 
-  ggplot(aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant)) +
+  ggplot(aes(x = timestep, y = proportion, color = idea, group = idea)) +
   geom_line(alpha = 0.4) +
   theme_bw() +
   stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
@@ -33,7 +36,7 @@ idea_proportions %>%
   xlab(expression(paste("t"))) 
 
 idea_proportions %>% 
-  tidyr::spread(variant, individuals_with_variant) %>%
+  tidyr::spread(idea, proportion) %>%
   ggplot(aes(x = idea_1, y = idea_2, z = not_involved)) +
   geom_point(alpha = 0.4) +
   theme_bw() +
