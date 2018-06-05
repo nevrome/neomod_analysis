@@ -9,11 +9,11 @@ idea_proportions <- dplyr::bind_rows(models_grid$idea_proportions)
 idea_proportions %>% 
   dplyr::filter(idea == "idea_1") %>%
   ggplot(aes(x = timestep, y = proportion, color = as.factor(multiplier), group = model_id)) +
-  geom_line(alpha = 0.4) +
+  geom_line(alpha = 0.4, size = 0.3) +
   theme_bw() +
   #facet_wrap(~idea) +
-  facet_wrap(as.factor(multiplier)~region) +
-  stat_smooth(method = "loess", formula = y ~ x, size = 1, span = 0.2) +
+  facet_grid(region~as.factor(multiplier)) +
+  stat_smooth(method = "loess", formula = y ~ x, size = 0.5, span = 0.2) +
   xlab(expression(paste("t"))) 
 
 ####
