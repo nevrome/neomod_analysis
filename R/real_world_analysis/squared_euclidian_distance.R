@@ -83,7 +83,7 @@ hu <- regions_grid %>%
   
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/regions_squared_euclidian_distance_burial_type.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/regions_regions_squared_euclidian_distance_burial_type.jpeg",
     #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
@@ -93,7 +93,7 @@ hu %>%
     limitsize = F
   )
 
-regions_grid %>%
+schnu <- regions_grid %>%
   ggplot() +
   geom_smooth(
     aes(time, sed, color = regionB),
@@ -106,5 +106,17 @@ regions_grid %>%
   ) +
   scale_x_reverse() +
   theme_bw() +
-  scale_color_discrete(guide = FALSE)
+  scale_color_discrete() +
+  theme(legend.position = "top")
 
+schnu %>%
+  ggsave(
+    "/home/clemens/neomod/neomod_datapool/bronze_age/regions_squared_euclidian_distance_burial_type.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    plot = .,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    width = 210, height = 297, units = "mm",
+    limitsize = F
+  )
