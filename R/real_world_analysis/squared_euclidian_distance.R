@@ -93,3 +93,18 @@ hu %>%
     limitsize = F
   )
 
+regions_grid %>%
+  ggplot() +
+  geom_smooth(
+    aes(time, sed, color = regionB),
+    method = "loess",
+    span = 0.3
+  ) +
+  facet_grid(
+    regionA~.,
+    switch = "y"
+  ) +
+  scale_x_reverse() +
+  theme_bw() +
+  scale_color_discrete(guide = FALSE)
+
