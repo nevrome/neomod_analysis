@@ -66,32 +66,41 @@ hu <- regions_grid %>%
   ggplot() +
   geom_line(
     aes(time, sed),
-    alpha = 0.3
+    alpha = 0.3,
+    size = 0.5
   ) +
   geom_smooth(
     aes(time, sed, color = regionB),
     method = "loess",
-    span = 0.3
+    span = 0.3,
+    size = 1.5
   ) +
   facet_grid(
     regionA ~ regionB,
     switch = "y"
   ) +
-  scale_x_reverse() +
+  scale_x_reverse(
+    breaks = c(2000, 1500, 1000), 
+    limits = c(2200, 800)
+  ) +
   theme_bw() +
-  scale_color_discrete(guide = FALSE) +
+  scale_color_manual(
+    guide = FALSE,
+    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+  ) +
   theme(
-    axis.text = element_text(size = 15),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1),
     axis.title = element_text(size = 15),
-    strip.text = element_text(size = 9),
-    legend.title = element_text(size = 15),
-    legend.text = element_text(size = 15)
-  )
+    strip.text = element_text(size = 9)
+  ) +
+  ylab("Sqared Euclidian Distance") +
+  xlab("Time")
   
 hu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/regions_regions_squared_euclidian_distance_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/regions_regions_squared_euclidian_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
