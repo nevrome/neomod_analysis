@@ -68,7 +68,7 @@ regions$ID <- 1:nrow(regions)
 regions$NAME <- c(
   "Northeast France", 
   "Southern Germany", 
-  "Austria and Czech Republic", 
+  "Austria and Czechia", 
   "England", "Benelux", 
   "Northern Germany",
   "Poland",

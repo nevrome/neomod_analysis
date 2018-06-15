@@ -4,7 +4,7 @@ load( "../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
 
 regions_factor <- as.factor(proportion_development_burial_type$region_name)
 proportion_development_burial_type$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czech Republic",
+  "Austria and Czechia",
   "Poland",
   "Southern Germany",
   "Northeast France",
@@ -38,7 +38,7 @@ load("../neomod_datapool/bronze_age/development_proportions_burial_construction.
 
 regions_factor <- as.factor(proportion_development_burial_construction$region_name)
 proportion_development_burial_construction$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czech Republic",
+  "Austria and Czechia",
   "Poland",
   "Southern Germany",
   "Northeast France",

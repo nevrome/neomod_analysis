@@ -31,7 +31,7 @@ prop <- models_grid$idea_proportions[[1]]
 
 # regions_factor <- as.factor(prop$region_name)
 # prop$region_name <- factor(regions_factor, levels = c(
-#   "Austria and Czech Republic",
+#   "Austria and Czechia",
 #   "Poland",
 #   "Southern Germany",
 #   "Northeast France",

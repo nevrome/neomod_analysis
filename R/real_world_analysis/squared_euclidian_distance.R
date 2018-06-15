@@ -39,7 +39,7 @@ for (p1 in 1:nrow(regions_grid)) {
 
 regions_factorA <- as.factor(regions_grid$regionA)
 regions_grid$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czech Republic",
+  "Austria and Czechia",
   "Poland",
   "Southern Germany",
   "Northeast France",
@@ -51,7 +51,7 @@ regions_grid$regionA <- factor(regions_factorA, levels = c(
 
 regions_factorB <- as.factor(regions_grid$regionB)
 regions_grid$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czech Republic",
+  "Austria and Czechia",
   "Poland",
   "Southern Germany",
   "Northeast France",
@@ -79,7 +79,14 @@ hu <- regions_grid %>%
   ) +
   scale_x_reverse() +
   theme_bw() +
-  scale_color_discrete(guide = FALSE)
+  scale_color_discrete(guide = FALSE) +
+  theme(
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15),
+    strip.text = element_text(size = 9),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15)
+  )
   
 hu %>%
   ggsave(
