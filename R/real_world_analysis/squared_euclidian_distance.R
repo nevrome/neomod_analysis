@@ -86,7 +86,7 @@ hu <- regions_grid %>%
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
-    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
   ) +
   theme(
     axis.text = element_text(size = 10),
@@ -109,6 +109,8 @@ hu %>%
     limitsize = F
   )
 
+#### second sed plot ####
+
 schnu <- regions_grid %>%
   ggplot() +
   geom_smooth(
@@ -120,10 +122,25 @@ schnu <- regions_grid %>%
     regionA~.,
     switch = "y"
   ) +
-  scale_x_reverse() +
+  scale_x_reverse(
+    breaks = c(2200, 2000, 1500, 1000, 800), 
+    limits = c(2200, 800)
+  ) +
   theme_bw() +
-  scale_color_discrete() +
-  theme(legend.position = "top")
+  scale_color_manual(
+    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+  ) +
+  theme(
+    legend.position = "bottom",
+    panel.grid.major.x = element_line(colour = "black", size = 0.3),
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15),
+    strip.text.x = element_text(size = 13),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15)
+  ) +
+  ylab("Sqared Euclidian Distance") +
+  xlab("Time")
 
 schnu %>%
   ggsave(
