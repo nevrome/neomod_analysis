@@ -118,16 +118,17 @@ schnu <- regions_grid %>%
     method = "loess",
     span = 0.3
   ) +
-  facet_grid(
-    regionA~.,
-    switch = "y"
+  facet_wrap(
+    ~regionA, 
+    nrow = 8
   ) +
   scale_x_reverse(
     breaks = c(2200, 2000, 1500, 1000, 800), 
-    limits = c(2200, 800)
+    limits = c(2500, 800)
   ) +
   theme_bw() +
   scale_color_manual(
+    guide = FALSE,
     values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
   ) +
   theme(
@@ -141,6 +142,28 @@ schnu <- regions_grid %>%
   ) +
   ylab("Sqared Euclidian Distance") +
   xlab("Time")
+
+
+region_file_list <- unique(regions_grid$regionA) %>% gsub(" ", "_", ., fixed = TRUE)
+
+gl <- lapply(region_file_list, function(x) {
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
+  g <- grid::rasterGrob(
+    img, interpolate = TRUE,
+    width = 0.1, height = 0.9
+  )
+})
+dummy <- tibble::tibble(regionA = unique(regions_grid$regionA), grob = gl )
+
+source("R/helper_functions/geom_grob.R")
+
+schnu <- schnu +
+  geom_custom(
+    data = dummy, 
+    aes(grob = grob), 
+    inherit.aes = FALSE,
+    x = 0.1, y = 0.5
+  )
 
 schnu %>%
   ggsave(
