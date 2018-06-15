@@ -147,7 +147,7 @@ schnu <- regions_grid %>%
 region_file_list <- unique(regions_grid$regionA) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
-  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
     width = 0.1, height = 0.9
