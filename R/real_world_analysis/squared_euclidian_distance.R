@@ -135,6 +135,8 @@ regions_grid_mean <- regions_grid %>%
 
 regions_grid_mean$regionB <- forcats::fct_rev(regions_grid_mean$regionB)
 
+save(regions_grid_mean, file = "../neomod_datapool/bronze_age/regions_mean_sed")
+
 kur <- regions_grid_mean %>%
   ggplot() +
   geom_raster(
