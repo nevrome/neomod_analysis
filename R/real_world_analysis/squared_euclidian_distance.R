@@ -10,31 +10,45 @@ prop <- proportion_development_burial_type
 #     fill = list(proportion = as.integer(0))
 #   )
 
-by_regions <-  base::split(prop, prop$region_name)
-
-by_regions_and_time <- lapply(
-  by_regions,
-  function(x) {
-    base::split(x, x$timestep)
-  }
-)
-
-regions <- prop$region_name %>% unique()
-timesteps <- prop$timestep %>% unique()
-regions_grid <- expand.grid(regionA = regions, regionB = regions, time = timesteps, stringsAsFactors = FALSE)
-
-
 sed <- function(pi, pj) {
   pi <- pi / sum(pi)
   pj <- pj / sum(pj)
   sum((pi - pj)^2)
 }
 
-for (p1 in 1:nrow(regions_grid)) {
-  p_region_A <- by_regions_and_time[[regions_grid[p1, 1]]][[as.character(regions_grid[p1, 3])]]$proportion
-  p_region_B <- by_regions_and_time[[regions_grid[p1, 2]]][[as.character(regions_grid[p1, 3])]]$proportion
-  regions_grid$sed[p1] <- sed(p_region_A, p_region_B)
-}
+long_prop <- prop %>%
+  tidyr::spread(
+    idea, proportion
+  )
+
+regions <- prop$region_name %>% unique()
+timesteps <- prop$timestep %>% unique()
+
+regions_grid <- 
+  expand.grid(
+    regionA = regions, regionB = regions, time = timesteps, 
+    stringsAsFactors = FALSE
+  ) %>%
+  tibble::as.tibble() %>%
+  dplyr::left_join(
+    long_prop,
+    by = c("regionA" = "region_name", "time" = "timestep")
+  ) %>%
+  dplyr::left_join(
+    long_prop,
+    by = c("regionB" = "region_name", "time" = "timestep"),
+    suffix = c("_regionA", "_regionB")
+  )
+
+regions_grid <- regions_grid %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    sed = sed(c(cremation_regionA, inhumation_regionA), c(cremation_regionB, inhumation_regionB))
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(
+    regionA, regionB, time, sed
+  )
 
 
 regions_factorA <- as.factor(regions_grid$regionA)
