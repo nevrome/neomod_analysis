@@ -66,9 +66,16 @@ hu <- test %>% dplyr::left_join(
   ) %>%
   dplyr::summarise(
     mean_sed = mean(sed, na.rm = TRUE)
-  )
+  ) %>%
+  dplyr::ungroup()
 
 hu$time <- forcats::fct_rev(hu$time)
+
+# lapply(
+#   base::split(hu, hu$time), function(x) {
+#     reshape2::acast(x, regionA~regionB, value.var = "distance")
+#   }
+# )
 
 regions_factorA <- as.factor(hu$regionA)
 hu$regionA <- factor(regions_factorA, levels = c(
