@@ -75,6 +75,8 @@ regions_grid$regionB <- factor(regions_factorB, levels = c(
   "England"
 ))
 
+save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time.RData")
+
 library(ggplot2)
 hu <- regions_grid %>%
   ggplot() +
