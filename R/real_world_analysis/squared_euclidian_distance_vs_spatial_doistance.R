@@ -16,13 +16,11 @@ region_distances <- region_centers %>%
   ) %>%
   # classification
   dplyr::mutate(
-    # distance = dplyr::case_when(
-    #   distance < 0.5 ~ 0,
-    #   distance >= 0.5 & distance < 1.5 ~ 1,
-    #   distance >= 1.5 & distance < 2.5 ~ 2,
-    #   distance >= 2.5 ~ 3
-    # )
-    distance = base::cut(distance, seq(0, 4, 0.5), include.lowest = TRUE, right = FALSE)
+    distance = base::cut(
+      distance, 
+      seq(0, 4, 0.5), paste(seq(0, 3.5, 0.5), seq(0.5, 4.0, 0.5), sep = "-"),
+      include.lowest = TRUE, 
+      right = FALSE)
   )
 
 # remove duplicates
@@ -32,9 +30,6 @@ int <- as.numeric(interaction(mn, mx))
 region_distances <- region_distances[match(unique(int), int),]
 
 test <- regions_grid %>%
-  # dplyr::filter(
-  #   time == 800
-  # ) %>%
   dplyr::mutate(
     regionA = as.character(regionA),
     regionB = as.character(regionB)
@@ -53,20 +48,18 @@ test <- lapply(
   do.call(rbind, .)
 
 hu <- test %>% dplyr::left_join(
-  region_distances, by = c("regionA", "regionB")
-) %>% 
+    region_distances, by = c("regionA", "regionB")
+  ) %>% 
   dplyr::filter(
     sed != 0 & distance != 0
-  )
-
-hu <- hu %>%
+  ) %>%
   dplyr::mutate(
-    relation = paste(regionA, "+", regionB)
-  )
-
-hu <- hu %>% 
-  dplyr::mutate(
-    time = base::cut(time, seq(800, 2200, 200), include.lowest = TRUE, right = FALSE)
+    relation = paste(regionA, "+", regionB),
+    time = base::cut(
+      time, 
+      seq(800, 2200, 200), labels = paste(seq(1000, 2200, 200), seq(800, 2000, 200), sep = "-"),
+      include.lowest = TRUE, 
+      right = FALSE)
   ) %>%
   dplyr::group_by(
     time, regionA, regionB, distance
@@ -74,45 +67,76 @@ hu <- hu %>%
   dplyr::summarise(
     mean_sed = mean(sed, na.rm = TRUE)
   )
-  
+
+hu$time <- forcats::fct_rev(hu$time)
+
+regions_factorA <- as.factor(hu$regionA)
+hu$regionA <- factor(regions_factorA, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
+regions_factorB <- as.factor(hu$regionB)
+hu$regionB <- factor(regions_factorB, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
 library(ggplot2)
-ggplot(hu) +
+plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = distance, y = mean_sed)
+    aes(x = distance, y = mean_sed),
+    position = position_nudge(x = 0.2),
+    width = 0.3 
   ) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionA),
-    size = 5,
-    position = position_nudge(x = -0.1)
+    size = 4,
+    position = position_nudge(x = -0.25)
   ) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionB),
-    size = 5,
-    position = position_nudge(x = 0.1)
-  ) +
-  facet_wrap(~time)
-
-ggplot(hu) +
-  geom_line(
-    aes(x = time, y = sed, color = relation),
-  ) +
-  facet_grid(rows = vars(distance))
-
-ggplot(hu) +
-  geom_point(
-    aes(x = distance, y = sed,),
-    size = 1
-  )
-
-ggplot(hu) +
-  geom_point(
-    aes(x = distance, y = sed, color = regionA),
-    size = 5,
+    size = 4,
     position = position_nudge(x = -0.1)
   ) +
-  geom_point(
-    aes(x = distance, y = sed, color = regionB),
-    size = 5,
-    position = position_nudge(x = 0.1)
+  facet_wrap(~time) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 20),
+    strip.text.x = element_text(size = 20),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 20)
+  ) +
+  scale_color_manual(
+    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+  ) +
+  xlab("Distance Classes") +
+  ylab("Squared Euclidian Distance")
+
+plu %>%
+  ggsave(
+    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance.jpeg",
+    plot = .,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    #width = 210, height = 297, units = "mm",
+    width = 350, height = 360, units = "mm",
+    limitsize = F
   )
   
