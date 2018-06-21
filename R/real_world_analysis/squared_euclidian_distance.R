@@ -2,7 +2,7 @@ load("../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
 load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
 
 prop <- proportion_development_burial_type
-# prop <- proportion_development_burial_construction
+#prop <- proportion_development_burial_construction
 
 # proportion_development_burial_type %>%
 #   tidyr::complete(
@@ -44,6 +44,7 @@ regions_grid <- regions_grid %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
     sed = sed(c(cremation_regionA, inhumation_regionA), c(cremation_regionB, inhumation_regionB))
+    #sed = sed(c(flat_regionA, mound_regionA), c(flat_regionB, mound_regionB))
   ) %>%
   dplyr::ungroup() %>%
   dplyr::select(
@@ -75,7 +76,8 @@ regions_grid$regionB <- factor(regions_factorB, levels = c(
   "England"
 ))
 
-save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time.RData")
+save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
+#save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 
 library(ggplot2)
 hu <- regions_grid %>%

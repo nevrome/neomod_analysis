@@ -1,5 +1,5 @@
 load("../neomod_datapool/bronze_age/regions.RData")
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time.RData")
+load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
 
 region_centers <- regions %>%
   sf::st_centroid()
