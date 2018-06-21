@@ -13,6 +13,16 @@ region_distances <- region_centers %>%
   tidyr::gather(key = regionB, value = distance, -regionA) %>%
   dplyr::mutate(
     distance = as.double(distance)
+  ) %>%
+  # classification
+  dplyr::mutate(
+    # distance = dplyr::case_when(
+    #   distance < 0.5 ~ 0,
+    #   distance >= 0.5 & distance < 1.5 ~ 1,
+    #   distance >= 1.5 & distance < 2.5 ~ 2,
+    #   distance >= 2.5 ~ 3
+    # )
+    distance = base::cut(distance, seq(0, 4, 0.5), include.lowest = TRUE, right = FALSE)
   )
 
 # remove duplicates
@@ -22,24 +32,87 @@ int <- as.numeric(interaction(mn, mx))
 region_distances <- region_distances[match(unique(int), int),]
 
 test <- regions_grid %>%
-  dplyr::filter(
-    time == 800
-  ) %>%
+  # dplyr::filter(
+  #   time == 800
+  # ) %>%
   dplyr::mutate(
     regionA = as.character(regionA),
     regionB = as.character(regionB)
-  )
+  ) 
 
-mn <- pmin(test$regionA, test$regionB)
-mx <- pmax(test$regionA, test$regionB)
-int <- as.numeric(interaction(mn, mx))
-test <- test[match(unique(int), int),]
+test <- lapply(
+  split(test, f = test$time),
+  function(x) {
+    mn <- pmin(x$regionA, x$regionB)
+    mx <- pmax(x$regionA, x$regionB)
+    int <- as.numeric(interaction(mn, mx))
+    x <- x[match(unique(int), int),]
+    return(x)
+  }
+) %>%
+  do.call(rbind, .)
 
 hu <- test %>% dplyr::left_join(
   region_distances, by = c("regionA", "regionB")
-)
+) %>% 
+  dplyr::filter(
+    sed != 0 & distance != 0
+  )
 
+hu <- hu %>%
+  dplyr::mutate(
+    relation = paste(regionA, "+", regionB)
+  )
+
+hu <- hu %>% 
+  dplyr::mutate(
+    time = base::cut(time, seq(800, 2200, 200), include.lowest = TRUE, right = FALSE)
+  ) %>%
+  dplyr::group_by(
+    time, regionA, regionB, distance
+  ) %>%
+  dplyr::summarise(
+    mean_sed = mean(sed, na.rm = TRUE)
+  )
+  
 library(ggplot2)
-ggplot(hu, aes(x = distance, y = sed, color = regionA)) +
-  geom_jitter()
+ggplot(hu) +
+  geom_boxplot(
+    aes(x = distance, y = mean_sed)
+  ) +
+  geom_point(
+    aes(x = distance, y = mean_sed, color = regionA),
+    size = 5,
+    position = position_nudge(x = -0.1)
+  ) +
+  geom_point(
+    aes(x = distance, y = mean_sed, color = regionB),
+    size = 5,
+    position = position_nudge(x = 0.1)
+  ) +
+  facet_wrap(~time)
+
+ggplot(hu) +
+  geom_line(
+    aes(x = time, y = sed, color = relation),
+  ) +
+  facet_grid(rows = vars(distance))
+
+ggplot(hu) +
+  geom_point(
+    aes(x = distance, y = sed,),
+    size = 1
+  )
+
+ggplot(hu) +
+  geom_point(
+    aes(x = distance, y = sed, color = regionA),
+    size = 5,
+    position = position_nudge(x = -0.1)
+  ) +
+  geom_point(
+    aes(x = distance, y = sed, color = regionB),
+    size = 5,
+    position = position_nudge(x = 0.1)
+  )
   
