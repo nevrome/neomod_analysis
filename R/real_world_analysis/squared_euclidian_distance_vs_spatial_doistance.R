@@ -16,18 +16,30 @@ region_distances <- region_centers %>%
   )
 
 # remove duplicates
-mn <- pmin(region_centers$regionA, region_centers$regionB)
-mx <- pmax(region_centers$regionA, region_centers$regionB)
+mn <- pmin(region_distances$regionA, region_distances$regionB)
+mx <- pmax(region_distances$regionA, region_distances$regionB)
 int <- as.numeric(interaction(mn, mx))
-region_centers <- region_centers[match(unique(int), int),]
+region_distances <- region_distances[match(unique(int), int),]
 
-regions_grid %>%
+test <- regions_grid %>%
   dplyr::filter(
     time == 800
   ) %>%
-  dplyr::
+  dplyr::mutate(
+    regionA = as.character(regionA),
+    regionB = as.character(regionB)
+  )
 
-spatial_distance_matrix <- 
-  
-  
+mn <- pmin(test$regionA, test$regionB)
+mx <- pmax(test$regionA, test$regionB)
+int <- as.numeric(interaction(mn, mx))
+test <- test[match(unique(int), int),]
+
+hu <- test %>% dplyr::left_join(
+  region_distances, by = c("regionA", "regionB")
+)
+
+library(ggplot2)
+ggplot(hu, aes(x = distance, y = sed, color = regionA)) +
+  geom_jitter()
   
