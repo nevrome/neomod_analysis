@@ -104,12 +104,26 @@ plu <- ggplot(hu) +
   geom_point(
     aes(x = mean_sed_burial_type, y = mean_sed_burial_construction, color = regionA),
     size = 4,
-    position = position_nudge(x = -0.1)
+    position = position_nudge(x = -0.03)
   ) +
   geom_point(
     aes(x = mean_sed_burial_type, y = mean_sed_burial_construction, color = regionB),
     size = 4,
-    position = position_nudge(x = 0.1)
+    position = position_nudge(x = 0.03)
+  ) +
+  geom_smooth(
+    method = 'lm', 
+    mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
+    color = "black",
+    se = FALSE,
+    size = 2
+  ) +
+  ggpubr::stat_cor(
+    mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
+    method = "pearson", 
+    label.x = 1.4, 
+    label.y = 1.8,
+    size = 6
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -123,7 +137,16 @@ plu <- ggplot(hu) +
     axis.title = element_text(size = 20)
   ) +
   scale_color_manual(
-    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c(
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#E69F00", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    )
   ) +
   xlab("Squared Euclidian Distance Burial Type") +
   ylab("Squared Euclidian Distance Burial Construction")

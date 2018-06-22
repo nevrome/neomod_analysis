@@ -111,12 +111,12 @@ plu <- ggplot(hu) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionA),
     size = 4,
-    position = position_nudge(x = -0.25)
+    position = position_nudge(x = -0.2)
   ) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionB),
     size = 4,
-    position = position_nudge(x = -0.1)
+    position = position_nudge(x = -0.11)
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -130,7 +130,16 @@ plu <- ggplot(hu) +
     axis.title = element_text(size = 20)
   ) +
   scale_color_manual(
-    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c(
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#E69F00", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    )
   ) +
   xlab("Distance Classes") +
   ylab("Squared Euclidian Distance")
