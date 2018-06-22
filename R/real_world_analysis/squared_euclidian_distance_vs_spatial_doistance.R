@@ -18,7 +18,7 @@ region_distances <- region_centers %>%
   dplyr::mutate(
     distance = base::cut(
       distance, 
-      seq(0, 4, 0.5), paste(seq(0, 3.5, 0.5), seq(0.5, 4.0, 0.5), sep = "-"),
+      seq(0, 4, 0.4), paste(seq(0, 3.6, 0.4), seq(0.4, 4.0, 0.4), sep = "-"),
       include.lowest = TRUE, 
       right = FALSE)
   )
@@ -51,7 +51,7 @@ hu <- test %>% dplyr::left_join(
     region_distances, by = c("regionA", "regionB")
   ) %>% 
   dplyr::filter(
-    sed != 0 & distance != 0
+    distance != "0-0.4"
   ) %>%
   dplyr::mutate(
     relation = paste(regionA, "+", regionB),
@@ -141,7 +141,15 @@ plu <- ggplot(hu) +
       "England" = "#CC79A7"
     )
   ) +
-  xlab("Distance Classes") +
+  scale_x_discrete(
+    labels = c(
+      "0.8-1.2" = "1", 
+      "1.2-1.6" = "2",
+      "2-2.4" = "3",
+      "2.8-3.2" = "4"
+    )
+  ) +
+  xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance")
 
 plu %>%
