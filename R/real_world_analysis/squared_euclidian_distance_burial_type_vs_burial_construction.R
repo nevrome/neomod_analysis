@@ -116,6 +116,7 @@ plu <- ggplot(hu) +
     mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
     color = "black",
     se = FALSE,
+    fullrange = TRUE,
     size = 2
   ) +
   ggpubr::stat_cor(
@@ -123,7 +124,7 @@ plu <- ggplot(hu) +
     method = "pearson", 
     label.x = 1.4, 
     label.y = 1.8,
-    size = 6
+    size = 6, color = "red"
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -149,7 +150,8 @@ plu <- ggplot(hu) +
     )
   ) +
   xlab("Squared Euclidian Distance Burial Type") +
-  ylab("Squared Euclidian Distance Burial Construction")
+  ylab("Squared Euclidian Distance Burial Construction") +
+  ylim(0, 2) 
 
 plu %>%
   ggsave(
