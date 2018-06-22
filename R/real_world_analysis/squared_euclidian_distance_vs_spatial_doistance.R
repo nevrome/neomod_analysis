@@ -1,5 +1,6 @@
 load("../neomod_datapool/bronze_age/regions.RData")
 load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
+#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 
 region_centers <- regions %>%
   sf::st_centroid()
@@ -67,7 +68,10 @@ hu <- test %>% dplyr::left_join(
   dplyr::summarise(
     mean_sed = mean(sed, na.rm = TRUE)
   ) %>%
-  dplyr::ungroup()
+  dplyr::ungroup() %>%
+  dplyr::filter(
+    !is.na(mean_sed)
+  )
 
 hu$time <- forcats::fct_rev(hu$time)
 
@@ -105,18 +109,17 @@ library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
     aes(x = distance, y = mean_sed),
-    position = position_nudge(x = 0.2),
-    width = 0.3 
+    width = 0.3
   ) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionA),
     size = 4,
-    position = position_nudge(x = -0.2)
+    position = position_nudge(x = -0.4)
   ) +
   geom_point(
     aes(x = distance, y = mean_sed, color = regionB),
     size = 4,
-    position = position_nudge(x = -0.11)
+    position = position_nudge(x = -0.31)
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -154,7 +157,8 @@ plu <- ggplot(hu) +
 
 plu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
