@@ -22,7 +22,29 @@ region_distances <- region_centers %>%
       seq(0, 4, 0.4), paste(seq(0, 3.6, 0.4), seq(0.4, 4.0, 0.4), sep = "-"),
       include.lowest = TRUE, 
       right = FALSE)
+  ) %>%
+  dplyr::mutate(
+    distance = case_when(
+      distance == "0-0.4" ~ 0, 
+      distance == "0.8-1.2" ~ 1, 
+      distance == "1.2-1.6" ~ 2, 
+      distance == "2-2.4" ~ 3, 
+      distance == "2.8-3.2" ~ 4
+    )
   )
+
+#####
+
+distance_matrix_spatial <- region_distances %>%
+  tidyr::spread(regionA, distance) %>%
+  dplyr::select(
+    -regionB
+  ) %>%
+  as.matrix()
+
+save(distance_matrix_spatial, file = "../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
+
+####
 
 # remove duplicates
 mn <- pmin(region_distances$regionA, region_distances$regionB)
@@ -35,6 +57,44 @@ test <- regions_grid %>%
     regionA = as.character(regionA),
     regionB = as.character(regionB)
   ) 
+
+####
+
+time_test <- test %>% dplyr::mutate(
+  time = base::cut(
+    time, 
+    seq(800, 2200, 200), labels = paste(seq(1000, 2200, 200), seq(800, 2000, 200), sep = "-"),
+    include.lowest = TRUE, 
+    right = FALSE)
+  ) %>%
+  dplyr::group_by(
+    time, regionA, regionB
+  ) %>%
+  dplyr::summarise(
+    mean_sed = mean(sed, na.rm = TRUE)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(
+    !is.na(mean_sed)
+  )
+
+distance_matrizes_sed_burial_type <- lapply(
+   base::split(time_test, time_test$time), function(x){
+    x %>%
+      dplyr::select(
+        -time
+      ) %>%
+      tidyr::spread(regionA, mean_sed) %>%
+      dplyr::select(
+        -regionB
+      ) %>%
+      as.matrix()
+  } 
+)
+
+save(distance_matrizes_sed_burial_type, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_type.RData")
+
+####
 
 test <- lapply(
   split(test, f = test$time),
@@ -52,7 +112,7 @@ hu <- test %>% dplyr::left_join(
     region_distances, by = c("regionA", "regionB")
   ) %>% 
   dplyr::filter(
-    distance != "0-0.4"
+    distance != 0
   ) %>%
   dplyr::mutate(
     relation = paste(regionA, "+", regionB),
@@ -108,7 +168,7 @@ hu$regionB <- factor(regions_factorB, levels = c(
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = distance, y = mean_sed),
+    aes(x = distance, y = mean_sed, group = distance),
     width = 0.3
   ) +
   geom_point(
@@ -142,14 +202,6 @@ plu <- ggplot(hu) +
       "Southern Skandinavia" = "#0072B2", 
       "Benelux" = "#D55E00", 
       "England" = "#CC79A7"
-    )
-  ) +
-  scale_x_discrete(
-    labels = c(
-      "0.8-1.2" = "1", 
-      "1.2-1.6" = "2",
-      "2-2.4" = "3",
-      "2.8-3.2" = "4"
     )
   ) +
   xlab("Spatial Distance Classes") +
