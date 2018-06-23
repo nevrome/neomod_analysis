@@ -91,9 +91,12 @@ plu <- ggplot(hu) +
   ) +
   geom_text(
     data = mantel_test_results,
-    aes(label = paste0("Mantel Test r: ", round(statistic, 3), ", p: ", signif)),
+    aes(
+      label = paste0("Mantel Test r: ", round(statistic, 3), ", p: ", signif),
+      colour = ifelse(signif < 0.05, "h0canberejected", "h0cannotberejected")
+    ),
     x = 2.7, y = 2.2,
-    size = 6, color = "red"
+    size = 6
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -115,7 +118,9 @@ plu <- ggplot(hu) +
       "Northern Germany" = "#000000", 
       "Southern Skandinavia" = "#0072B2", 
       "Benelux" = "#D55E00", 
-      "England" = "#CC79A7"
+      "England" = "#CC79A7",
+      "h0canberejected" = "red",
+      "h0cannotberejected" = "black"
     )
   ) +
   xlab("Spatial Distance Classes") +
