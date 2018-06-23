@@ -1,56 +1,6 @@
-load("../neomod_datapool/bronze_age/regions.RData")
 load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
 #load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
-
-region_centers <- regions %>%
-  sf::st_centroid()
-
-region_distances <- region_centers %>% 
-  sf::st_distance() %>%
-  magrittr::divide_by(min(.[. != min(.)])) %>%
-  tibble::as.tibble() %>%
-  magrittr::set_colnames(region_centers$NAME) %>%
-  dplyr::mutate(regionA = region_centers$NAME) %>%
-  tidyr::gather(key = regionB, value = distance, -regionA) %>%
-  dplyr::mutate(
-    distance = as.double(distance)
-  ) %>%
-  # classification
-  dplyr::mutate(
-    distance = base::cut(
-      distance, 
-      seq(0, 4, 0.4), paste(seq(0, 3.6, 0.4), seq(0.4, 4.0, 0.4), sep = "-"),
-      include.lowest = TRUE, 
-      right = FALSE)
-  ) %>%
-  dplyr::mutate(
-    distance = dplyr::case_when(
-      distance == "0-0.4" ~ 0, 
-      distance == "0.8-1.2" ~ 1, 
-      distance == "1.2-1.6" ~ 2, 
-      distance == "2-2.4" ~ 3, 
-      distance == "2.8-3.2" ~ 4
-    )
-  )
-
-#####
-
-distance_matrix_spatial <- region_distances %>%
-  tidyr::spread(regionA, distance) %>%
-  dplyr::select(
-    -regionB
-  ) %>%
-  as.matrix()
-
-save(distance_matrix_spatial, file = "../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
-
-####
-
-# remove duplicates
-mn <- pmin(region_distances$regionA, region_distances$regionB)
-mx <- pmax(region_distances$regionA, region_distances$regionB)
-int <- as.numeric(interaction(mn, mx))
-region_distances <- region_distances[match(unique(int), int),]
+load("../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
 
 test <- regions_grid %>%
   dplyr::mutate(
@@ -109,7 +59,7 @@ test <- lapply(
   do.call(rbind, .)
 
 hu <- test %>% dplyr::left_join(
-    region_distances, by = c("regionA", "regionB")
+    distance_matrix_spatial_long_half, by = c("regionA", "regionB")
   ) %>% 
   dplyr::filter(
     distance != 0
