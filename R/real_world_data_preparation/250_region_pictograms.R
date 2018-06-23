@@ -53,12 +53,25 @@ regions_ordered <- c(
 
 path = "../neomod_datapool/bronze_age/region_pictograms_colour/"
 
-colour_vector <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+colour_vector <- c(
+  "Austria and Czechia" = "#999999", 
+  "Poland" = "#E69F00", 
+  "Southern Germany" = "#56B4E9", 
+  "Northeast France" = "#009E73", 
+  "Northern Germany" = "#000000", 
+  "Southern Skandinavia" = "#0072B2", 
+  "Benelux" = "#D55E00", 
+  "England" = "#CC79A7"
+)
 
 for (i in 1:nrow(regions)) {
   
   one_region <- regions[regions$NAME == regions_ordered[i], ]
+  one_region_buffer <- one_region %>%
+    sf::st_buffer(400000)
+  
   one_region_geom <- one_region$geometry
+  one_region_buffer_geom <- one_region_buffer$geometry
   
   one_region_name <- one_region$NAME %>% gsub(" ", "_", ., fixed = TRUE)
   
@@ -75,8 +88,9 @@ for (i in 1:nrow(regions)) {
       yaxs = "i",
       yaxt = 'n',
       bg = NA)
-  plot(land_out_geom, border = "black" , col = colour_vector[i], lwd = 1)
-  plot(one_region_geom, border = "red", col = NA, lwd = 3, add = TRUE)
+  plot(land_out_geom, border = "black" , col = "grey85", lwd = 1)
+  plot(one_region_buffer_geom, border = NA, col = alpha(colour_vector[i], 0.6), add = TRUE, alpha = 0.5)
+  plot(one_region_geom, border = NA, col = colour_vector[i], add = TRUE)
   dev.off()
   
 }
