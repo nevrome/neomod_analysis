@@ -1,13 +1,22 @@
 load("../popgenerator/testresults/pop.RData")
 load("../popgenerator/testresults/rel.RData")
 
+rel2 <- (rel %>% dplyr::filter(from <= max(pop$id), to <= max(pop$id)))
+
 g <- igraph::graph_from_data_frame(
-  rel %>% dplyr::filter(from <= max(pop$id), to <= max(pop$id)),
+  rel2,
   directed = FALSE,
-  vertices = pop %>% dplyr::select(id, dplyr::everything())
+  vertices = (pop %>% dplyr::select(id, unit))
 )
 
-igraph::write_graph(g, file = "data_raw/test.graphml", format = "graphml")
+actual_vertices <- unique(c(rel2$from, rel2$to))
+write.table(
+  actual_vertices, 
+  file = "../gluesless/test_data/vert.txt", 
+  row.names = FALSE, col.names = FALSE
+)
+
+igraph::write_graph(g, file = "../gluesless/test_data/test.paj", format = "pajek")
 
 #hu <- graphwrite(g)
 
