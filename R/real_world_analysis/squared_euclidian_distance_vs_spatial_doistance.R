@@ -1,50 +1,14 @@
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
-#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
+#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
+load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 load("../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
+#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
+load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
 
 test <- regions_grid %>%
   dplyr::mutate(
     regionA = as.character(regionA),
     regionB = as.character(regionB)
   ) 
-
-####
-
-time_test <- test %>% dplyr::mutate(
-  time = base::cut(
-    time, 
-    seq(800, 2200, 200), labels = paste(seq(1000, 2200, 200), seq(800, 2000, 200), sep = "-"),
-    include.lowest = TRUE, 
-    right = FALSE)
-  ) %>%
-  dplyr::group_by(
-    time, regionA, regionB
-  ) %>%
-  dplyr::summarise(
-    mean_sed = mean(sed, na.rm = TRUE)
-  ) %>%
-  dplyr::ungroup() %>%
-  dplyr::filter(
-    !is.na(mean_sed)
-  )
-
-distance_matrizes_sed_burial_type <- lapply(
-   base::split(time_test, time_test$time), function(x){
-    x %>%
-      dplyr::select(
-        -time
-      ) %>%
-      tidyr::spread(regionA, mean_sed) %>%
-      dplyr::select(
-        -regionB
-      ) %>%
-      as.matrix()
-  } 
-)
-
-save(distance_matrizes_sed_burial_type, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_type.RData")
-
-####
 
 test <- lapply(
   split(test, f = test$time),
@@ -85,12 +49,6 @@ hu <- test %>% dplyr::left_join(
 
 hu$time <- forcats::fct_rev(hu$time)
 
-# lapply(
-#   base::split(hu, hu$time), function(x) {
-#     reshape2::acast(x, regionA~regionB, value.var = "distance")
-#   }
-# )
-
 regions_factorA <- as.factor(hu$regionA)
 hu$regionA <- factor(regions_factorA, levels = c(
   "Austria and Czechia",
@@ -114,12 +72,6 @@ hu$regionB <- factor(regions_factorB, levels = c(
   "Benelux",
   "England"
 ))
-
-####
-
-load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
-
-####
 
 library(ggplot2)
 plu <- ggplot(hu) +
@@ -172,13 +124,12 @@ plu <- ggplot(hu) +
 
 plu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    #width = 210, height = 297, units = "mm",
     width = 350, height = 360, units = "mm",
     limitsize = F
   )

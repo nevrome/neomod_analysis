@@ -53,7 +53,31 @@ save(distance_matrix_spatial_long_half, file = "../neomod_datapool/bronze_age/di
 
 #### transform distance information to wide format ####
 
-distance_matrix_spatial <- region_distances %>%
+regions_factorA <- as.factor(distance_matrix_spatial_long$regionA)
+distance_matrix_spatial_long$regionA <- factor(regions_factorA, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
+regions_factorB <- as.factor(distance_matrix_spatial_long$regionB)
+distance_matrix_spatial_long$regionB <- factor(regions_factorB, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
+
+distance_matrix_spatial <- distance_matrix_spatial_long %>%
   tidyr::spread(regionA, distance) %>%
   dplyr::select(
     -regionB
