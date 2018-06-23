@@ -1,12 +1,6 @@
 load("../neomod_datapool/bronze_age/regions.RData")
-
-load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-
-land_outline %<>% sf::st_transform(102013)
-
-# plot region pictograms
-
-land_out_geom <- land_outline$geometry
+load("../neomod_datapool/bronze_age/spatial_data/extended_area.RData")
+extended_area <- extended_area$geometry
 
 #### grey ####
 
@@ -32,7 +26,7 @@ for (i in 1:nrow(regions)) {
       yaxs = "i",
       yaxt = 'n',
       bg = NA)
-  plot(land_out_geom, border = "black" , col = "grey85", lwd = 1)
+  plot(extended_area, border = NA , col = "grey85", lwd = 2)
   plot(one_region_geom, border = "red", col = NA, lwd = 3, add = TRUE)
   dev.off()
 
@@ -88,7 +82,7 @@ for (i in 1:nrow(regions)) {
       yaxs = "i",
       yaxt = 'n',
       bg = NA)
-  plot(land_out_geom, border = "black" , col = "grey85", lwd = 1)
+  plot(extended_area, border = NA , col = "grey85", lwd = 2)
   plot(one_region_buffer_geom, border = NA, col = alpha(colour_vector[i], 0.6), add = TRUE, alpha = 0.5)
   plot(one_region_geom, border = NA, col = colour_vector[i], add = TRUE)
   dev.off()

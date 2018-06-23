@@ -62,7 +62,7 @@ extended_area <- sf::st_intersection(sf::st_buffer(land_outline, 0), extended_re
 # plot(extended_research_area, add = T, border = "red")
 
 save(
-  area, 
+  extended_area, 
   file = "../neomod_datapool/bronze_age/spatial_data/extended_area.RData"
 )
 
