@@ -1,14 +1,9 @@
-research_area <- sf::st_read(
-  "manually_changed_data/research_area.shp"
-) %>% sf::st_transform(102013)
+#### load spatial data ####
 
-land_outline <- sf::st_read(
-  "../neomod_datapool/geodata/land_shapes/ne_50m_land.shp"
-) %>%
-  sf::st_crop(xmin = -20, ymin = 0, xmax = 40, ymax = 65) %>% 
-  sf::st_transform(102013)
+load("../neomod_datapool/bronze_age/spatial_data/research_area.RData")
+load("../neomod_datapool/bronze_age/spatial_data/area.RData")
 
-area <- sf::st_intersection(sf::st_buffer(land_outline, 0), research_area)
+#### define region circles ####
 
 region_circles <- tibble::tibble(
   geometry = sf::st_make_grid(area, 400000, what = "centers", offset = c(-900000,-130000)),
