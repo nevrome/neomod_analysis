@@ -24,7 +24,7 @@ region_distances <- region_centers %>%
       right = FALSE)
   ) %>%
   dplyr::mutate(
-    distance = case_when(
+    distance = dplyr::case_when(
       distance == "0-0.4" ~ 0, 
       distance == "0.8-1.2" ~ 1, 
       distance == "1.2-1.6" ~ 2, 
@@ -165,6 +165,12 @@ hu$regionB <- factor(regions_factorB, levels = c(
   "England"
 ))
 
+####
+
+load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
+
+####
+
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
@@ -180,6 +186,12 @@ plu <- ggplot(hu) +
     aes(x = distance, y = mean_sed, color = regionB),
     size = 4,
     position = position_nudge(x = -0.31)
+  ) +
+  geom_text(
+    data = mantel_test_results,
+    aes(label = paste0("Mantel Test r: ", round(statistic, 3), ", p: ", signif)),
+    x = 2.7, y = 2.2,
+    size = 6, color = "red"
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -205,7 +217,8 @@ plu <- ggplot(hu) +
     )
   ) +
   xlab("Spatial Distance Classes") +
-  ylab("Squared Euclidian Distance")
+  ylab("Squared Euclidian Distance") +
+  ylim(0, 2.3)
 
 plu %>%
   ggsave(
