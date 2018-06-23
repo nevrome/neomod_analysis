@@ -121,6 +121,16 @@ plu <- ggplot(hu) +
       "England" = "#CC79A7",
       "h0canberejected" = "red",
       "h0cannotberejected" = "black"
+    ),
+    breaks = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
     )
   ) +
   xlab("Spatial Distance Classes") +
