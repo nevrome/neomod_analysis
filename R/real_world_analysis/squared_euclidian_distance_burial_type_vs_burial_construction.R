@@ -103,6 +103,14 @@ hu$regionB <- factor(regions_factorB, levels = c(
 
 library(ggplot2)
 plu <- ggplot(hu) +
+  geom_smooth(
+    method = 'lm', 
+    mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
+    color = "black",
+    se = FALSE,
+    fullrange = TRUE,
+    size = 0.5
+  ) +
   geom_point(
     aes(x = mean_sed_burial_type, y = mean_sed_burial_construction, color = regionA),
     size = 4,
@@ -112,14 +120,6 @@ plu <- ggplot(hu) +
     aes(x = mean_sed_burial_type, y = mean_sed_burial_construction, color = regionB),
     size = 4,
     position = position_nudge(x = 0.03)
-  ) +
-  geom_smooth(
-    method = 'lm', 
-    mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
-    color = "black",
-    se = FALSE,
-    fullrange = TRUE,
-    size = 2
   ) +
   # ggpubr::stat_cor(
   #   mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
