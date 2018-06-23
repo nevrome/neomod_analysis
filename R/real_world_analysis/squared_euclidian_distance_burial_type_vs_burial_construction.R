@@ -4,6 +4,8 @@ regions_grid_burial_type <- regions_grid
 load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 regions_grid_burial_construction <- regions_grid
 
+load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type_burial_construction.RData")
+
 regions_grid_burial_type <- regions_grid_burial_type %>%
   dplyr::mutate(
     regionA = as.character(regionA),
@@ -119,12 +121,21 @@ plu <- ggplot(hu) +
     fullrange = TRUE,
     size = 2
   ) +
-  ggpubr::stat_cor(
-    mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
-    method = "pearson", 
-    label.x = 1.4, 
-    label.y = 1.8,
-    size = 6, color = "red"
+  # ggpubr::stat_cor(
+  #   mapping = aes(mean_sed_burial_type, mean_sed_burial_construction),
+  #   method = "pearson", 
+  #   label.x = 1.4, 
+  #   label.y = 2.2,
+  #   size = 6, color = "black"
+  # ) +
+  geom_text(
+    data = mantel_test_results,
+    aes(
+      label = paste0("Mantel Test r: ", round(statistic, 3), ", p: ", signif),
+      colour = ifelse(signif < 0.1, "h0canberejected", "h0cannotberejected")
+    ),
+    x = 1.1, y = 2.2,
+    size = 6
   ) +
   facet_wrap(~time) +
   theme_bw() +
@@ -146,12 +157,14 @@ plu <- ggplot(hu) +
       "Northern Germany" = "#000000", 
       "Southern Skandinavia" = "#0072B2", 
       "Benelux" = "#D55E00", 
-      "England" = "#CC79A7"
+      "England" = "#CC79A7",
+      "h0canberejected" = "red",
+      "h0cannotberejected" = "black"
     )
   ) +
   xlab("Squared Euclidian Distance Burial Type") +
   ylab("Squared Euclidian Distance Burial Construction") +
-  ylim(0, 2) 
+  ylim(0, 2.3) 
 
 plu %>%
   ggsave(

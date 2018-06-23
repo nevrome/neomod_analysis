@@ -36,7 +36,7 @@ dms_burial_construction <- distance_matrizes_sed
 
 mantel_test_results <- lapply(
   1:length(dms_burial_type), function(i, x, y, z) {
-    mantel_result <- vegan::mantel(x[[i]], y[[i]], method = "spear", permutations=999)
+    mantel_result <- vegan::mantel(x[[i]], y[[i]], method = "pearson", permutations=999)
     data.frame(
       time = z[[i]],
       statistic = mantel_result$statistic, 
