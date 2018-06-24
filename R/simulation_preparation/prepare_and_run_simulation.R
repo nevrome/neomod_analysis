@@ -7,21 +7,41 @@ load("../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
 models_grid <- expand.grid(
   # general settings
   timeframe = list(
-    0:1400
+    -2200:-800
   ),
   # population settings  
-  population_size_functions = c(
-    function(t) {100}
-    # function(t) {round(0.0002 * (t - 700)^2 + 10, 0)}
-  ),
-  units_amount = c(
+  unit_amount = c(
     8
+  ),
+  unit_names = list(
+    list(
+      "Austria and Czechia",
+      "Poland",
+      "Southern Germany",
+      "Northeast France",
+      "Northern Germany",
+      "Southern Skandinavia",
+      "Benelux",
+      "England"
+    )
+  ),
+  unit_size_functions = list(
+    list(
+      "Austria and Czechia" =  function(t) {20},
+      "Poland" =               function(t) {20},
+      "Southern Germany" =     function(t) {20},
+      "Northeast France" =     function(t) {20},
+      "Northern Germany" =     function(t) {20},
+      "Southern Skandinavia" = function(t) {20},
+      "Benelux" =              function(t) {20},
+      "England" =              function(t) {20}
+    )
   ),
   age_distribution_functions = c(
     function(x) {1 / (1 + 0.0004 * 0.7^(-7*log(x)))}
   ),
   age_ranges = list(
-    1:100
+    1:90
   ),
   # relations settings
   amounts_friends = list(
@@ -51,12 +71,13 @@ models_grid <- expand.grid(
   ), 
   strength = list(
     c(1, 1) 
-  )
+  ),
+  stringsAsFactors = FALSE
 ) %>% tibble::as.tibble() %>%
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(30) %>%
+  tidyr::uncount(1) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
