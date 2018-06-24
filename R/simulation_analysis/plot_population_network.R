@@ -1,5 +1,7 @@
-test2$populations[[4]] -> pop
-test2$relations[[4]] -> rel
+load("R/simulation_results/sim1.RData")
+
+models_grid$populations[[1]] -> pop
+models_grid$relations[[1]] -> rel
 
 pop_groups <- pop %>% 
   dplyr::group_by(unit) %>%
