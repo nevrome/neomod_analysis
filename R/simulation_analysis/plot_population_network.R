@@ -11,7 +11,8 @@ pop_groups <- pop %>%
   dplyr::group_by(unit, timeblock) %>%
   dplyr::summarise(
     n = n()
-  )
+  ) %>%
+  dplyr::ungroup()
 
 frommer <- dplyr::left_join(
   rel[, c("from", "type")],
@@ -59,29 +60,62 @@ rel4 <- rel3 %>% dplyr::group_by(
   dplyr::summarise(
     n = n(),
     type = type[1]
-  )
+  ) %>%
+  dplyr::ungroup()
 
-# rel5 <- rel4 %>% dplyr::filter(
-#   n > 6
-# )
+regions_factor <- as.factor(pop_groups$unit)
+pop_groups$unit <- factor(regions_factor, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
 
 library(ggplot2)
 ggplot() +
-  geom_point(data = pop_groups, aes(x = unit, y = timeblock, size = n)) +
+  geom_point(
+    data = pop_groups, 
+    aes(
+      x = timeblock, 
+      y = unit, 
+      size = n
+    )
+  ) +
   geom_segment(
     data = rel4,#[rel4$type != "friend", ], 
     aes(
-      x = from_unit, xend = to_unit, 
-      y = timeblock_from, yend = timeblock_to,
-      color = type
+      y = from_unit, yend = to_unit, 
+      x = timeblock_from, xend = timeblock_to,
+      color = type,
+      alpha = type
     ),
-    size = 1,
-    alpha = 0.05
+    size = 1
   ) +
   scale_color_manual(
     values = c(
       "child_of" = "red",
       "friend" = "blue"
     )
+  ) +
+  scale_alpha_manual(
+    values = c(
+      "child_of" = 0.4,
+      "friend" = 0.1
+    )
+  ) +
+  theme_bw() +
+  scale_y_discrete(limits = rev(levels(pop_groups$unit))) +
+  scale_x_continuous(
+    breaks = seq(min(pop_groups$timeblock), max(pop_groups$timeblock), 100)
+  ) +
+  theme(
+    panel.grid.major.y = element_line(size = 0.5, colour = "black")
   )
+
+
+
 
