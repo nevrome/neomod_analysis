@@ -6,7 +6,7 @@ models_grid$relations[[1]] -> rel
 pop_groups <- pop %>% 
   dplyr::group_by(unit) %>%
   dplyr::mutate(
-    timeblock = plyr::round_any(birth_time, 100, f = floor)
+    timeblock = plyr::round_any(birth_time, 100)
   ) %>%
   dplyr::group_by(unit, timeblock) %>%
   dplyr::summarise(
@@ -47,8 +47,8 @@ rel3 <- rel2 %>%
     from_unit != to_unit
   ) %>%
   dplyr::mutate(
-    timeblock_from = plyr::round_any(from_birth_time, 100, f = floor),
-    timeblock_to = plyr::round_any(to_birth_time, 100, f = floor)
+    timeblock_from = plyr::round_any(from_birth_time, 100),
+    timeblock_to = plyr::round_any(to_birth_time, 100)
   ) %>%
   dplyr::select(
     -from, -to, -from_birth_time, -to_birth_time
