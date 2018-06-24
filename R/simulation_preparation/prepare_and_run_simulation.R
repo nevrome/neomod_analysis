@@ -1,6 +1,7 @@
 #### setup settings grid ####
 
 load("../neomod_datapool/bronze_age/start_proportion_burial_type.RData")
+load("../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
 
 # create models_grid data.frame
 models_grid <- expand.grid(
@@ -27,26 +28,12 @@ models_grid <- expand.grid(
     20
   ),
   unit_interaction_matrix = list(
-    t(matrix(
-      c(
-        0,1,1,1,1,1,1,1,
-        1,0,1,1,1,1,1,1,
-        1,1,0,1,1,1,1,1,
-        1,1,1,0,1,1,1,1,
-        1,1,1,1,0,1,1,1,
-        1,1,1,1,1,0,1,1,
-        1,1,1,1,1,1,0,1,
-        1,1,1,1,1,1,1,0
-      ),
-      8, 8
-    ))
+    distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = list(
-    0
+    0.01
   ),
   cross_unit_proportion_friend = list(
-    0,
-    0.01,
     0.10
   ),
   weight_child_of = list(
