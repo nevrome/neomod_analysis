@@ -29,26 +29,20 @@ library(ggplot2)
 
 prop <- models_grid$idea_proportions[[1]]
 
-# regions_factor <- as.factor(prop$region_name)
-# prop$region_name <- factor(regions_factor, levels = c(
-#   "Austria and Czechia",
-#   "Poland",
-#   "Southern Germany",
-#   "Northeast France",
-#   "Northern Germany",
-#   "Southern Skandinavia",
-#   "Benelux",
-#   "England"
-# ))
+regions_factor <- as.factor(prop$region)
+prop$region <- factor(regions_factor, levels = c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+))
 
 prop$idea <- as.factor(prop$idea)
 #prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
-
-ann_text <- data.frame(
-  timestep = -200, proportion = 0.5, 
-  lab = as.character(unique(prop$region)),
-  region = unique(prop$region) 
-)
 
 hu <- ggplot() +
   geom_area(
@@ -62,11 +56,6 @@ hu <- ggplot() +
     mapping = aes(x = timestep, y = proportion),
     color = "black",
     size = 0.2
-  ) +
-  geom_text(
-    data = ann_text,
-    mapping = aes(x = timestep, y = proportion, label = lab),
-    size = 12
   ) +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region, nrow = 8) +
@@ -94,8 +83,29 @@ hu <- ggplot() +
     labels = c("0%", "50%", "100%")
   ) +
   scale_x_continuous(
-    breaks = c(0, 200, 700, 1200, 1400), 
-    limits = c(-300, 1400)
+    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    limits = c(-2500, -800)
+  )
+
+region_file_list <- unique(prop$region) %>% gsub(" ", "_", ., fixed = TRUE)
+
+gl <- lapply(region_file_list, function(x) {
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
+  g <- grid::rasterGrob(
+    img, interpolate = TRUE,
+    width = 0.14, height = 1.2
+  )
+})
+dummy <- tibble::tibble(region = unique(prop$region), grob = gl )
+
+source("R/helper_functions/geom_grob.R")
+
+hu <- hu +
+  geom_custom(
+    data = dummy, 
+    aes(grob = grob), 
+    inherit.aes = FALSE,
+    x = 0.1, y = 0.5
   )
 
 hu %>%
