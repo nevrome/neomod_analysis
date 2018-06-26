@@ -62,13 +62,13 @@ models_grid <- expand.grid(
     distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = list(
-    0.005
+    0.01
   ),
   cross_unit_proportion_friend = list(
-    0.02
+    0.05
   ),
   weight_child_of = list(
-    5
+    7
   ),
   weight_friend = list(
     3
