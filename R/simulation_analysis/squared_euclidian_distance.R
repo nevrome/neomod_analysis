@@ -70,8 +70,8 @@ hu <- regions_grid %>%
     switch = "y"
   ) +
   scale_x_continuous(
-    breaks = c(200, 700, 1200), 
-    limits = c(0, 1400)
+    breaks = c(-2000, -1500, -1000), 
+    limits = c(-2200, -800)
   ) +
   theme_bw() +
   scale_color_manual(
