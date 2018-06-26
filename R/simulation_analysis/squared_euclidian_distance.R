@@ -51,6 +51,8 @@ regions_grid <- regions_grid %>%
     regionA, regionB, time, sed
   )
 
+save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_sim1.RData")
+
 library(ggplot2)
 hu <- regions_grid %>%
   ggplot() +
