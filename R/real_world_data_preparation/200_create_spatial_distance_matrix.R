@@ -41,41 +41,36 @@ distance_matrix_spatial_long <- region_centers %>%
     )
   )
 
-save(distance_matrix_spatial_long, file = "../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
-
 # remove duplicates
 mn <- pmin(distance_matrix_spatial_long$regionA, distance_matrix_spatial_long$regionB)
 mx <- pmax(distance_matrix_spatial_long$regionA, distance_matrix_spatial_long$regionB)
 int <- as.numeric(interaction(mn, mx))
 distance_matrix_spatial_long_half <- distance_matrix_spatial_long[match(unique(int), int),]
 
-save(distance_matrix_spatial_long_half, file = "../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
+#### define factor order ####
 
-#### transform distance information to wide format ####
+regions_order <- c(
+  "Austria and Czechia",
+  "Poland",
+  "Southern Germany",
+  "Northeast France",
+  "Northern Germany",
+  "Southern Skandinavia",
+  "Benelux",
+  "England"
+)
 
 regions_factorA <- as.factor(distance_matrix_spatial_long$regionA)
-distance_matrix_spatial_long$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
+distance_matrix_spatial_long$regionA <- factor(regions_factorA, levels = regions_order)
 regions_factorB <- as.factor(distance_matrix_spatial_long$regionB)
-distance_matrix_spatial_long$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
+distance_matrix_spatial_long$regionB <- factor(regions_factorB, levels = regions_order)
+
+regions_factorA <- as.factor(distance_matrix_spatial_long_half$regionA)
+distance_matrix_spatial_long_half$regionA <- factor(regions_factorA, levels = regions_order)
+regions_factorB <- as.factor(distance_matrix_spatial_long_half$regionB)
+distance_matrix_spatial_long_half$regionB <- factor(regions_factorB, levels = regions_order)
+
+#### transform distance information to wide format ####
 
 distance_matrix_spatial <- distance_matrix_spatial_long %>%
   tidyr::spread(regionA, distance) %>%
@@ -84,4 +79,8 @@ distance_matrix_spatial <- distance_matrix_spatial_long %>%
   ) %>%
   as.matrix()
 
+#### writing files to file system ####
+
+save(distance_matrix_spatial_long_half, file = "../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
+save(distance_matrix_spatial_long, file = "../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
 save(distance_matrix_spatial, file = "../neomod_datapool/bronze_age/distance_matrix_spatial.RData")

@@ -54,30 +54,6 @@ hu <- test %>% dplyr::left_join(
     !is.na(mean_sed)
   )
 
-regions_factorA <- as.factor(hu$regionA)
-hu$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
-regions_factorB <- as.factor(hu$regionB)
-hu$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
