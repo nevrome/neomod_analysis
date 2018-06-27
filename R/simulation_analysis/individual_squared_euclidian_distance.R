@@ -1,6 +1,6 @@
 load("R/simulation_results/sim1.RData")
 
-prop <- models_grid$idea_proportions[[1]]
+prop <- models_grid$idea_proportions[[4]]
 
 prop <- prop %>%
   dplyr::transmute(
