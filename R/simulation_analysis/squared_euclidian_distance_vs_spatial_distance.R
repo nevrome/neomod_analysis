@@ -1,6 +1,6 @@
 #load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
 load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_sim1.RData")
-load("../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
+load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
 #load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
 #load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
 
@@ -23,7 +23,7 @@ test <- lapply(
   do.call(rbind, .)
 
 hu <- test %>% dplyr::left_join(
-    distance_matrix_spatial_long_half, by = c("regionA", "regionB")
+    distance_matrix_spatial_long, by = c("regionA", "regionB")
   ) %>% 
   dplyr::filter(
     distance != 0
@@ -46,8 +46,6 @@ hu <- test %>% dplyr::left_join(
   dplyr::filter(
     !is.na(mean_sed)
   )
-
-hu$time <- forcats::fct_rev(hu$time)
 
 regions_factorA <- as.factor(hu$regionA)
 hu$regionA <- factor(regions_factorA, levels = c(
