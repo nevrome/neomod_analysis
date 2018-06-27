@@ -81,18 +81,7 @@ hu$regionB <- factor(regions_factorB, levels = c(
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = distance, y = mean_sed, group = distance),
-    width = 0.3
-  ) +
-  geom_point(
-    aes(x = distance, y = mean_sed, color = regionA),
-    size = 4,
-    position = position_nudge(x = -0.4)
-  ) +
-  geom_point(
-    aes(x = distance, y = mean_sed, color = regionB),
-    size = 4,
-    position = position_nudge(x = -0.31)
+    aes(x = distance, y = mean_sed, group = distance)
   ) +
   # geom_text(
   #   data = mantel_test_results,
