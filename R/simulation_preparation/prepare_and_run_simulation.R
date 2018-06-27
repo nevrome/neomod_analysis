@@ -38,14 +38,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "Austria and Czechia" =  function(t) {20},
-      "Poland" =               function(t) {20},
-      "Southern Germany" =     function(t) {20},
-      "Northeast France" =     function(t) {20},
-      "Northern Germany" =     function(t) {20},
-      "Southern Skandinavia" = function(t) {20},
-      "Benelux" =              function(t) {20},
-      "England" =              function(t) {20}
+      "Austria and Czechia" =  function(t) {25},
+      "Poland" =               function(t) {25},
+      "Southern Germany" =     function(t) {25},
+      "Northeast France" =     function(t) {25},
+      "Northern Germany" =     function(t) {25},
+      "Southern Skandinavia" = function(t) {25},
+      "Benelux" =              function(t) {25},
+      "England" =              function(t) {25}
     )
   ),
   age_distribution_functions = c(
@@ -62,16 +62,16 @@ models_grid <- expand.grid(
     distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = list(
-    0.01
+    0.02
   ),
   cross_unit_proportion_friend = list(
-    0.05
+    0.1
   ),
   weight_child_of = list(
-    7
+    8
   ),
   weight_friend = list(
-    3
+    2
   ),
   # ideas settings
   names = list(
@@ -88,7 +88,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     multiplier = 1:nrow(.)
   ) %>%
-  tidyr::uncount(1) %>%
+  tidyr::uncount(8) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
