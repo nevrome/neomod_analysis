@@ -34,14 +34,17 @@ regions_grid <-
     suffix = c("_regionA", "_regionB")
   )
 
-regions_grid <- regions_grid %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    sed = sed(c(idea_1_regionA, idea_2_regionA), c(idea_1_regionB, idea_2_regionB))
-    #sed = sed(c(flat_regionA, mound_regionA), c(flat_regionB, mound_regionB))
-  ) %>%
-  dplyr::ungroup() %>%
-  dplyr::select(
+region_A <- mapply(c, regions_grid$idea_1_regionA, regions_grid$idea_2_regionA, SIMPLIFY = FALSE)
+region_B <- mapply(c, regions_grid$idea_1_regionB, regions_grid$idea_2_regionB, SIMPLIFY = FALSE)
+region_A_region_B <- mapply(list, region_A, region_B, SIMPLIFY = FALSE)
+
+regions_grid$sed <- unlist(pbapply::pblapply(
+  region_A_region_B, function(x) {
+    sed(x[[1]], x[[2]])
+  }
+))
+
+regions_grid %<>% dplyr::select(
     regionA, regionB, time, sed, model_id, multiplier
   )
 

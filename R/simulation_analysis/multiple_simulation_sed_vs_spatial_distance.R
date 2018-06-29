@@ -12,7 +12,7 @@ load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
 
 test <- regions_grid
 
-test <- lapply(
+test <- pbapply::pblapply(
   base::split(test, f = test$model_id), function(y) { 
     lapply(
       base::split(y, f = y$time), function(x) {
