@@ -131,6 +131,16 @@ plu <- ggplot(hu) +
       "Southern Skandinavia", 
       "Benelux", 
       "England"
+    ),
+    labels = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
     )
   ) +
   xlab("Spatial Distance Classes") +
