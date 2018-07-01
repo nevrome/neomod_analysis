@@ -38,14 +38,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "Austria and Czechia" =  function(t) {100},
-      "Poland" =               function(t) {100},
-      "Southern Germany" =     function(t) {100},
-      "Northeast France" =     function(t) {100},
-      "Northern Germany" =     function(t) {100},
-      "Southern Skandinavia" = function(t) {100},
-      "Benelux" =              function(t) {100},
-      "England" =              function(t) {100}
+      "Austria and Czechia" =  function(t) {25},
+      "Poland" =               function(t) {25},
+      "Southern Germany" =     function(t) {25},
+      "Northeast France" =     function(t) {25},
+      "Northern Germany" =     function(t) {25},
+      "Southern Skandinavia" = function(t) {25},
+      "Benelux" =              function(t) {25},
+      "England" =              function(t) {25}
     )
   ),
   age_distribution_functions = c(
@@ -56,7 +56,7 @@ models_grid <- expand.grid(
   ),
   # relations settings
   amounts_friends = list(
-    20
+    5
   ),
   unit_interaction_matrix = list(
     distance_matrix_spatial
@@ -65,16 +65,13 @@ models_grid <- expand.grid(
     0.01
   ),
   cross_unit_proportion_friend = list(
-    0.1,
-    0.2,
-    0.3,
-    0.4
+    0.08
   ),
   weight_child_of = list(
-    8
+    40
   ),
   weight_friend = list(
-    2
+    5
   ),
   # ideas settings
   names = list(
@@ -91,12 +88,12 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(100) %>%
+  tidyr::uncount(8) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
 
-models_grid[1, ] %<>% popgenerator::prepare_pops_rels_ideas()
+models_grid %<>% popgenerator::prepare_pops_rels_ideas()
 
 # models_grid$population_settings[[1]] -> settings 
 # models_grid$relations_settings[[1]] -> settings
