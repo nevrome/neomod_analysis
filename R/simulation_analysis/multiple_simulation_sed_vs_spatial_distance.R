@@ -13,19 +13,21 @@ load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
 test <- regions_grid
 
 test <- pbapply::pblapply(
-  base::split(test, f = test$model_id), function(y) { 
+  base::split(test, f = test$multiplier), function(z) { 
     lapply(
-      base::split(y, f = y$time), function(x) {
-        mn <- pmin(x$regionA, x$regionB)
-        mx <- pmax(x$regionA, x$regionB)
-        int <- as.numeric(interaction(mn, mx))
-        x <- x[match(unique(int), int),]
-        return(x)
-      }
-    ) %>%
-      do.call(rbind, .)
-  }
-) %>%
+      base::split(z, f = test$model_id), function(y) { 
+        lapply(
+          base::split(y, f = y$time), function(x) {
+            mn <- pmin(x$regionA, x$regionB)
+            mx <- pmax(x$regionA, x$regionB)
+            int <- as.numeric(interaction(mn, mx))
+            x <- x[match(unique(int), int),]
+            return(x)
+          }) %>%
+        do.call(rbind, .)
+    }) %>%
+    do.call(rbind, .)    
+}) %>%
   do.call(rbind, .)
 
 
@@ -57,7 +59,7 @@ hu <- test %>% dplyr::left_join(
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = distance, y = mean_sed, group = distance)
+    aes(x = as.factor(distance), y = mean_sed, fill = as.factor(multiplier))
   ) +
   # geom_text(
   #   data = mantel_test_results,
@@ -79,33 +81,17 @@ plu <- ggplot(hu) +
     axis.text = element_text(size = 20),
     axis.title = element_text(size = 20)
   ) +
-  scale_color_manual(
+  scale_fill_manual(
     values = c(
-      "Austria and Czechia" = "#999999", 
-      "Poland" = "#E69F00", 
-      "Southern Germany" = "#56B4E9", 
-      "Northeast France" = "#009E73", 
-      "Northern Germany" = "#000000", 
-      "Southern Skandinavia" = "#0072B2", 
-      "Benelux" = "#D55E00", 
-      "England" = "#CC79A7",
-      "h0canberejected" = "red",
-      "h0cannotberejected" = "black"
-    ),
-    breaks = c(
-      "Austria and Czechia",
-      "Poland", 
-      "Southern Germany", 
-      "Northeast France", 
-      "Northern Germany", 
-      "Southern Skandinavia", 
-      "Benelux", 
-      "England"
+      "1" = "#999999", 
+      "2" = "#E69F00", 
+      "3" = "#56B4E9", 
+      "4" = "#009E73"
     )
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
-  ylim(0, 2.3)
+  ylim(0, 0.8)
 
 plu %>%
   ggsave(
