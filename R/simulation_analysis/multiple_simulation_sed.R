@@ -20,17 +20,24 @@ regions_grid <-
     regionB = prop$region %>% unique(), 
     time = prop$timestep %>% unique(), 
     model_id =  prop$model_id %>% unique(),
-    multiplier =  prop$multiplier %>% unique(),
     stringsAsFactors = FALSE
   ) %>%
   tibble::as.tibble() %>%
   dplyr::left_join(
     long_prop,
-    by = c("regionA" = "region", "time" = "timestep", "model_id" = "model_id", "multiplier" = "multiplier" )
+    by = c(
+      "regionA" = "region", 
+      "time" = "timestep", 
+      "model_id" = "model_id"
+    )
   ) %>%
   dplyr::left_join(
-    long_prop,
-    by = c("regionB" = "region", "time" = "timestep", "model_id" = "model_id", "multiplier" = "multiplier"),
+    subset(long_prop, select=-c(multiplier)),
+    by = c(
+      "regionB" = "region", 
+      "time" = "timestep", 
+      "model_id" = "model_id"
+    ),
     suffix = c("_regionA", "_regionB")
   )
 
