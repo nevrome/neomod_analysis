@@ -32,7 +32,7 @@ regions_grid <-
     )
   ) %>%
   dplyr::left_join(
-    subset(long_prop, select=-c(multiplier)),
+    subset(long_prop, select=-c(model_group)),
     by = c(
       "regionB" = "region", 
       "time" = "timestep", 
@@ -52,7 +52,7 @@ regions_grid$sed <- unlist(pbapply::pblapply(
 ))
 
 regions_grid %<>% dplyr::select(
-    regionA, regionB, time, sed, model_id, multiplier
+    regionA, regionB, time, sed, model_id, model_group
   )
 
 save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_sim_multiple.RData")

@@ -13,7 +13,7 @@ load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
 test <- regions_grid
 
 test <- pbapply::pblapply(
-  base::split(test, f = test$multiplier), function(z) { 
+  base::split(test, f = test$model_group), function(z) { 
     lapply(
       base::split(z, f = test$model_id), function(y) { 
         lapply(
@@ -46,7 +46,7 @@ hu <- test %>% dplyr::left_join(
       right = FALSE)
   ) %>%
   dplyr::group_by(
-    model_id, multiplier, time, regionA, regionB, distance
+    model_id, model_group, time, regionA, regionB, distance
   ) %>%
   dplyr::summarise(
     mean_sed = mean(sed, na.rm = TRUE)
@@ -59,7 +59,7 @@ hu <- test %>% dplyr::left_join(
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = as.factor(distance), y = mean_sed, fill = as.factor(multiplier))
+    aes(x = as.factor(distance), y = mean_sed, fill = as.factor(model_group))
   ) +
   # geom_text(
   #   data = mantel_test_results,
@@ -91,7 +91,8 @@ plu <- ggplot(hu) +
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
-  ylim(0, 0.8)
+  #ylim(0, 0.8) +
+  NULL
 
 plu %>%
   ggsave(

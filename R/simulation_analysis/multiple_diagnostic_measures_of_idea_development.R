@@ -18,7 +18,7 @@ huup <- idea_proportions %>%
     general_sd = sd(proportion)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::group_by(timestep, multiplier) %>%
+  dplyr::group_by(timestep, model_group) %>%
   dplyr::summarise(
     min = min(proportion),
     max = max(proportion),
@@ -45,23 +45,23 @@ huup %>%
   geom_line(aes(x = timestep, y = mean - standard_deviation), color = "red") +
   geom_line(aes(x = timestep, y = lower_quart), color = "darkgreen") +
   geom_line(aes(x = timestep, y = upper_quart), color = "darkgreen") +
-  facet_wrap(~multiplier)
+  facet_wrap(~model_group)
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timestep, y = range, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = range, color = as.factor(model_group), group = as.factor(model_group)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timestep, y = inter_quart_dist, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = inter_quart_dist, color = as.factor(model_group), group = as.factor(model_group)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timestep, y = standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = standard_deviation, color = as.factor(model_group), group = as.factor(model_group)))
 
 huup %>%
   ggplot() +
-  geom_line(aes(x = timestep, y = diff_standard_deviation, color = as.factor(multiplier), group = as.factor(multiplier)))
+  geom_line(aes(x = timestep, y = diff_standard_deviation, color = as.factor(model_group), group = as.factor(model_group)))
 
 #####
 
@@ -76,12 +76,12 @@ huup <- idea_proportions %>%
   #   proportion = moving_average(proportion, n = 50, sides = 2)
   # ) %>%
   # dplyr::ungroup() %>%
-  dplyr::group_by(multiplier, region, timestep) %>%
+  dplyr::group_by(model_group, region, timestep) %>%
   dplyr::mutate(
     general_sd = sd(proportion)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::group_by(multiplier, timestep) %>%
+  dplyr::group_by(model_group, timestep) %>%
   dplyr::summarise(
     standard_deviation = mean(general_sd)
   ) %>%
@@ -93,7 +93,7 @@ huup %>%
     aes(
       x = timestep, 
       y = standard_deviation, 
-      color = as.factor(multiplier)
+      color = as.factor(model_group)
     )
   )
 
