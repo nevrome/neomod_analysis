@@ -1,6 +1,41 @@
 load("R/simulation_results/sim1.RData")
+load("../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
+#load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
 
-prop <- models_grid[1:10, ]$idea_proportions %>%
+burial_type_long_prop <- proportion_development_burial_type %>%
+  dplyr::rename(
+    region = region_name
+  ) %>%
+  dplyr::mutate(
+    timestep = -timestep,
+    model_id = -2,
+    model_group = 0,
+    idea = dplyr::case_when(
+      idea == "cremation" ~ "idea_1",
+      idea == "inhumation" ~ "idea_2"
+    )
+  ) %>%
+  tibble::as.tibble()
+ 
+# burial_construction_long_prop <- proportion_development_burial_construction %>%
+#   dplyr::rename(
+#     region = region_name
+#   ) %>%
+#   dplyr::mutate(
+#     timestep = -timestep,
+#     model_id = -1,
+#     model_group = 0,
+#     idea = dplyr::case_when(
+#       idea == "flat" ~ "idea_1",
+#       idea == "mound" ~ "idea_2"
+#     )
+#   ) %>%
+#   tibble::as.tibble()
+
+prop <- c(
+    models_grid$idea_proportions,
+    list(burial_type_long_prop)
+  ) %>%
   do.call(rbind, .)
 
 long_prop <- prop %>%
@@ -28,8 +63,8 @@ fu <- ggplot(long_prop) +
   ) +
   facet_wrap(
     ~model_id,
-    nrow = 5,
-    ncol = 2
+    nrow = 13,
+    ncol = 4
   ) +
   theme_bw() +
   scale_color_manual(
@@ -45,19 +80,17 @@ fu <- ggplot(long_prop) +
     )
   ) +
   theme(
-    plot.title = element_text(size = 30, face = "bold"),
     legend.position = "bottom",
     legend.title = element_blank(),
-    legend.text = element_text(size = 20),
-    strip.text.x = element_text(size = 20),
-    axis.text = element_text(size = 20),
-    axis.title = element_text(size = 20)
+    legend.text = element_text(size = 10),
+    strip.text.x = element_text(size = 10),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 10)
   )
 
 fu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_simulation_2.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
