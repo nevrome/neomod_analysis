@@ -1,10 +1,16 @@
-#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
-load("../neomod_datapool/bronze_age/distance_matrix_spatial_long_half.RData")
-#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
-load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
+load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
+#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
+load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
+load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
+#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
 
 test <- regions_grid %>%
+  dplyr::mutate(
+    regionA = as.character(regionA),
+    regionB = as.character(regionB)
+  ) 
+
+distance_matrix_spatial_long %<>%
   dplyr::mutate(
     regionA = as.character(regionA),
     regionB = as.character(regionB)
@@ -23,7 +29,7 @@ test <- lapply(
   do.call(rbind, .)
 
 hu <- test %>% dplyr::left_join(
-    distance_matrix_spatial_long_half, by = c("regionA", "regionB")
+    distance_matrix_spatial_long, by = c("regionA", "regionB")
   ) %>% 
   dplyr::filter(
     distance != 0
@@ -32,7 +38,7 @@ hu <- test %>% dplyr::left_join(
     relation = paste(regionA, "+", regionB),
     time = base::cut(
       time, 
-      seq(800, 2200, 200), labels = paste(seq(1000, 2200, 200), seq(800, 2000, 200), sep = "-"),
+      seq(-2200, -800, 200), labels = paste(seq(-2200, -1000, 200), seq(-2000, -800, 200), sep = " - "),
       include.lowest = TRUE, 
       right = FALSE)
   ) %>%
@@ -46,8 +52,6 @@ hu <- test %>% dplyr::left_join(
   dplyr::filter(
     !is.na(mean_sed)
   )
-
-hu$time <- forcats::fct_rev(hu$time)
 
 regions_factorA <- as.factor(hu$regionA)
 hu$regionA <- factor(regions_factorA, levels = c(
@@ -149,8 +153,8 @@ plu <- ggplot(hu) +
 
 plu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
+    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
