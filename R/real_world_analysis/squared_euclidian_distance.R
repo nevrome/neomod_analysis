@@ -79,7 +79,16 @@ hu <- regions_grid %>%
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
-    values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c(
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#ffe500", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    )
   ) +
   theme(
     axis.text = element_text(size = 10),
@@ -176,7 +185,16 @@ schnu <- regions_grid %>%
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
-    values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c(
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#ffe500", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    )
   ) +
   theme(
     legend.position = "bottom",
@@ -197,7 +215,7 @@ gl <- lapply(region_file_list, function(x) {
   img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
-    width = 0.1, height = 0.9
+    width = 0.14, height = 1.2
   )
 })
 dummy <- tibble::tibble(regionA = unique(regions_grid$regionA), grob = gl )
