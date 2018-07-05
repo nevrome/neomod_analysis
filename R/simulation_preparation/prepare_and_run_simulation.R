@@ -3,6 +3,15 @@
 load("../neomod_datapool/bronze_age/start_proportion_burial_type.RData")
 load("../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
 
+start_proportion_5050 <- structure(
+  list(
+    idea_1 = c(.5, .5, .5, .5, .5, .5, .5, .5), 
+    idea_2 = c(.5, .5, .5, .5, .5, .5, .5, .5)), 
+  class = "data.frame", 
+  row.names = c(
+    "Austria and Czechia", "Poland", "Southern Germany", "Northeast France", 
+    "Northern Germany", "Southern Skandinavia", "Benelux", "England"))
+
 region_factor_levels <- c(
   "Austria and Czechia",
   "Poland",
@@ -62,10 +71,10 @@ models_grid <- expand.grid(
     distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = list(
-    0.01
+    0.02
   ),
   cross_unit_proportion_friend = list(
-    0.08
+    0.20
   ),
   weight_child_of = list(
     40
@@ -78,7 +87,8 @@ models_grid <- expand.grid(
     c("idea_1", "idea_2")
   ),
   start_distribution = list(
-    start_proportion_burial_type
+    #start_proportion_burial_type.
+    start_proportion_5050
   ), 
   strength = list(
     c(1, 1) 
@@ -88,7 +98,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(50) %>%
+  tidyr::uncount(51) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -121,7 +131,7 @@ pryr::object_size(models_grid)
 
 save(models_grid, file = "R/simulation_results/sim1.RData")
 
-models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
-
-save(models_grid, file = "R/simulation_results/sim1_general.RData")
+# models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
+# 
+# save(models_grid, file = "R/simulation_results/sim1_general.RData")
 
