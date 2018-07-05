@@ -29,7 +29,7 @@ spu <- ggplot() +
   ) +
   facet_wrap(~region_name, nrow = 8) +
   xlab("Time in years calBC") +
-  ylab("Amount of burials") +
+  ylab("Amount of 14C dates from burials") +
   labs(fill = "Ideas (mutually exclusive)") + 
   theme_bw() +
   theme(
@@ -38,7 +38,7 @@ spu <- ggplot() +
     axis.text = element_text(size = 15),
     axis.title = element_text(size = 15),
     strip.text.x = element_text(size = 13),
-    legend.title = element_text(size = 15),
+    legend.title = element_text(size = 15, face = "bold"),
     legend.text = element_text(size = 15)
   ) +
   scale_fill_manual(

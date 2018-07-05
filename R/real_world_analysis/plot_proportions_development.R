@@ -54,7 +54,7 @@ load("../neomod_datapool/bronze_age/development_proportions_burial_construction.
 library(ggplot2)
 
 prop <- proportion_development_burial_type
-# prop <- proportion_development_burial_construction
+#prop <- proportion_development_burial_construction
   
 regions_factor <- as.factor(prop$region_name)
 prop$region_name <- factor(regions_factor, levels = c(
@@ -97,7 +97,7 @@ hu <- ggplot() +
   scale_alpha_continuous(range = c(0.0, 0.7)) +
   facet_wrap(~region_name, nrow = 8) +
   xlab("Time in years calBC") +
-  ylab("Proportion of burials") +
+  ylab("Proportion of 14C dates from burials") +
   labs(fill = "Ideas (mutually exclusive)") + 
   theme_bw() +
   theme(
@@ -106,7 +106,7 @@ hu <- ggplot() +
     axis.text = element_text(size = 15),
     axis.title = element_text(size = 15),
     strip.text.x = element_text(size = 13),
-    legend.title = element_text(size = 15),
+    legend.title = element_text(size = 15, face = "bold"),
     legend.text = element_text(size = 15)
   ) +
   scale_fill_manual(
@@ -125,16 +125,16 @@ hu <- ggplot() +
 
 
 
-region_file_list <- unique(prop$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
+region_file_list <- unique(amount_devel$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
-  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms/", x, ".png"))
+  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
-    width = 0.1, height = 0.9
+    width = 0.14, height = 1.2
   )
 })
-dummy <- tibble::tibble(region_name = unique(prop$region_name), grob = gl )
+dummy <- tibble::tibble(region_name = unique(amount_devel$region_name), grob = gl )
 
 source("R/helper_functions/geom_grob.R")
 
