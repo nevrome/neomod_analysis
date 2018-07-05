@@ -51,31 +51,6 @@ regions_grid <- regions_grid %>%
     regionA, regionB, time, sed
   )
 
-
-regions_factorA <- as.factor(regions_grid$regionA)
-regions_grid$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
-regions_factorB <- as.factor(regions_grid$regionB)
-regions_grid$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
 #save(regions_grid, file = "../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 
