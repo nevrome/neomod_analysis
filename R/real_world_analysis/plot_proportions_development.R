@@ -121,7 +121,10 @@ hu <- ggplot() +
     breaks = c(0, 0.5, 1),
     labels = c("0%", "50%", "100%")
   ) +
-  scale_x_reverse(breaks = c(2200, 2000, 1500, 1000, 800), limits = c(2500, 800))
+  scale_x_continuous(
+    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    limits = c(-2500, -800)
+  )
 
 
 

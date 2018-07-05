@@ -72,9 +72,9 @@ hu <- regions_grid %>%
     regionA ~ regionB,
     switch = "y"
   ) +
-  scale_x_reverse(
-    breaks = c(2000, 1500, 1000), 
-    limits = c(2200, 800)
+  scale_x_continuous(
+    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    limits = c(-2500, -800)
   ) +
   theme_bw() +
   scale_color_manual(
@@ -178,9 +178,9 @@ schnu <- regions_grid %>%
     ~regionA, 
     nrow = 8
   ) +
-  scale_x_reverse(
-    breaks = c(2200, 2000, 1500, 1000, 800), 
-    limits = c(2500, 800)
+  scale_x_continuous(
+    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    limits = c(-2500, -800)
   ) +
   theme_bw() +
   scale_color_manual(

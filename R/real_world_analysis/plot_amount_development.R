@@ -53,7 +53,10 @@ spu <- ggplot() +
   coord_cartesian(
     ylim = c(0, 80)
   ) +
-  scale_x_reverse(breaks = c(2200, 2000, 1500, 1000, 800), limits = c(2500, 800))
+  scale_x_continuous(
+    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    limits = c(-2500, -800)
+  )
   
   
 
