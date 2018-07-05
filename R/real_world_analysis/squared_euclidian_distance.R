@@ -104,7 +104,7 @@ hu <- regions_grid %>%
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
-    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
   ) +
   theme(
     axis.text = element_text(size = 10),
@@ -201,7 +201,7 @@ schnu <- regions_grid %>%
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
-    values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+    values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
   ) +
   theme(
     legend.position = "bottom",

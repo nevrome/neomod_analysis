@@ -19,7 +19,7 @@ path = "../neomod_datapool/bronze_age/region_pictograms_colour/"
 
 colour_vector <- c(
   "Austria and Czechia" = "#999999", 
-  "Poland" = "#E69F00", 
+  "Poland" = "#ffe500", 
   "Southern Germany" = "#56B4E9", 
   "Northeast France" = "#009E73", 
   "Northern Germany" = "#000000", 

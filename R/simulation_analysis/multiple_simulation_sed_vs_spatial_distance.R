@@ -84,7 +84,7 @@ plu <- ggplot(hu) +
   scale_fill_manual(
     values = c(
       "1" = "#999999", 
-      "2" = "#E69F00", 
+      "2" = "#ffe500", 
       "3" = "#56B4E9", 
       "4" = "#009E73"
     )

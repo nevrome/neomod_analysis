@@ -118,7 +118,7 @@ hu <- ggplot() +
     curvature = 0.2
   ) +
   # scale_color_manual(
-  #   #values = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
+  #   #values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
   # ) +
   scale_size_continuous(
     range = c(5, 0.5)
