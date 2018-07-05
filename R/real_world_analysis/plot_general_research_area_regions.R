@@ -41,7 +41,10 @@ hu <- ggplot() +
   ) +
   geom_sf(
     data = regions,
-    fill = NA, colour = "red", size = 0.8
+    mapping = aes(
+      colour = NAME
+    ),
+    fill = NA, size = 3.5
   ) +
   geom_sf(
     data = research_area,
@@ -56,11 +59,11 @@ hu <- ggplot() +
     ),
     show.legend = "point"
   ) +
-  geom_text(
-    data = regions_name_points,
-    aes(x = x, y = y, label = ID),
-    size = 15
-  ) +
+  # geom_text(
+  #   data = regions_name_points,
+  #   aes(x = x, y = y, label = ID),
+  #   size = 15
+  # ) +
   theme_bw() +
   coord_sf(
     xlim = xlimit, ylim = ylimit,
@@ -86,7 +89,35 @@ hu <- ggplot() +
       "inhumation" = "#0072B2",
       "mound" = "#CC79A7",
       "flat" = "#009E73",
-      "unknown" = "darkgrey"
+      "unknown" = "darkgrey",
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#ffe500", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    ),
+    breaks = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
+    ),
+    labels = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
     )
   ) +
   theme(
@@ -99,8 +130,8 @@ hu <- ggplot() +
     panel.grid.major = element_line(colour = "black", size = 0.3)
   ) +
   guides(
-    color = guide_legend(title = "Burial type", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
-    shape = guide_legend(title = "Burial construction", override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    color = guide_legend(title = NULL, override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    shape = FALSE,
     size = FALSE
   )
 
