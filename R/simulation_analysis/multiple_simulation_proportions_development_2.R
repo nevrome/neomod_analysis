@@ -8,7 +8,7 @@ burial_type_long_prop <- proportion_development_burial_type %>%
   ) %>%
   dplyr::mutate(
     timestep = -timestep,
-    model_id = -2,
+    model_id = 0,
     model_group = 0,
     idea = dplyr::case_when(
       idea == "cremation" ~ "idea_1",
