@@ -104,7 +104,7 @@ proportion_per_region <- dates_probability_per_year_and_region_list %>%
     
     # complete result with 0 for years without information
     if (nrow(res) < 1401) {
-      missing_ages <- c(800:2200)[!(c(800:2200) %in% res$age)]
+      missing_ages <- c(-2200:-800)[!(c(-2200:-800) %in% res$age)]
       res <- rbind(
         res, 
         tibble::tibble(

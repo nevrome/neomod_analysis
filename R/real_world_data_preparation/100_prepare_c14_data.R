@@ -50,6 +50,17 @@ bronze <- bronze %>%
     ) 
   )
 
+
+
+#### transform calBP age to calBC ####
+
+bronze$calage_density_distribution %<>% lapply(
+  function(x) {
+    x$age = -x$age + bol
+    return(x)
+  }
+)
+
 save(bronze, file = "../neomod_datapool/bronze_age/bronze.RData")
 
 # plot to check the calibration result 
@@ -70,8 +81,8 @@ bronze0 <- bronze %>%
     in_time_of_interest = 
       purrr::map(calage_density_distribution, function(x){
         any(
-          x$age <= (2200 + bol) & 
-            x$age >= (800 + bol) &
+          x$age >= -2200 & 
+            x$age <= -800 &
             x$two_sigma
         )
       }
@@ -128,6 +139,8 @@ bronze1 <- bronze0 %>%
 
 save(bronze1, file = "../neomod_datapool/bronze_age/bronze1.RData")
 
+
+
 # export dates as shapefile
 bronze1 %>% sf::st_as_sf(
   coords = c("lon", "lat"),
@@ -148,11 +161,8 @@ bronze2 <- bronze1 %>%
   dplyr::filter(
     two_sigma == TRUE
   ) %>%
-  dplyr::mutate(
-    age = age - bol
-  ) %>%
   dplyr::filter(
-    age <= 2200 & age >= 800
+    age >= -2200 & age <= -800
   ) %>%
   dplyr::arrange(
     desc(burial_construction)

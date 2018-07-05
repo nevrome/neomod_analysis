@@ -2,20 +2,8 @@
 
 load( "../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
 
-regions_factor <- as.factor(proportion_development_burial_type$region_name)
-proportion_development_burial_type$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 start_proportion_burial_type <- proportion_development_burial_type %>%
-  dplyr::filter(timestep == 2200) %>%
+  dplyr::filter(timestep == -2200) %>%
   tidyr::spread(idea, proportion) %>%
   dplyr::arrange(region_name) %>%
   magrittr::set_rownames(.$region_name) %>%
@@ -36,20 +24,8 @@ save(
 
 load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
 
-regions_factor <- as.factor(proportion_development_burial_construction$region_name)
-proportion_development_burial_construction$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 start_proportion_burial_construction <- proportion_development_burial_construction %>%
-  dplyr::filter(timestep == 2200) %>%
+  dplyr::filter(timestep == -2200) %>%
   tidyr::spread(idea, proportion) %>%
   dplyr::arrange(region_name) %>%
   magrittr::set_rownames(.$region_name) %>%
