@@ -42,8 +42,8 @@ distance_matrix_spatial_long <- region_centers %>%
   )
 
 # remove duplicates
-mn <- pmin(distance_matrix_spatial_long$regionA, distance_matrix_spatial_long$regionB)
-mx <- pmax(distance_matrix_spatial_long$regionA, distance_matrix_spatial_long$regionB)
+mn <- pmin(as.character(distance_matrix_spatial_long$regionA), as.character(distance_matrix_spatial_long$regionB))
+mx <- pmax(as.character(distance_matrix_spatial_long$regionA), as.character(distance_matrix_spatial_long$regionB))
 int <- as.numeric(interaction(mn, mx))
 distance_matrix_spatial_long_half <- distance_matrix_spatial_long[match(unique(int), int),]
 
