@@ -1,10 +1,10 @@
-#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
+load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
+#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 
 time_regions_grid <- regions_grid %>% dplyr::mutate(
   time = base::cut(
     time, 
-    seq(800, 2200, 200), labels = paste(seq(1000, 2200, 200), seq(800, 2000, 200), sep = "-"),
+    seq(-2200, -800, 200), labels = paste(seq(-2200, -1000, 200), seq(-2000, -800, 200), sep = " - "),
     include.lowest = TRUE, 
     right = FALSE)
 ) %>%
@@ -34,5 +34,5 @@ distance_matrizes_sed <- lapply(
   } 
 )
 
-#save(distance_matrizes_sed, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_type.RData")
-save(distance_matrizes_sed, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_construction.RData")
+save(distance_matrizes_sed, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_type.RData")
+#save(distance_matrizes_sed, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_construction.RData")
