@@ -73,8 +73,8 @@ hu <- regions_grid %>%
     switch = "y"
   ) +
   scale_x_continuous(
-    breaks = c(-2200, -2000, -1500, -1000, -800), 
-    limits = c(-2500, -800)
+    breaks = c(-2000, -1500, -1000), 
+    limits = c(-2000, -800)
   ) +
   theme_bw() +
   scale_color_manual(
@@ -156,7 +156,7 @@ kur <- regions_grid_mean %>%
 kur %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/regions_regions_mean_squared_euclidian_distance_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/regions_regions_mean_squared_euclidian_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
@@ -233,7 +233,7 @@ schnu <- schnu +
 schnu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/regions_squared_euclidian_distance_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    #"/home/clemens/neomod/neomod_datapool/bronze_age/regions_squared_euclidian_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
@@ -241,3 +241,4 @@ schnu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
+
