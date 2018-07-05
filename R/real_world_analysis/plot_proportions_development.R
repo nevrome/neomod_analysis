@@ -56,18 +56,6 @@ library(ggplot2)
 prop <- proportion_development_burial_type
 #prop <- proportion_development_burial_construction
   
-regions_factor <- as.factor(prop$region_name)
-prop$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
@@ -79,13 +67,13 @@ hu <- ggplot() +
     linetype = "blank"
     #alpha = 0.6
   ) +
-  geom_line(
-    data = dplyr::filter(prop, idea == "cremation"),
-    #data = dplyr::filter(prop, idea == "flat"),
-    mapping = aes(x = timestep, y = proportion),
-    color = "black",
-    size = 0.2
-  ) +
+  # geom_line(
+  #   data = dplyr::filter(prop, idea == "cremation"),
+  #   #data = dplyr::filter(prop, idea == "flat"),
+  #   mapping = aes(x = timestep, y = proportion),
+  #   color = "black",
+  #   size = 0.2
+  # ) +
   # geom_rect(
   #   aes(NULL, NULL, xmin = start, xmax = end),
   #   ymin = 0, ymax = 1, 
@@ -128,7 +116,7 @@ hu <- ggplot() +
 
 
 
-region_file_list <- unique(amount_devel$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
+region_file_list <- unique(prop$region_name) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
   img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
@@ -137,7 +125,7 @@ gl <- lapply(region_file_list, function(x) {
     width = 0.14, height = 1.2
   )
 })
-dummy <- tibble::tibble(region_name = unique(amount_devel$region_name), grob = gl )
+dummy <- tibble::tibble(region_name = unique(prop$region_name), grob = gl )
 
 source("R/helper_functions/geom_grob.R")
 
