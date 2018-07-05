@@ -77,7 +77,7 @@ models_grid <- expand.grid(
     0.20
   ),
   weight_child_of = list(
-    40
+    45
   ),
   weight_friend = list(
     5
@@ -98,7 +98,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(51) %>%
+  tidyr::uncount(48) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
