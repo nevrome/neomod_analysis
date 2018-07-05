@@ -33,7 +33,7 @@ burial_type_long_prop <- proportion_development_burial_type %>%
 #   tibble::as.tibble()
 
 prop <- c(
-    models_grid$idea_proportions,
+    models_grid$idea_proportions[1:48],
     list(burial_type_long_prop)
   ) %>%
   do.call(rbind, .)
@@ -63,8 +63,8 @@ fu <- ggplot(long_prop) +
   ) +
   facet_wrap(
     ~model_id,
-    nrow = 13,
-    ncol = 4
+    nrow = 7,
+    ncol = 7
   ) +
   theme_bw() +
   scale_color_manual(
@@ -79,13 +79,24 @@ fu <- ggplot(long_prop) +
       "England" = "#CC79A7"
     )
   ) +
+  xlab("Time in years calBC") +
+  ylab("Proportions") +
   theme(
     legend.position = "bottom",
-    legend.title = element_blank(),
-    legend.text = element_text(size = 10),
-    strip.text.x = element_text(size = 10),
-    axis.text = element_text(size = 10),
-    axis.title = element_text(size = 10)
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15),
+    strip.text.x = element_text(size = 13),
+    legend.text = element_text(size = 15),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.title=element_blank()
+  ) +
+  scale_x_continuous(
+    breaks = c(-2000, -1500, -1000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = c(0, 0.5, 1),
+    labels = c("0%", "50%", "100%")
   )
 
 fu %>%
@@ -95,6 +106,6 @@ fu %>%
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    width = 210, height = 297, units = "mm",
+    width = 350, height = 360, units = "mm",
     limitsize = F
   )
