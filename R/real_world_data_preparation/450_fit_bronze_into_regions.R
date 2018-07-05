@@ -20,15 +20,23 @@ region_index_of_date <- bronze_sf %>% sf::st_intersects(regions) %>%
 dates_probability_per_year_and_region_list <- bronze2 %>%
   # add region information to bronze2
   dplyr::mutate(
-    region_id = regions$ID[region_index_of_date],
-    region_name = as.character(regions$NAME[region_index_of_date])
+    region_name = factor(regions$NAME[region_index_of_date], levels = c(
+      "Austria and Czechia",
+      "Poland",
+      "Southern Germany",
+      "Northeast France",
+      "Northern Germany",
+      "Southern Skandinavia",
+      "Benelux",
+      "England"
+    ))
   ) %>% 
   # remove entries without (outside of) regions
   dplyr::filter(
-    !is.na(region_id)
+    !is.na(region_name)
   ) %>%
-  # split datasets by region id
-  split(.$region_id)
+  # split datasets by region name
+  split(.$region_name)
 
 save(
   dates_probability_per_year_and_region_list, 

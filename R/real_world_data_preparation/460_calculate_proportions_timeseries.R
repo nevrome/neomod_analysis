@@ -123,13 +123,12 @@ proportion_per_region <- dates_probability_per_year_and_region_list %>%
 
 # merge per region information and transform to tall data.frame
 proportion_per_region_df <- proportion_per_region %>% 
-  purrr::map_dfr(as.data.frame, .id = "region_id") %>%
-  dplyr::mutate_("region_id" = ~as.numeric(region_id)) %>%
+  do.call(rbind, .) %>%
   dplyr::rename(
     "timestep" = "age"
   ) %>%
   tidyr::gather(
-    idea, proportion, -timestep, -region_id, -region_name
+    idea, proportion, -timestep, -region_name
   ) %>% 
   dplyr::select(
     region_name, timestep, idea, proportion 
