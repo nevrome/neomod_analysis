@@ -1,8 +1,6 @@
 # load("../neomod_datapool/bronze_age/amount_development_burial_type.RData")
-#load("../neomod_datapool/bronze_age/amount_development_burial_construction.RData")
 
 # amount_devel <- amount_development_burial_type
-# #amount_devel <- amount_development_burial_construction
 # 
 # amount_devel %<>% 
 #   dplyr::filter(
@@ -49,12 +47,10 @@
 #   )
 
 load("../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
-load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
 
 library(ggplot2)
 
 prop <- proportion_development_burial_type
-#prop <- proportion_development_burial_construction
   
 prop$idea <- as.factor(prop$idea)
 prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
@@ -69,7 +65,6 @@ hu <- ggplot() +
   ) +
   # geom_line(
   #   data = dplyr::filter(prop, idea == "cremation"),
-  #   #data = dplyr::filter(prop, idea == "flat"),
   #   mapping = aes(x = timestep, y = proportion),
   #   color = "black",
   #   size = 0.2
@@ -140,7 +135,6 @@ hu <- hu +
 hu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

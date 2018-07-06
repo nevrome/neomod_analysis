@@ -1,8 +1,6 @@
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
-#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
+load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
 load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
-load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
-#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
+load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
 
 test <- regions_grid %>%
   dplyr::mutate(
@@ -153,8 +151,7 @@ plu <- ggplot(hu) +
 
 plu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
+		"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

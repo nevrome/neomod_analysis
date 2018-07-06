@@ -1,8 +1,6 @@
 load("../neomod_datapool/bronze_age/development_amount_burial_type.RData")
-load("../neomod_datapool/bronze_age/development_amount_burial_construction.RData")
 
 amount_devel <- amount_development_burial_type
-#amount_devel <- amount_development_burial_construction
 
 regions_factor <- as.factor(amount_devel$region_name)
 amount_devel$region_name <- factor(regions_factor, levels = c(
@@ -84,7 +82,6 @@ spu <- spu +
 spu %>%
   ggsave(
     "/home/clemens/neomod/neomod_datapool/bronze_age/development_amount_regions_burial_type.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_amount_regions_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
