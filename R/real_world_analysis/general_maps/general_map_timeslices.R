@@ -1,15 +1,15 @@
-load("../neomod_datapool/bronze_age/bronze2.RData")
+load("../neomod_datapool/R_data/bronze2.RData")
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
 research_area <- sf::st_read("manually_changed_data/research_area.shp")
-load("../neomod_datapool/bronze_age/regions.RData")
+load("../neomod_datapool/R_data/regions.RData")
 
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
-    age %in% seq(2200, 800, by = -200)
+    age %in% seq(-2200, -800, by = 200)
   ) %>%
   dplyr::mutate(
-    age_slice = factor(age, levels = seq(2200, 800, by = -200))
+    age_slice = factor(age, levels = seq(-2200, -800, by = 200))
   ) %>% sf::st_as_sf(
     coords = c("lon", "lat"),
     crs = 4326
@@ -90,18 +90,18 @@ hu <- ggplot() +
     alpha = FALSE
   ) +
   facet_wrap(
-    nrow = 3,
+    nrow = 2,
     ~age_slice
   )
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/general_map_research_area_timeslices.jpeg",
+    "/home/clemens/neomod/neomod_datapool/plots/general_maps/general_map_research_area_timeslices.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
     dpi = 300,
     #width = 210, height = 297, units = "mm",
-    width = 350, height = 360, units = "mm",
+    width = 550, height = 280, units = "mm",
     limitsize = F
   )
