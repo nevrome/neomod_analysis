@@ -1,7 +1,7 @@
 #### load spatial data ####
 
-load("../neomod_datapool/bronze_age/spatial_data/research_area.RData")
-load("../neomod_datapool/bronze_age/spatial_data/area.RData")
+load("../neomod_datapool/R_data/research_area.RData")
+load("../neomod_datapool/R_data/area.RData")
 
 #### define region circles ####
 
@@ -12,24 +12,24 @@ region_circles <- tibble::tibble(
 region_circles <- sf::st_intersection(region_circles, research_area)
 region_circles %<>% sf::st_buffer(dist = 240000)
 
-load("../neomod_datapool/bronze_age/bronze1.RData")
+load("../neomod_datapool/R_data/bronze1.RData")
 bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
 sf::st_crs(bronze1) <- 4326
 bronze1 %<>% sf::st_transform(102013)
 gu <- sf::st_intersection(bronze1, research_area)
 
-library(ggplot2)
-ggplot() +
-  geom_sf(data = area) +
-  geom_sf(data = region_circles, fill = NA) +
-  geom_sf(data = gu)
+# library(ggplot2)
+# ggplot() +
+#   geom_sf(data = area) +
+#   geom_sf(data = region_circles, fill = NA) +
+#   geom_sf(data = gu)
 
 schnu <- sf::st_intersection(gu, region_circles)
 
-ggplot() +
-  geom_sf(data = area) +
-  geom_sf(data = region_circles, fill = NA) +
-  geom_sf(data = schnu)
+# ggplot() +
+#   geom_sf(data = area) +
+#   geom_sf(data = region_circles, fill = NA) +
+#   geom_sf(data = schnu)
 
 regions_with_enough_graves <- schnu %>% 
   dplyr::group_by(ID) %>%
@@ -44,20 +44,20 @@ regions_with_enough_graves <- schnu %>%
 regions <- region_circles %>%
   dplyr::filter(ID %in% regions_with_enough_graves)
 
-ggplot() +
-  geom_sf(data = area) +
-  geom_sf(data = regions, fill = NA) +
-  geom_sf(data = gu)
+# ggplot() +
+#   geom_sf(data = area) +
+#   geom_sf(data = regions, fill = NA) +
+#   geom_sf(data = gu)
 
-regions %>%
-  dplyr::mutate(
-    x = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[1]]),
-    y = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[2]])
-  ) %>%
-  ggplot() +
-    geom_sf(data = area) +
-    geom_sf(fill = NA) +
-    geom_text(aes(x = x, y = y, label = ID))
+# regions %>%
+#   dplyr::mutate(
+#     x = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[1]]),
+#     y = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[2]])
+#   ) %>%
+#   ggplot() +
+#     geom_sf(data = area) +
+#     geom_sf(fill = NA) +
+#     geom_text(aes(x = x, y = y, label = ID))
 
 regions$ID <- 1:nrow(regions)
 regions$NAME <- c(
@@ -70,14 +70,14 @@ regions$NAME <- c(
   "Southern Skandinavia"
   )
 
-regions %>%
-  dplyr::mutate(
-    x = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[1]]),
-    y = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[2]])
-  ) %>%
-  ggplot() +
-  geom_sf(data = area) +
-  geom_sf(fill = NA) +
-  geom_text(aes(x = x, y = y, label = NAME))
+# regions %>%
+#   dplyr::mutate(
+#     x = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[1]]),
+#     y = purrr::map_dbl(geometry, ~sf::st_centroid(.x)[[2]])
+#   ) %>%
+#   ggplot() +
+#   geom_sf(data = area) +
+#   geom_sf(fill = NA) +
+#   geom_text(aes(x = x, y = y, label = NAME))
 
-save(regions, file = "../neomod_datapool/bronze_age/regions.RData")
+save(regions, file = "../neomod_datapool/R_data/regions.RData")

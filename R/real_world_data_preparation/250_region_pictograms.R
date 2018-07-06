@@ -1,5 +1,5 @@
-load("../neomod_datapool/bronze_age/regions.RData")
-load("../neomod_datapool/bronze_age/spatial_data/extended_area.RData")
+load("../neomod_datapool/R_data/regions.RData")
+load("../neomod_datapool/R_data/extended_area.RData")
 extended_area <- extended_area$geometry
 
 #### colour #### 
@@ -15,7 +15,7 @@ regions_ordered <- c(
   "England"
 )
 
-path = "../neomod_datapool/bronze_age/region_pictograms_colour/"
+path = "../neomod_datapool/plots/region_pictograms_colour/"
 
 colour_vector <- c(
   "Austria and Czechia" = "#999999", 

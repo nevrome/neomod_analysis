@@ -9,7 +9,7 @@ research_area <- sf::st_read(
 
 save(
   research_area, 
-  file = "../neomod_datapool/bronze_age/spatial_data/research_area.RData"
+  file = "../neomod_datapool/R_data/research_area.RData"
 )
 
 
@@ -27,7 +27,7 @@ land_outline <- sf::st_read(
 
 save(
   land_outline, 
-  file = "../neomod_datapool/bronze_age/spatial_data/land_outline.RData"
+  file = "../neomod_datapool/R_data/land_outline.RData"
   )
 
 
@@ -40,7 +40,7 @@ area <- sf::st_intersection(sf::st_buffer(land_outline, 0), research_area)
 
 save(
   area, 
-  file = "../neomod_datapool/bronze_age/spatial_data/area.RData"
+  file = "../neomod_datapool/R_data/area.RData"
 )
 
 
@@ -63,7 +63,7 @@ extended_area <- sf::st_intersection(sf::st_buffer(land_outline, 0), extended_re
 
 save(
   extended_area, 
-  file = "../neomod_datapool/bronze_age/spatial_data/extended_area.RData"
+  file = "../neomod_datapool/R_data/extended_area.RData"
 )
 
 

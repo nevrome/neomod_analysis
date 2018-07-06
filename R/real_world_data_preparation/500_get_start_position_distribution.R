@@ -1,6 +1,6 @@
 #### burial type ####
 
-load( "../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
+load( "../neomod_datapool/R_data/development_proportions_burial_type.RData")
 
 start_proportion_burial_type <- proportion_development_burial_type %>%
   dplyr::filter(timestep == -2200) %>%
@@ -15,14 +15,14 @@ start_proportion_burial_type <- proportion_development_burial_type %>%
 
 save(
   start_proportion_burial_type,
-  file = "../neomod_datapool/bronze_age/start_proportion_burial_type.RData"
+  file = "../neomod_datapool/R_data/start_proportion_burial_type.RData"
 )
 
 
 
 #### burial construction ####
 
-load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
+load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
 
 start_proportion_burial_construction <- proportion_development_burial_construction %>%
   dplyr::filter(timestep == -2200) %>%
@@ -37,5 +37,5 @@ start_proportion_burial_construction <- proportion_development_burial_constructi
 
 save(
   start_proportion_burial_construction,
-  file = "../neomod_datapool/bronze_age/start_proportion_burial_construction.RData"
+  file = "../neomod_datapool/R_data/start_proportion_burial_construction.RData"
 )
