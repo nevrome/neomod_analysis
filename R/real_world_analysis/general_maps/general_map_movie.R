@@ -1,11 +1,11 @@
 #load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-load("../neomod_datapool/bronze_age/bronze2.RData")
+load("../neomod_datapool/R_data/bronze2.RData")
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
 rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
 lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
 research_area <- sf::st_read("manually_changed_data/research_area.shp")
-load("../neomod_datapool/bronze_age/regions.RData")
+load("../neomod_datapool/R_data/regions.RData")
 
 ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
 xlimit <- c(ex[1], ex[2])
@@ -16,7 +16,7 @@ library(sf)
 
 #### movie ####
 
-for(i in seq(2200, 800, -10)) {
+for(i in seq(-2200, -800, 10)) {
   bronze2_fine_slices <- bronze2 %>%
     dplyr::filter(
       age == i
@@ -103,7 +103,7 @@ for(i in seq(2200, 800, -10)) {
   
   hu %>%
     ggsave(
-      paste0("/home/clemens/neomod/neomod_datapool/bronze_age/movie/", 220 - (i/10) ,".jpeg"),
+      paste0("/home/clemens/neomod/neomod_datapool/development_movie/frames/", 220 + (i/10) ,".jpeg"),
       plot = .,
       device = "jpeg",
       scale = 1,
@@ -114,4 +114,4 @@ for(i in seq(2200, 800, -10)) {
   
 }
 
-#ffmpeg -r 8 -vb 20M -i movie/%*.jpeg -vcodec libx264 -vf scale=1280:-2 -r 8 the_movie_3.mp4
+#ffmpeg -r 8 -vb 20M -i frames/%*.jpeg -vcodec libx264 -vf scale=1280:-2 -r 8 the_movie_3.mp4
