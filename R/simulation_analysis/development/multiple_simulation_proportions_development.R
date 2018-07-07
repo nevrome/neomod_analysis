@@ -1,4 +1,4 @@
-load("R/simulation_results/sim1.RData")
+load("../neomod_datapool/simulation_data/sim1.RData")
 
 library(ggplot2)
 
@@ -6,7 +6,6 @@ prop <- models_grid$idea_proportions %>%
   do.call(rbind, .)
 
 prop$idea <- as.factor(prop$idea)
-#prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
 hu <- ggplot() +
   geom_line(
@@ -47,12 +46,13 @@ hu <- ggplot() +
   scale_x_continuous(
     breaks = c(-2200, -2000, -1500, -1000, -800), 
     limits = c(-2500, -800)
-  )
+  ) +
+  guides(color = FALSE)
 
 region_file_list <- unique(prop$region) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
-  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
+  img <- png::readPNG(paste0("../neomod_datapool/plots/region_pictograms_colour/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
     width = 0.14, height = 1.2
@@ -72,8 +72,7 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_simulation.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    "../neomod_datapool/plots/development_simulation/development_proportions_regions_simulation.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
@@ -81,5 +80,3 @@ hu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
-
-
