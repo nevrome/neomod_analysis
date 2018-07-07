@@ -1,4 +1,4 @@
-load("R/simulation_results/sim1.RData")
+load("../neomod_datapool/simulation_data/sim1.RData")
 
 prop <- models_grid$idea_proportions[[4]]
 
