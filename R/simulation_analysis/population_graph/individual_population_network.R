@@ -1,4 +1,4 @@
-load("R/simulation_results/sim1.RData")
+load("../neomod_datapool/simulation_data/sim1.RData")
 
 models_grid$populations[[1]] -> pop
 models_grid$relations[[1]] -> rel
@@ -76,7 +76,7 @@ pop_groups$unit <- factor(regions_factor, levels = c(
 ))
 
 library(ggplot2)
-ggplot() +
+pu <- ggplot() +
   geom_point(
     data = pop_groups, 
     aes(
@@ -114,8 +114,17 @@ ggplot() +
   ) +
   theme(
     panel.grid.major.y = element_line(size = 0.5, colour = "black")
+  ) +
+  ylab(NULL) +
+  xlab("timeblock in calBC")
+
+pu %>%
+  ggsave(
+    "../neomod_datapool/plots/simulation_population_graph/population_group_graph.jpeg",
+    plot = .,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    width = 297, height = 210, units = "mm",
+    limitsize = F
   )
-
-
-
-
