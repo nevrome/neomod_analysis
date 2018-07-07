@@ -1,8 +1,12 @@
 #load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_sim_multiple.RData")
-load("../neomod_datapool/bronze_age/distance_matrix_spatial_long.RData")
+load("../neomod_datapool/simulation_data/squared_euclidian_distance_over_time_sim_multiple.RData")
+load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
 #load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
 #load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
+load("../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData")
+
+mantel_test_results %>%
+  
 
 # test <- regions_grid %>%
 #   dplyr::mutate(
@@ -70,7 +74,10 @@ plu <- ggplot(hu) +
   #   x = 2.7, y = 2.2,
   #   size = 6
   # ) +
-  facet_wrap(~time) +
+  facet_wrap(
+    nrow = 2,
+    ~time
+  ) +
   theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),
@@ -96,13 +103,12 @@ plu <- ggplot(hu) +
 
 plu %>%
   ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_burial_type.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/squared_euclidian_distance_vs_spatial_distance_sim_multiple.jpeg",
+    "../neomod_datapool/plots/sed_simulation/squared_euclidian_distance_vs_spatial_distance_sim_multiple.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    width = 350, height = 360, units = "mm",
+    width = 550, height = 280, units = "mm",
     limitsize = F
   )
   
