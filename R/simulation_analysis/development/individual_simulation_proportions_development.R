@@ -1,48 +1,10 @@
-# moving_average <- function(x, n = 5, sides = 1) {
-#   as.vector(stats::filter(x, rep(1/n, n), sides = sides))
-# }
-# 
-# test_prop_smooth <- test_prop %>% 
-#   dplyr::group_by(variant) %>%
-#   dplyr::mutate(
-#     individuals_with_variant = moving_average(individuals_with_variant, n = 50, sides = 2)
-#   )
-# 
-# ggplot() +
-#   geom_line(
-#     data = test_prop,
-#     mapping = aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant), 
-#     alpha = 0.4
-#   ) +
-#   geom_line(
-#     data = test_prop_smooth,
-#     mapping = aes(x = timesteps, y = individuals_with_variant, color = variant, group = variant), 
-#     size = 1
-#   ) +
-#   theme_bw() +
-#   facet_wrap(~variant)
-#   xlab(expression(paste("t"))) 
-
-load("R/simulation_results/sim1.RData")
+load("../neomod_datapool/simulation_data/sim1.RData")
 
 library(ggplot2)
 
 prop <- models_grid$idea_proportions[[1]]
 
-regions_factor <- as.factor(prop$region)
-prop$region <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
-  "Poland",
-  "Southern Germany",
-  "Northeast France",
-  "Northern Germany",
-  "Southern Skandinavia",
-  "Benelux",
-  "England"
-))
-
 prop$idea <- as.factor(prop$idea)
-#prop$idea <- factor(prop$idea , levels = rev(levels(prop$idea )))
 
 hu <- ggplot() +
   geom_area(
@@ -69,7 +31,7 @@ hu <- ggplot() +
     axis.text = element_text(size = 15),
     axis.title = element_text(size = 15),
     strip.text.x = element_text(size = 13),
-    legend.title = element_text(size = 15),
+    legend.title = element_text(size = 15, face = "bold"),
     legend.text = element_text(size = 15)
   ) +
   scale_fill_manual(
@@ -90,7 +52,7 @@ hu <- ggplot() +
 region_file_list <- unique(prop$region) %>% gsub(" ", "_", ., fixed = TRUE)
 
 gl <- lapply(region_file_list, function(x) {
-  img <- png::readPNG(paste0("../neomod_datapool/bronze_age/region_pictograms_colour/", x, ".png"))
+  img <- png::readPNG(paste0("../neomod_datapool/plots/region_pictograms_colour/", x, ".png"))
   g <- grid::rasterGrob(
     img, interpolate = TRUE,
     width = 0.14, height = 1.2
@@ -110,8 +72,7 @@ hu <- hu +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_simulation_example.jpeg",
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_burial_construction.jpeg",
+    "../neomod_datapool/plots/development_simulation/development_proportions_regions_simulation_example.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
@@ -119,5 +80,3 @@ hu %>%
     width = 210, height = 297, units = "mm",
     limitsize = F
   )
-
-
