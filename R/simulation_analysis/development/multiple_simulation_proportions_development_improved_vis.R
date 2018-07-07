@@ -1,13 +1,12 @@
-load("R/simulation_results/sim1.RData")
-load("../neomod_datapool/bronze_age/development_proportions_burial_type.RData")
-#load("../neomod_datapool/bronze_age/development_proportions_burial_construction.RData")
+load("../neomod_datapool/simulation_data/sim1.RData")
+load("../neomod_datapool/R_data/development_proportions_burial_type.RData")
+#load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
 
 burial_type_long_prop <- proportion_development_burial_type %>%
   dplyr::rename(
     region = region_name
   ) %>%
   dplyr::mutate(
-    timestep = -timestep,
     model_id = 0,
     model_group = 0,
     idea = dplyr::case_when(
@@ -101,7 +100,7 @@ fu <- ggplot(long_prop) +
 
 fu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/bronze_age/development_proportions_regions_simulation_2.jpeg",
+    "../neomod_datapool/plots/development_simulation/development_proportions_regions_simulation_improved_vis.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
