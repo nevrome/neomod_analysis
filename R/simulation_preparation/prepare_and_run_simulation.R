@@ -1,7 +1,7 @@
 #### setup settings grid ####
 
-load("../neomod_datapool/bronze_age/start_proportion_burial_type.RData")
-load("../neomod_datapool/bronze_age/distance_matrix_spatial.RData")
+load("../neomod_datapool/R_data/start_proportion_burial_type.RData")
+load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
 
 start_proportion_5050 <- structure(
   list(
@@ -114,14 +114,16 @@ models_grid %<>% popgenerator::prepare_pops_rels_ideas()
 # models_grid$relations[[1]] -> rel
 # save(rel, file = "testresults/rel.RData")
 
-models_grid %>% popgenerator::write_all_models_to_files(dir_path = "../gluesless/test_data/model_grid")
+data_path <- "../neomod_datapool/simulation_data/gluesless_input_output"
+
+models_grid %>% popgenerator::write_all_models_to_files(dir_path = data_path)
 
 #### test working with gluesless ####
 
 models_grid$simulation_results <- popgenerator::run_gluesless(
-  app_path = "/home/clemens/neomod/gluesless/build/gluesless",
-  input_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
-  output_file_dir = "/home/clemens/neomod/gluesless/test_data/model_grid",
+  app_path = "../gluesless/build/gluesless",
+  input_file_dir = data_path,
+  output_file_dir = data_path,
   models_to_run = models_grid$model_id
 )
 
@@ -129,9 +131,9 @@ models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit 
 
 pryr::object_size(models_grid)
 
-save(models_grid, file = "R/simulation_results/sim1.RData")
+save(models_grid, file = "../neomod_datapool/simulation_data/sim1.RData")
 
 # models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
 # 
-# save(models_grid, file = "R/simulation_results/sim1_general.RData")
+# save(models_grid, file = "../neomod_datapool/simulation_data/sim_general.RData")
 
