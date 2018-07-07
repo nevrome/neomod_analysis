@@ -1,21 +1,40 @@
 load("../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData")
+mantel_simulations <- mantel_test_results
+load("../neomod_datapool/R_data/mantel_sed_spatial_burial_type.RData")
+mantel_burial_type <- mantel_test_results
+load("../neomod_datapool/R_data/mantel_sed_spatial_burial_construction.RData")
+mantel_burial_construction <- mantel_test_results
+
+mantel_burial_type %<>%
+  dplyr::mutate(
+    context = "burial_type"
+  )
+
+mantel_burial_construction %<>%
+  dplyr::mutate(
+    context = "burial_construction"
+  )
+
+mantel_real_world <- rbind(mantel_burial_type, mantel_burial_construction)
 
 library(ggplot2)
-ju <- ggplot(mantel_test_results) +
+ju <- ggplot() +
   geom_hline(
     yintercept = 0,
     colour = "red",
     size = 2
   ) + 
   geom_boxplot(
-    aes(
+    data = mantel_simulations,
+    mapping = aes(
       x = time,
       y = statistic
     ),
-    width = 0.4
+    width = 0.2
   ) +
   geom_dotplot(
-    aes(
+    data = mantel_simulations,
+    mapping = aes(
       x = time,
       y = statistic,
       fill = base::cut(
@@ -26,9 +45,19 @@ ju <- ggplot(mantel_test_results) +
     ),
     binaxis = "y",
     stackdir = "down",
-    position = position_nudge(x = -0.3),
-    dotsize = 0.4,
+    position = position_nudge(x = -0.4),
+    dotsize = 0.35,
     binpositions = "all"
+  ) +
+  geom_point(
+    data = mantel_real_world,
+    mapping = aes(
+      x = time,
+      y = statistic,
+      colour = context
+    ),
+    position = position_nudge(x = -0.25),
+    size = 6
   ) +
   scale_fill_manual(
     name = "Mantel test significance level",
@@ -39,6 +68,13 @@ ju <- ggplot(mantel_test_results) +
       "> 0.1" = "white"
     )
   ) +
+  scale_colour_manual(
+    name = "Real world context",
+    values = c(
+      "burial_type" = "#0072B2",
+      "burial_construction" = "#009E73"
+    )
+  ) +
   theme_bw() +
   theme(
     legend.position = "bottom",
@@ -46,7 +82,8 @@ ju <- ggplot(mantel_test_results) +
     axis.title = element_text(size = 15),
     strip.text.x = element_text(size = 13),
     legend.title = element_text(size = 15, face = "bold"),
-    legend.text = element_text(size = 15)
+    legend.text = element_text(size = 15),
+    legend.box = "vertical"
   ) +
   ylab("Spearman's rank correlation coefficient") +
   xlab("time blocks calBC")
