@@ -22,7 +22,7 @@ mantel_test_results <- pbapply::pblapply(
     x = distance_matrizes_sed,
     y = distance_matrix_spatial,
     model_id = names(distance_matrizes_sed)
-  ) %>% do.call(rbind, .)
+  ) %>% do.call(rbind, .) %>% tibble::as.tibble()
 
 save(
   mantel_test_results, 
