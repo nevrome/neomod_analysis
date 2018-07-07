@@ -1,4 +1,4 @@
-load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_construction.RData")
+load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_construction.RData")
 
 time_regions_grid <- regions_grid %>% dplyr::mutate(
   time = base::cut(
@@ -33,4 +33,4 @@ distance_matrizes_sed <- lapply(
   } 
 )
 
-save(distance_matrizes_sed, file = "../neomod_datapool/bronze_age/distance_matrizes_sed_burial_construction.RData")
+save(distance_matrizes_sed, file = "../neomod_datapool/R_data/distance_matrizes_sed_burial_construction.RData")

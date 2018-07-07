@@ -1,5 +1,5 @@
-load("/home/clemens/neomod/neomod_datapool/bronze_age/distance_matrix_spatial.RData")
-load("/home/clemens/neomod/neomod_datapool/bronze_age/distance_matrizes_sed_burial_type.RData")
+load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
+load("../neomod_datapool/R_data/distance_matrizes_sed_burial_type.RData")
 
 #### 
 
@@ -20,6 +20,5 @@ mantel_test_results <- lapply(
 
 save(
   mantel_test_results, 
-  file = "../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData"
+  file = "../neomod_datapool/R_data/mantel_sed_spatial_burial_type.RData"
 )
-
