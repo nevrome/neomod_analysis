@@ -1,0 +1,30 @@
+load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
+load("../neomod_datapool/simulation_data/distance_matrizes_sed_simulation.RData")
+
+mantel_test_results <- pbapply::pblapply(
+  1:length(distance_matrizes_sed), function(i, x, y, model_id) {
+      lapply(
+        1:length(x[[i]]), function(i, x, y, time, model_id) {
+          mantel_result <- vegan::mantel(x[[i]], y, method = "spear", permutations=999)
+          data.frame(
+            model_id = model_id,
+            time = time[[i]],
+            statistic = mantel_result$statistic, 
+            signif = mantel_result$signif
+          )
+        },
+        x = x[[i]],
+        y = y,
+        time = names(x[[i]]),
+        model_id = model_id[[i]]
+      ) %>% do.call(rbind, .)
+    },
+    x = distance_matrizes_sed,
+    y = distance_matrix_spatial,
+    model_id = names(distance_matrizes_sed)
+  ) %>% do.call(rbind, .)
+
+save(
+  mantel_test_results, 
+  file = "../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData"
+)
