@@ -33,5 +33,3 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 
-# simulation results
-R/simulation_results
