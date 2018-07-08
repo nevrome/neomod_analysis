@@ -23,6 +23,8 @@ region_centers %>%
     NAME, x, y
   )
 
+save(region_centers, file = "../neomod_datapool/R_data/region_centers.RData")
+
 distance_lines <- distance_matrix_spatial_long %>%
   dplyr::left_join(
     region_centers,
