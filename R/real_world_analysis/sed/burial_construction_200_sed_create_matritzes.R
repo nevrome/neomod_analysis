@@ -19,6 +19,8 @@ time_regions_grid <- regions_grid %>% dplyr::mutate(
     mean_sed = tidyr::replace_na(mean_sed, 0)
   )
 
+save(time_regions_grid, file = "../neomod_datapool/R_data/time_regions_grid_sed_burial_construction.RData")
+
 distance_matrizes_sed <- lapply(
   base::split(time_regions_grid, time_regions_grid$time), function(x){
     x %>%
