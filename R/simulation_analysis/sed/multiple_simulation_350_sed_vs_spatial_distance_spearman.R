@@ -60,7 +60,7 @@ ju <- ggplot() +
     size = 6
   ) +
   scale_fill_manual(
-    name = "Mantel test significance level",
+    name = "Mantel test significance level of simulation runs",
     values = c(
       "< 0.01" = "#800026",
       "< 0.05" = "#e31a1c",

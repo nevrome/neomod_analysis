@@ -39,11 +39,18 @@ plu <- ggplot() +
     nrow = 2,
     ~time
   ) +
+  scale_colour_manual(
+    name = "Real world context",
+    values = c(
+      "burial_type" = "#0072B2",
+      "burial_construction" = "#009E73"
+    )
+  ) +
   theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),
     legend.position = "bottom",
-    legend.title = element_blank(),
+    legend.title = element_text(size = 20, face = "bold"),
     legend.text = element_text(size = 20),
     strip.text.x = element_text(size = 20),
     axis.text = element_text(size = 20),
