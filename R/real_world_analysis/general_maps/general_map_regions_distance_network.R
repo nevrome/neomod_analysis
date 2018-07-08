@@ -1,6 +1,5 @@
 load("../neomod_datapool/R_data/regions.RData")
 load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
-
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
 lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
@@ -59,7 +58,7 @@ distance_lines <- distance_lines[match(unique(int), int),]
 library(ggplot2)
 library(sf)
 
-ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
+ex <- raster::extent(regions %>% sf::st_transform(sf::st_crs(102013)))
 
 xlimit <- c(ex[1], ex[2])
 ylimit <- c(ex[3], ex[4])
@@ -77,10 +76,6 @@ hu <- ggplot() +
     data = lakes,
     fill = NA, colour = "black", size = 0.2
   ) +
-  # geom_sf(
-  #   data = regions,
-  #   fill = NA, colour = "red", size = 0.5
-  # ) +
   geom_sf(
     data = research_area,
     fill = NA, colour = "red", size = 0.5
@@ -89,20 +84,22 @@ hu <- ggplot() +
     data = distance_lines,
     mapping = aes(
       x = x_a, y = y_a, xend = x_b, yend = y_b,
-      color = distance, size = distance    
+      size = distance    
     ), 
     alpha = 0.5,
-    curvature = 0.2
+    curvature = 0.2,
+    colour = "black"
   ) +
-  # scale_color_manual(
-  #   #values = c("#999999", "#ffe500", "#56B4E9", "#009E73", "#000000", "#0072B2", "#D55E00", "#CC79A7")
-  # ) +
   scale_size_continuous(
+    name = "Spatial closeness",
     range = c(5, 0.5)
   ) +
   geom_sf(
-    data = region_centers,
-    fill = NA, colour = "red", size = 0.5
+    data = region_centers, 
+    mapping = aes(
+      colour = NAME
+    ), 
+    fill = NA, size = 16
   ) +
   theme_bw() +
   coord_sf(
@@ -119,9 +116,47 @@ hu <- ggplot() +
     panel.grid.major = element_line(colour = "black", size = 0.3)
   ) +
   guides(
-    color = FALSE,
-    shape = FALSE,
-    size = FALSE
+    colour = FALSE,
+    shape = FALSE
+  ) +
+  xlab("") +
+  ylab("") +
+  scale_color_manual(
+    values = c(
+      "cremation" = "#D55E00",
+      "inhumation" = "#0072B2",
+      "mound" = "#CC79A7",
+      "flat" = "#009E73",
+      "unknown" = "darkgrey",
+      "Austria and Czechia" = "#999999", 
+      "Poland" = "#ffe500", 
+      "Southern Germany" = "#56B4E9", 
+      "Northeast France" = "#009E73", 
+      "Northern Germany" = "#000000", 
+      "Southern Skandinavia" = "#0072B2", 
+      "Benelux" = "#D55E00", 
+      "England" = "#CC79A7"
+    ),
+    breaks = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
+    ),
+    labels = c(
+      "Austria and Czechia",
+      "Poland", 
+      "Southern Germany", 
+      "Northeast France", 
+      "Northern Germany", 
+      "Southern Skandinavia", 
+      "Benelux", 
+      "England"
+    )
   )
 
 hu %>%
