@@ -1,5 +1,21 @@
 load("../neomod_datapool/simulation_data/squared_euclidian_distance_over_time_sim_multiple.RData")
 load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
+load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_type.RData")
+sed_burial_type <- sed_spatial_distance
+load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
+sed_burial_construction <- sed_spatial_distance
+
+sed_burial_type %<>%
+  dplyr::mutate(
+    context = "burial_type"
+  )
+
+sed_burial_construction %<>%
+  dplyr::mutate(
+    context = "burial_construction"
+  )
+
+sed_spatial_real_world <- rbind(sed_burial_type, sed_burial_construction)
 
 # test <- regions_grid %>%
 #   dplyr::mutate(
@@ -54,14 +70,34 @@ hu <- test %>% dplyr::left_join(
   )
 
 library(ggplot2)
-plu <- ggplot(hu) +
+plu <- ggplot() +
   geom_boxplot(
-    aes(
+    data = hu,
+    mapping = aes(
       x = as.factor(distance), 
-      y = mean_sed, 
-      fill = as.factor(model_group)
+      y = mean_sed
     ),
     width = 0.3
+  ) +
+  geom_point(
+    data = sed_burial_type,
+    mapping  = aes(
+      x = as.factor(distance), 
+      y = mean_sed,
+      colour = context
+    ),
+    size = 4,
+    position = position_nudge(x = -0.3)
+  ) +
+  geom_point(
+    data = sed_burial_construction,
+    mapping  = aes(
+      x = as.factor(distance), 
+      y = mean_sed,
+      colour = context
+    ),
+    size = 4,
+    position = position_nudge(x = -0.5)
   ) +
   facet_wrap(
     nrow = 2,
@@ -76,14 +112,6 @@ plu <- ggplot(hu) +
     strip.text.x = element_text(size = 20),
     axis.text = element_text(size = 20),
     axis.title = element_text(size = 20)
-  ) +
-  scale_fill_manual(
-    values = c(
-      "1" = "#999999", 
-      "2" = "#ffe500", 
-      "3" = "#56B4E9", 
-      "4" = "#009E73"
-    )
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
