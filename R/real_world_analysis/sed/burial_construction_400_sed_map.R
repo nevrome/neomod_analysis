@@ -3,10 +3,15 @@ countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_
 research_area <- sf::st_read("manually_changed_data/research_area.shp")
 load("../neomod_datapool/R_data/regions.RData")
 load("../neomod_datapool/R_data/sed_time_spatial_network.RData")
+load("../neomod_datapool/R_data/region_centers.RData")
 
 ex <- raster::extent(regions %>% sf::st_transform(sf::st_crs(102013)))
-xlimit <- c(ex[1], ex[2])
+xlimit <- c(ex[1] + 100000, ex[2] - 100000)
 ylimit <- c(ex[3], ex[4])
+
+distance_lines %<>% dplyr::filter(
+  context == "burial_construction"
+)
 
 library(ggplot2)
 library(sf)
@@ -34,13 +39,13 @@ hu <- ggplot() +
     nrow = 2,
     ~time
   ) +
-  # geom_sf(
-  #   data = region_centers, 
-  #   mapping = aes(
-  #     colour = NAME
-  #   ), 
-  #   fill = NA, size = 16
-  # ) +
+  geom_sf(
+    data = region_centers,
+    mapping = aes(
+      colour = NAME
+    ),
+    fill = NA, size = 12
+  ) +
   theme_bw() +
   coord_sf(
     xlim = xlimit, ylim = ylimit,
@@ -57,8 +62,13 @@ hu <- ggplot() +
     strip.text.x = element_text(size = 20)
   ) +
   guides(
-    size = FALSE,
-    alpha = FALSE
+    size = guide_legend(title = "Behavioural closeness"),
+    alpha = FALSE,
+    colour = FALSE
+  ) +
+  scale_size(
+    trans = 'reverse',
+    range = c(0.5, 3)
   ) +
   scale_color_manual(
     values = c(
@@ -100,7 +110,7 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/sed/sed_map_research_area_timeslices.jpeg",
+    "/home/clemens/neomod/neomod_datapool/plots/sed/sed_map_research_area_timeslices_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
