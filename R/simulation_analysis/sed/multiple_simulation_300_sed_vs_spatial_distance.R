@@ -1,12 +1,5 @@
-#load("../neomod_datapool/bronze_age/squared_euclidian_distance_over_time_burial_type.RData")
 load("../neomod_datapool/simulation_data/squared_euclidian_distance_over_time_sim_multiple.RData")
 load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
-#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_type.RData")
-#load("../neomod_datapool/bronze_age/mantel_sed_spatial_burial_construction.RData")
-load("../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData")
-
-mantel_test_results %>%
-  
 
 # test <- regions_grid %>%
 #   dplyr::mutate(
@@ -63,17 +56,13 @@ hu <- test %>% dplyr::left_join(
 library(ggplot2)
 plu <- ggplot(hu) +
   geom_boxplot(
-    aes(x = as.factor(distance), y = mean_sed, fill = as.factor(model_group))
+    aes(
+      x = as.factor(distance), 
+      y = mean_sed, 
+      fill = as.factor(model_group)
+    ),
+    width = 0.3
   ) +
-  # geom_text(
-  #   data = mantel_test_results,
-  #   aes(
-  #     label = paste0("Mantel Test r: ", round(statistic, 3), ", p: ", signif),
-  #     colour = ifelse(signif < 0.05, "h0canberejected", "h0cannotberejected")
-  #   ),
-  #   x = 2.7, y = 2.2,
-  #   size = 6
-  # ) +
   facet_wrap(
     nrow = 2,
     ~time
@@ -98,7 +87,6 @@ plu <- ggplot(hu) +
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
-  #ylim(0, 0.8) +
   NULL
 
 plu %>%
