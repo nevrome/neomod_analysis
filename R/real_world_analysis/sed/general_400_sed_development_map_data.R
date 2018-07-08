@@ -6,6 +6,8 @@ burial_construction_distance <- sed_spatial_distance %>% dplyr::mutate(context =
 
 distance <- rbind(burial_type_distance, burial_construction_distance)
 
+save(distance, file = "../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks.RData")
+
 region_centers <- regions %>%
   sf::st_centroid()
 
