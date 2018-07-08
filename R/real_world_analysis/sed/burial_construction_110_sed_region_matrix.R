@@ -20,7 +20,7 @@ hu <- regions_grid %>%
   ) +
   scale_x_continuous(
     breaks = c(-2000, -1500, -1000), 
-    limits = c(-2000, -800)
+    limits = c(-2200, -800)
   ) +
   theme_bw() +
   scale_color_manual(
