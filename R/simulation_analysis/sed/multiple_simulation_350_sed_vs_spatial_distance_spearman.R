@@ -59,6 +59,17 @@ ju <- ggplot() +
     position = position_nudge(x = -0.25),
     size = 6
   ) +
+  geom_line(
+    data = mantel_real_world,
+    mapping = aes(
+      x = time,
+      y = statistic,
+      colour = context,
+      group = context
+    ),
+    position = position_nudge(x = -0.25),
+    size = 0.5
+  ) +
   scale_fill_manual(
     name = "Mantel test significance level of simulation runs",
     values = c(
