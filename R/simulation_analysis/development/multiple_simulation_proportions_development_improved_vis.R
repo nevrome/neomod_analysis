@@ -1,13 +1,13 @@
 load("../neomod_datapool/simulation_data/sim1.RData")
 load("../neomod_datapool/R_data/development_proportions_burial_type.RData")
-#load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
+load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
 
 burial_type_long_prop <- proportion_development_burial_type %>%
   dplyr::rename(
     region = region_name
   ) %>%
   dplyr::mutate(
-    model_id = 0,
+    model_id = -2,
     model_group = 0,
     idea = dplyr::case_when(
       idea == "cremation" ~ "idea_1",
@@ -16,24 +16,23 @@ burial_type_long_prop <- proportion_development_burial_type %>%
   ) %>%
   tibble::as.tibble()
  
-# burial_construction_long_prop <- proportion_development_burial_construction %>%
-#   dplyr::rename(
-#     region = region_name
-#   ) %>%
-#   dplyr::mutate(
-#     timestep = -timestep,
-#     model_id = -1,
-#     model_group = 0,
-#     idea = dplyr::case_when(
-#       idea == "flat" ~ "idea_1",
-#       idea == "mound" ~ "idea_2"
-#     )
-#   ) %>%
-#   tibble::as.tibble()
+burial_construction_long_prop <- proportion_development_burial_construction %>%
+  dplyr::rename(
+    region = region_name
+  ) %>%
+  dplyr::mutate(
+    model_id = -1,
+    model_group = 0,
+    idea = dplyr::case_when(
+      idea == "flat" ~ "idea_1",
+      idea == "mound" ~ "idea_2"
+    )
+  ) %>%
+  tibble::as.tibble()
 
 prop <- c(
-    models_grid$idea_proportions[1:48],
-    list(burial_type_long_prop)
+    models_grid$idea_proportions[1:47],
+    list(burial_type_long_prop, burial_construction_long_prop)
   ) %>%
   do.call(rbind, .)
 
