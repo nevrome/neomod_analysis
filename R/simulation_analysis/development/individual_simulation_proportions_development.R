@@ -2,7 +2,7 @@ load("../neomod_datapool/simulation_data/sim1.RData")
 
 library(ggplot2)
 
-prop <- models_grid$idea_proportions[[1]]
+prop <- models_grid$idea_proportions[[30]]
 
 prop$idea <- as.factor(prop$idea)
 
