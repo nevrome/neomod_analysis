@@ -15,6 +15,19 @@ load("../neomod_datapool/R_data/development_proportions_burial_construction.RDat
 bt <- proportion_development_burial_type %>%
   dplyr::filter(idea == "cremation") %>%
   dplyr::select(-idea) %>%
-  tidyr::spread(region_name, proportion)
+  tidyr::spread(region_name, proportion) %>%
+  dplyr::select(-timestep) 
   
-gdp <- ts(bt, start=c(1970,1), end=c(2000,4), frequency=4)
+bt_ts <- ts(bt, start = -2200, end = -800, frequency = 1)
+
+ts.plot(bt_ts, type="l")
+
+lapply(
+  bt_ts,
+  function(x) {
+    broom::tidy(tseries::adf.test(x))
+  }
+) %>%
+  dplyr::bind_rows(.id = "region")
+
+sapply(bt, diff)
