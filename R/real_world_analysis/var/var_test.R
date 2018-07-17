@@ -22,10 +22,18 @@ bt <- proportion_development_burial_type %>%
   dplyr::select(-idea) %>%
   tidyr::spread(region_name, proportion) %>%
   dplyr::select(-timestep) 
+
+bt2 <- bt %>% 
+  dplyr::mutate(
+    time_unit = c(lapply(1:28, function(x) { rep(x, 50) }) %>% unlist, 28)
+  ) %>% 
+  dplyr::group_by(time_unit) %>%
+  dplyr::summarize_all(mean) %>%
+  dplyr::select(-time_unit)
   
 bt_ts <- ts(bt, start = -2200, end = -800, frequency = 1)
 
-ts.plot(bt_ts, type="l")
+ts.plot(bt_ts, type = "l")
 
 adf <- lapply(
   bt_ts,
@@ -73,9 +81,9 @@ residuals <- lapply(
 
 ###
 
-diffi <- sapply(bt, diff)
+diffi <- sapply(bt2, diff)
 
-varfit <- vars::VAR(diffi, type = "const", lag.max = 50, ic = "AIC")
+varfit <- vars::VAR(diffi, type = "const", lag.max = 2, ic = "AIC")
 
 summary(varfit)
 
@@ -83,6 +91,6 @@ impresp <- vars::irf(varfit)
 
 plot(impresp)
 
-plot(vars::fevd(varfit))
+plot(vars::fevd(varfit), col = terrain.colors(8))
 
-causality(varfit, cause = "Benelux")
+causality(varfit, cause = "Austria.and.Czechia")
