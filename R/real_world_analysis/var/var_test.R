@@ -60,7 +60,7 @@ dynlm_results <- lapply(
 adf_residuals <- lapply(
   residuals,
   function(x) {
-    adf.test(x)
+    tseries::adf.test(x)
   }
 )
 
@@ -75,7 +75,7 @@ residuals <- lapply(
 
 diffi <- sapply(bt, diff)
 
-varfit <- vars::VAR(bt, p = 1)
+varfit <- vars::VAR(diffi, type = "const", lag.max = 50, ic = "AIC")
 
 summary(varfit)
 
