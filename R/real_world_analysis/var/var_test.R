@@ -39,6 +39,8 @@ bt2_with_unit %>%
 
 bt2 <- bt2_with_unit %>%
   dplyr::select(-time_unit)
+
+###
   
 bt_ts <- ts(bt, start = -2200, end = -800, frequency = 1)
 
@@ -92,9 +94,21 @@ residuals <- lapply(
 
 diffi <- sapply(bt2, diff)
 
-varfit <- vars::VAR(diffi, type = "const", lag.max = 2, ic = "AIC")
+varfit <- vars::VAR(diffi, type = "both", p = 1)
 
 summary(varfit)
+
+acf(residuals(varfit)[,1])
+acf(residuals(varfit)[,2])
+acf(residuals(varfit)[,3])
+acf(residuals(varfit)[,4])
+acf(residuals(varfit)[,5])
+acf(residuals(varfit)[,6])
+acf(residuals(varfit)[,7])
+acf(residuals(varfit)[,8])
+
+acf(residuals(varfit))
+
 
 impresp <- vars::irf(varfit)
 
