@@ -23,12 +23,21 @@ bt <- proportion_development_burial_type %>%
   tidyr::spread(region_name, proportion) %>%
   dplyr::select(-timestep) 
 
-bt2 <- bt %>% 
+bt2_with_unit <- bt %>% 
   dplyr::mutate(
-    time_unit = c(lapply(1:28, function(x) { rep(x, 50) }) %>% unlist, 28)
+    time_unit = c(lapply(1:30, function(x) { rep(x, 47) }) %>% unlist)[1:1401]
   ) %>% 
   dplyr::group_by(time_unit) %>%
-  dplyr::summarize_all(mean) %>%
+  dplyr::summarize_all(mean) 
+
+library(ggplot2)
+bt2_with_unit %>%
+  tidyr::gather(region, proportion, -time_unit) %>%
+  ggplot() +
+    geom_col(aes(x = as.factor(time_unit), y = proportion)) +
+    facet_wrap(~region)
+
+bt2 <- bt2_with_unit %>%
   dplyr::select(-time_unit)
   
 bt_ts <- ts(bt, start = -2200, end = -800, frequency = 1)
