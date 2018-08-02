@@ -33,3 +33,11 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 
+# data and results that are not necessary or to big for the repo
+data_analysis/*.RData
+data_simulation/*.RData
+data_simulation/gluesless_input_output/*.txt
+data_simulation/gluesless_input_output/*.paj
+development_movie/*.mp4
+development_movie/*.gif
+development_movie/frames/*.jpeg
