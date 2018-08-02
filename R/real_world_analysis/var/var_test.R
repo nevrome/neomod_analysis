@@ -9,8 +9,8 @@ library(car) #for `hccm()` robust standard errors
 library(sandwich)
 library(forecast) 
 
-load("../neomod_datapool/R_data/development_proportions_burial_type.RData")
-load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
+load("data_analysis/development_proportions_burial_type.RData")
+load("data_analysis/development_proportions_burial_construction.RData")
 
 proportion_development_burial_type %<>%
   dplyr::mutate(

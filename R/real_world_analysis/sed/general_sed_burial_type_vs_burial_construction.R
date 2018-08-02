@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks.RData")
-load("../neomod_datapool/R_data/mantel_sed_spatial_burial_type_burial_construction.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks.RData")
+load("data_analysis/mantel_sed_spatial_burial_type_burial_construction.RData")
 
 distance %<>%
   tidyr::spread(context, mean_sed)

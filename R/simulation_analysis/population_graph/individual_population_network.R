@@ -1,4 +1,4 @@
-load("../neomod_datapool/simulation_data/sim1.RData")
+load("data_simulation/sim1.RData")
 
 models_grid$populations[[1]] -> pop
 models_grid$relations[[1]] -> rel

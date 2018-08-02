@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_type.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_type.RData")
 
 time_regions_grid <- regions_grid %>% dplyr::mutate(
   time = base::cut(
@@ -19,7 +19,7 @@ time_regions_grid <- regions_grid %>% dplyr::mutate(
     mean_sed = tidyr::replace_na(mean_sed, 0)
   )
 
-save(time_regions_grid, file = "../neomod_datapool/R_data/time_regions_grid_sed_burial_type.RData")
+save(time_regions_grid, file = "data_analysis/time_regions_grid_sed_burial_type.RData")
 
 distance_matrizes_sed <- lapply(
   base::split(time_regions_grid, time_regions_grid$time), function(x){
@@ -35,4 +35,4 @@ distance_matrizes_sed <- lapply(
   } 
 )
 
-save(distance_matrizes_sed, file = "../neomod_datapool/R_data/distance_matrizes_sed_burial_type.RData")
+save(distance_matrizes_sed, file = "data_analysis/distance_matrizes_sed_burial_type.RData")

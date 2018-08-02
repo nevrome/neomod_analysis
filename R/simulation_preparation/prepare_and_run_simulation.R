@@ -1,7 +1,7 @@
 #### setup settings grid ####
 
-load("../neomod_datapool/R_data/start_proportion_burial_type.RData")
-load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
+load("data_analysis/start_proportion_burial_type.RData")
+load("data_analysis/distance_matrix_spatial.RData")
 
 start_proportion_5050 <- structure(
   list(
@@ -114,7 +114,7 @@ models_grid %<>% popgenerator::prepare_pops_rels_ideas()
 # models_grid$relations[[1]] -> rel
 # save(rel, file = "testresults/rel.RData")
 
-data_path <- "../neomod_datapool/simulation_data/gluesless_input_output"
+data_path <- "data_simulation/gluesless_input_output"
 
 models_grid %>% popgenerator::write_all_models_to_files(dir_path = data_path)
 
@@ -131,9 +131,9 @@ models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit 
 
 pryr::object_size(models_grid)
 
-save(models_grid, file = "../neomod_datapool/simulation_data/sim1.RData")
+save(models_grid, file = "data_simulation/sim1.RData")
 
 # models_grid %<>% popgenerator::calculate_all_idea_proportions_over_time(by_unit = FALSE)
 # 
-# save(models_grid, file = "../neomod_datapool/simulation_data/sim_general.RData")
+# save(models_grid, file = "data_simulation/sim_general.RData")
 

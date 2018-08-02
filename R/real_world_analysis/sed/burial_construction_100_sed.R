@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
+load("data_analysis/development_proportions_burial_construction.RData")
 
 prop <- proportion_development_burial_construction
 
@@ -42,4 +42,4 @@ regions_grid <- regions_grid %>%
     regionA, regionB, time, sed
   )
 
-save(regions_grid, file = "../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_construction.RData")
+save(regions_grid, file = "data_analysis/squared_euclidian_distance_over_time_burial_construction.RData")

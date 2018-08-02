@@ -1,4 +1,4 @@
-devel_table <- readr::read_csv("manually_changed_data/burial_traditions_pseudo.csv")
+devel_table <- readr::read_csv("data_manually_prepared/burial_traditions_pseudo.csv")
 
 regions_factor <- as.factor(devel_table$region)
 devel_table$region<- factor(regions_factor, levels = c(

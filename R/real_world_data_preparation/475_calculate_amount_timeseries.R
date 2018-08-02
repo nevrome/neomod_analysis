@@ -1,6 +1,6 @@
 #### calculate 
 
-load("../neomod_datapool/R_data/dates_probability_per_year_and_region_df.RData")
+load("data_analysis/dates_probability_per_year_and_region_df.RData")
 
 amount_development_burial_type_without_zero <- dates_probability_per_year_and_region_df %>%
   dplyr::group_by(region_name, age, burial_type) %>%
@@ -26,7 +26,7 @@ amount_development_burial_type <- amount_development_burial_type_without_zero %>
 
 save(
   amount_development_burial_type, 
-  file = "../neomod_datapool/R_data/development_amount_burial_type.RData"
+  file = "data_analysis/development_amount_burial_type.RData"
 )
 
 amount_development_burial_construction_without_zero <- dates_probability_per_year_and_region_df %>%
@@ -53,6 +53,6 @@ amount_development_burial_construction  <- amount_development_burial_constructio
 
 save(
   amount_development_burial_construction, 
-  file = "../neomod_datapool/R_data/development_amount_burial_construction.RData"
+  file = "data_analysis/development_amount_burial_construction.RData"
 )
 

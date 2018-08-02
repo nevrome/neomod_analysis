@@ -1,7 +1,7 @@
-load("../neomod_datapool/R_data/distance_matrizes_sed_burial_type.RData")
+load("data_analysis/distance_matrizes_sed_burial_type.RData")
 dms_burial_type <- distance_matrizes_sed
 
-load("../neomod_datapool/R_data/distance_matrizes_sed_burial_construction.RData")
+load("data_analysis/distance_matrizes_sed_burial_construction.RData")
 dms_burial_construction <- distance_matrizes_sed
 
 mantel_test_results <- lapply(
@@ -21,5 +21,5 @@ mantel_test_results <- lapply(
 
 save(
   mantel_test_results, 
-  file = "../neomod_datapool/R_data/mantel_sed_spatial_burial_type_burial_construction.RData"
+  file = "data_analysis/mantel_sed_spatial_burial_type_burial_construction.RData"
 )

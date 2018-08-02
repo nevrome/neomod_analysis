@@ -1,8 +1,8 @@
-load("../neomod_datapool/simulation_data/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData")
+load("data_simulation/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData")
 sed_simulation <- sed_spatial_distance
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_type.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
 sed_burial_type <- sed_spatial_distance %>% dplyr::mutate(context = "burial_type")
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
 sed_burial_construction <-sed_spatial_distance %>% dplyr::mutate(context = "burial_construction")
 
 library(ggplot2)

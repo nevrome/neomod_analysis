@@ -46,7 +46,7 @@
 #     power < 10
 #   )
 
-load("../neomod_datapool/R_data/development_proportions_burial_type.RData")
+load("data_analysis/development_proportions_burial_type.RData")
 
 library(ggplot2)
 

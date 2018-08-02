@@ -1,7 +1,7 @@
 #### load spatial data ####
 
-load("../neomod_datapool/R_data/research_area.RData")
-load("../neomod_datapool/R_data/area.RData")
+load("data_analysis/research_area.RData")
+load("data_analysis/area.RData")
 
 #### define region circles ####
 
@@ -12,7 +12,7 @@ region_circles <- tibble::tibble(
 region_circles <- sf::st_intersection(region_circles, research_area)
 region_circles %<>% sf::st_buffer(dist = 240000)
 
-load("../neomod_datapool/R_data/bronze1.RData")
+load("data_analysis/bronze1.RData")
 bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
 sf::st_crs(bronze1) <- 4326
 bronze1 %<>% sf::st_transform(102013)
@@ -80,4 +80,4 @@ regions$NAME <- c(
 #   geom_sf(fill = NA) +
 #   geom_text(aes(x = x, y = y, label = NAME))
 
-save(regions, file = "../neomod_datapool/R_data/regions.RData")
+save(regions, file = "data_analysis/regions.RData")

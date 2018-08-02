@@ -1,8 +1,8 @@
-load("../neomod_datapool/R_data/bronze2.RData")
+load("data_analysis/bronze2.RData")
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
-research_area <- sf::st_read("manually_changed_data/research_area.shp")
-load("../neomod_datapool/R_data/regions.RData")
+research_area <- sf::st_read("data_manually_prepared/research_area.shp")
+load("data_analysis/regions.RData")
 
 bronze2_slices <- bronze2 %>%
   dplyr::filter(

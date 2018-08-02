@@ -4,12 +4,12 @@
 # EPSG:102013 and store the result
 
 research_area <- sf::st_read(
-  "manually_changed_data/research_area.shp"
+  "data_manually_prepared/research_area.shp"
 ) %>% sf::st_transform(102013)
 
 save(
   research_area, 
-  file = "../neomod_datapool/R_data/research_area.RData"
+  file = "data_analysis/research_area.RData"
 )
 
 
@@ -27,7 +27,7 @@ land_outline <- sf::st_read(
 
 save(
   land_outline, 
-  file = "../neomod_datapool/R_data/land_outline.RData"
+  file = "data_analysis/land_outline.RData"
   )
 
 
@@ -40,7 +40,7 @@ area <- sf::st_intersection(sf::st_buffer(land_outline, 0), research_area)
 
 save(
   area, 
-  file = "../neomod_datapool/R_data/area.RData"
+  file = "data_analysis/area.RData"
 )
 
 
@@ -63,7 +63,7 @@ extended_area <- sf::st_intersection(sf::st_buffer(land_outline, 0), extended_re
 
 save(
   extended_area, 
-  file = "../neomod_datapool/R_data/extended_area.RData"
+  file = "data_analysis/extended_area.RData"
 )
 
 

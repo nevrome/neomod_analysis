@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_type.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_type.RData")
 
 regions_grid_mean <- regions_grid %>%
   dplyr::group_by(

@@ -1,5 +1,5 @@
-load("../neomod_datapool/simulation_data/squared_euclidian_distance_over_time_sim_multiple.RData")
-load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
+load("data_simulation/squared_euclidian_distance_over_time_sim_multiple.RData")
+load("data_analysis/distance_matrix_spatial_long.RData")
 
 test <- regions_grid
 
@@ -49,5 +49,5 @@ sed_spatial_distance <- test %>% dplyr::left_join(
 
 save(
   sed_spatial_distance, 
-  file = "../neomod_datapool/simulation_data/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData"
+  file = "data_simulation/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData"
 )

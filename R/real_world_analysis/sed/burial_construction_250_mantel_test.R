@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
-load("../neomod_datapool/R_data/distance_matrizes_sed_burial_construction.RData")
+load("data_analysis/distance_matrix_spatial.RData")
+load("data_analysis/distance_matrizes_sed_burial_construction.RData")
 
 #### 
 
@@ -20,7 +20,7 @@ mantel_test_results <- lapply(
 
 save(
   mantel_test_results, 
-  file = "../neomod_datapool/R_data/mantel_sed_spatial_burial_construction.RData"
+  file = "data_analysis/mantel_sed_spatial_burial_construction.RData"
 )
 
 

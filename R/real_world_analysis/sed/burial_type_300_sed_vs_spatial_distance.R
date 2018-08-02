@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/mantel_sed_spatial_burial_type.RData")
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_type.RData")
+load("data_analysis/mantel_sed_spatial_burial_type.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
 
 library(ggplot2)
 plu <- ggplot(sed_spatial_distance) +

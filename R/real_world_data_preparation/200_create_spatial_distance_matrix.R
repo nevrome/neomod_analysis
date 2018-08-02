@@ -1,6 +1,6 @@
 #### load regions data ####
 
-load("../neomod_datapool/R_data/regions.RData")
+load("data_analysis/regions.RData")
 
 #### create distance information in tall format ####
 
@@ -81,6 +81,6 @@ distance_matrix_spatial <- distance_matrix_spatial_long %>%
 
 #### writing files to file system ####
 
-save(distance_matrix_spatial_long_half, file = "../neomod_datapool/R_data/distance_matrix_spatial_long_half.RData")
-save(distance_matrix_spatial_long, file = "../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
-save(distance_matrix_spatial, file = "../neomod_datapool/R_data/distance_matrix_spatial.RData")
+save(distance_matrix_spatial_long_half, file = "data_analysis/distance_matrix_spatial_long_half.RData")
+save(distance_matrix_spatial_long, file = "data_analysis/distance_matrix_spatial_long.RData")
+save(distance_matrix_spatial, file = "data_analysis/distance_matrix_spatial.RData")

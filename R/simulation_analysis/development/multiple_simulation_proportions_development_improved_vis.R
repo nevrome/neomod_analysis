@@ -1,6 +1,6 @@
-load("../neomod_datapool/simulation_data/sim1.RData")
-load("../neomod_datapool/R_data/development_proportions_burial_type.RData")
-load("../neomod_datapool/R_data/development_proportions_burial_construction.RData")
+load("data_simulation/sim1.RData")
+load("data_analysis/development_proportions_burial_type.RData")
+load("data_analysis/development_proportions_burial_construction.RData")
 
 burial_type_long_prop <- proportion_development_burial_type %>%
   dplyr::rename(

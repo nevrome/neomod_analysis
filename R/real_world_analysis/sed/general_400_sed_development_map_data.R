@@ -1,12 +1,12 @@
-load("../neomod_datapool/R_data/regions.RData")
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_type.RData")
+load("data_analysis/regions.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
 burial_type_distance <- sed_spatial_distance %>% dplyr::mutate(context = "burial_type")
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
+load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
 burial_construction_distance <- sed_spatial_distance %>% dplyr::mutate(context = "burial_construction")
 
 distance <- rbind(burial_type_distance, burial_construction_distance)
 
-save(distance, file = "../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks.RData")
+save(distance, file = "data_analysis/squared_euclidian_distance_over_timeblocks.RData")
 
 region_centers <- regions %>%
   sf::st_centroid()
@@ -51,4 +51,4 @@ distance_lines <- distance %>%
     regionA != regionB
   )
 
-save(distance_lines, file = "../neomod_datapool/R_data/sed_time_spatial_network.RData")
+save(distance_lines, file = "data_analysis/sed_time_spatial_network.RData")

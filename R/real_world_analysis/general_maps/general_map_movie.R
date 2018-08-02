@@ -1,11 +1,11 @@
 #load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-load("../neomod_datapool/R_data/bronze2.RData")
+load("data_analysis/bronze2.RData")
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
 rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
 lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
-research_area <- sf::st_read("manually_changed_data/research_area.shp")
-load("../neomod_datapool/R_data/regions.RData")
+research_area <- sf::st_read("data_manually_prepared/research_area.shp")
+load("data_analysis/regions.RData")
 
 ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
 xlimit <- c(ex[1], ex[2])
@@ -103,7 +103,7 @@ for(i in seq(-2200, -800, 10)) {
   
   hu %>%
     ggsave(
-      paste0("/home/clemens/neomod/neomod_datapool/development_movie/frames/", 220 + (i/10) ,".jpeg"),
+      paste0("development_movie/frames/", 220 + (i/10) ,".jpeg"),
       plot = .,
       device = "jpeg",
       scale = 1,

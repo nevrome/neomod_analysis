@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/distance_matrix_spatial.RData")
-load("../neomod_datapool/simulation_data/distance_matrizes_sed_simulation.RData")
+load("data_analysis/distance_matrix_spatial.RData")
+load("data_simulation/distance_matrizes_sed_simulation.RData")
 
 mantel_test_results <- pbapply::pblapply(
   1:length(distance_matrizes_sed), function(i, x, y, model_id) {
@@ -26,5 +26,5 @@ mantel_test_results <- pbapply::pblapply(
 
 save(
   mantel_test_results, 
-  file = "../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData"
+  file = "data_simulation/mantel_sed_spatial_simulation.RData"
 )

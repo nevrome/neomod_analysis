@@ -1,5 +1,5 @@
 chronology <- readr::read_delim(
-  "manually_changed_data/bronze_age_chronology/chronology.csv",
+  "data_manually_prepared/bronze_age_chronology.csv",
   delim = "\t"
   )
 

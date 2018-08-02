@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/regions.RData")
-load("../neomod_datapool/R_data/extended_area.RData")
+load("data_analysis/regions.RData")
+load("data_analysis/extended_area.RData")
 extended_area <- extended_area$geometry
 
 #### colour #### 

@@ -1,7 +1,7 @@
 #### load data ####
 
-load("../neomod_datapool/R_data/regions.RData")
-load("../neomod_datapool/R_data/bronze2.RData")
+load("data_analysis/regions.RData")
+load("data_analysis/bronze2.RData")
 
 # transform to sf
 bronze_sf <- bronze2 %>%
@@ -40,7 +40,7 @@ dates_probability_per_year_and_region_list <- bronze2 %>%
 
 save(
   dates_probability_per_year_and_region_list, 
-  file = "../neomod_datapool/R_data/dates_probability_per_year_and_region_list.RData"
+  file = "data_analysis/dates_probability_per_year_and_region_list.RData"
 )
 
 # merge per-region data.frame list again to one dataframe
@@ -49,5 +49,5 @@ dates_probability_per_year_and_region_df <- dates_probability_per_year_and_regio
 
 save(
   dates_probability_per_year_and_region_df, 
-  file = "../neomod_datapool/R_data/dates_probability_per_year_and_region_df.RData"
+  file = "data_analysis/dates_probability_per_year_and_region_df.RData"
 )

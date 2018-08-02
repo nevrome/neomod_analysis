@@ -1,9 +1,9 @@
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
-research_area <- sf::st_read("manually_changed_data/research_area.shp")
-load("../neomod_datapool/R_data/regions.RData")
-load("../neomod_datapool/R_data/sed_time_spatial_network.RData")
-load("../neomod_datapool/R_data/region_centers.RData")
+research_area <- sf::st_read("data_manually_prepared/research_area.shp")
+load("data_analysis/regions.RData")
+load("data_analysis/sed_time_spatial_network.RData")
+load("data_analysis/region_centers.RData")
 
 ex <- raster::extent(regions %>% sf::st_transform(sf::st_crs(102013)))
 xlimit <- c(ex[1] + 100000, ex[2] - 100000)

@@ -1,4 +1,4 @@
-load("../neomod_datapool/simulation_data/sim1.RData")
+load("data_simulation/sim1.RData")
 
 prop <- models_grid$idea_proportions %>%
   do.call(rbind, .)
@@ -55,4 +55,4 @@ regions_grid %<>% dplyr::select(
     regionA, regionB, time, sed, model_id, model_group
   )
 
-save(regions_grid, file = "../neomod_datapool/simulation_data/squared_euclidian_distance_over_time_sim_multiple.RData")
+save(regions_grid, file = "data_simulation/squared_euclidian_distance_over_time_sim_multiple.RData")

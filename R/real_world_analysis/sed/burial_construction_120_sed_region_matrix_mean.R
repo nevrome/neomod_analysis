@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_construction.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_construction.RData")
 
 regions_grid_mean <- regions_grid %>%
   dplyr::group_by(
@@ -10,7 +10,7 @@ regions_grid_mean <- regions_grid %>%
 
 regions_grid_mean$regionB <- forcats::fct_rev(regions_grid_mean$regionB)
 
-save(regions_grid_mean, file = "../neomod_datapool/R_data/regions_mean_sed")
+save(regions_grid_mean, file = "data_analysis/regions_mean_sed")
 
 kur <- regions_grid_mean %>%
   ggplot() +

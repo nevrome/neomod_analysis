@@ -1,9 +1,9 @@
-load("../neomod_datapool/R_data/regions.RData")
-load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
+load("data_analysis/regions.RData")
+load("data_analysis/distance_matrix_spatial_long.RData")
 land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
 rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
 lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
-research_area <- sf::st_read("manually_changed_data/research_area.shp")
+research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 
 region_centers <- regions %>%
   sf::st_centroid()
@@ -23,7 +23,7 @@ region_centers %>%
     NAME, x, y
   )
 
-save(region_centers, file = "../neomod_datapool/R_data/region_centers.RData")
+save(region_centers, file = "data_analysis/region_centers.RData")
 
 distance_lines <- distance_matrix_spatial_long %>%
   dplyr::left_join(

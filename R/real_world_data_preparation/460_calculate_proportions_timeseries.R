@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/dates_probability_per_year_and_region_list.RData")
+load("data_analysis/dates_probability_per_year_and_region_list.RData")
 
 #### calculate per year, per region distribution of ideas ####
 
@@ -139,7 +139,7 @@ proportion_development_burial_type <- proportion_per_region_df %>%
 
 save(
   proportion_development_burial_type, 
-  file = "../neomod_datapool/R_data/development_proportions_burial_type.RData"
+  file = "data_analysis/development_proportions_burial_type.RData"
 )
 
 proportion_development_burial_construction <- proportion_per_region_df %>% 
@@ -147,6 +147,6 @@ proportion_development_burial_construction <- proportion_per_region_df %>%
 
 save(
   proportion_development_burial_construction, 
-  file = "../neomod_datapool/R_data/development_proportions_burial_construction.RData"
+  file = "data_analysis/development_proportions_burial_construction.RData"
 )
 

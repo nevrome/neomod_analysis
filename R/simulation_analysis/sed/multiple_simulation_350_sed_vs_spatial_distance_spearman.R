@@ -1,8 +1,8 @@
-load("../neomod_datapool/simulation_data/mantel_sed_spatial_simulation.RData")
+load("data_simulation/mantel_sed_spatial_simulation.RData")
 mantel_simulations <- mantel_test_results
-load("../neomod_datapool/R_data/mantel_sed_spatial_burial_type.RData")
+load("data_analysis/mantel_sed_spatial_burial_type.RData")
 mantel_burial_type <- mantel_test_results
-load("../neomod_datapool/R_data/mantel_sed_spatial_burial_construction.RData")
+load("data_analysis/mantel_sed_spatial_burial_construction.RData")
 mantel_burial_construction <- mantel_test_results
 
 mantel_burial_type %<>%

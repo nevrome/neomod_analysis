@@ -61,7 +61,7 @@ bronze$calage_density_distribution %<>% lapply(
   }
 )
 
-save(bronze, file = "../neomod_datapool/R_data/bronze.RData")
+save(bronze, file = "data_analysis/bronze.RData")
 
 # plot to check the calibration result 
 # library(ggplot2)
@@ -73,7 +73,7 @@ save(bronze, file = "../neomod_datapool/R_data/bronze.RData")
 
 #### filter time ####
 
-load("../neomod_datapool/R_data/bronze.RData")
+load("data_analysis/bronze.RData")
 
 # filter dates to only include dates in in time range of interest
 bronze0 <- bronze %>% 
@@ -93,13 +93,13 @@ bronze0 <- bronze %>%
   ) %>%
   dplyr::select(-in_time_of_interest)
 
-save(bronze0, file = "../neomod_datapool/R_data/bronze0.RData")
+save(bronze0, file = "data_analysis/bronze0.RData")
 
 
 
 #### filter research question ####
 
-load("../neomod_datapool/R_data/bronze0.RData")
+load("data_analysis/bronze0.RData")
 
 bronze1 <- bronze0 %>%
   # reduce variable selection to necessary information
@@ -137,7 +137,7 @@ bronze1 <- bronze0 %>%
    !is.na(lat) | !is.na(lon)
   )
 
-save(bronze1, file = "../neomod_datapool/R_data/bronze1.RData")
+save(bronze1, file = "data_analysis/bronze1.RData")
 
 
 
@@ -146,13 +146,13 @@ bronze1 %>% sf::st_as_sf(
   coords = c("lon", "lat"),
   crs = 4326
 ) %>% 
-  sf::write_sf("../neomod_datapool/R_data/bronze1.shp")
+  sf::write_sf("data_analysis/bronze1.shp")
 
 
 
 #### unnest dates ####
 
-load("../neomod_datapool/R_data/bronze1.RData")
+load("data_analysis/bronze1.RData")
 
 # unnest calage_density_distribution to have per year information: 
 # a diachron perspective
@@ -168,4 +168,4 @@ bronze2 <- bronze1 %>%
     desc(burial_construction)
   )
 
-save(bronze2, file = "../neomod_datapool/R_data/bronze2.RData")
+save(bronze2, file = "data_analysis/bronze2.RData")

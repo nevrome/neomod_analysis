@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_type.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_type.RData")
 
 schnu <- regions_grid %>%
   ggplot() +

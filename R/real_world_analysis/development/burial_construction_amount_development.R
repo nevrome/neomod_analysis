@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/development_amount_burial_construction.RData")
+load("data_analysis/development_amount_burial_construction.RData")
 
 amount_devel <- amount_development_burial_construction
 

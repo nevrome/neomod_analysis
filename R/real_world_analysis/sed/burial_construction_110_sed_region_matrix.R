@@ -1,4 +1,4 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_construction.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_construction.RData")
 
 library(ggplot2)
 hu <- regions_grid %>%

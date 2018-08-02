@@ -1,5 +1,5 @@
-load("../neomod_datapool/R_data/squared_euclidian_distance_over_time_burial_construction.RData")
-load("../neomod_datapool/R_data/distance_matrix_spatial_long.RData")
+load("data_analysis/squared_euclidian_distance_over_time_burial_construction.RData")
+load("data_analysis/distance_matrix_spatial_long.RData")
 
 test <- regions_grid %>%
   dplyr::mutate(
@@ -74,4 +74,4 @@ sed_spatial_distance$regionB <- factor(regions_factorB, levels = c(
   "England"
 ))
 
-save(sed_spatial_distance, file = "../neomod_datapool/R_data/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
+save(sed_spatial_distance, file = "data_analysis/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
