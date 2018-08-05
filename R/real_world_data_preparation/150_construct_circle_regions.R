@@ -43,6 +43,15 @@ regions_with_enough_graves <- number_of_dates_per_circle %>%
   ) %$%
   ID
 
+dates_per_region <- schnu %>% dplyr::filter(
+  ID %in% regions_with_enough_graves
+) %>% sf::st_set_geometry(NULL)
+
+save(
+  dates_per_region,
+  file = "data_analysis/dates_per_region.RData"
+)
+
 regions <- region_circles %>%
   dplyr::mutate(
     number_of_dates = number_of_dates_per_circle$n
