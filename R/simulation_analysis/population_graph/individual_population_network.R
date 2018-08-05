@@ -68,7 +68,7 @@ pop_groups$unit <- factor(regions_factor, levels = c(
   "Austria and Czechia",
   "Poland",
   "Southern Germany",
-  "Northeast France",
+  "Northeastern France",
   "Northern Germany",
   "Southern Skandinavia",
   "Benelux",

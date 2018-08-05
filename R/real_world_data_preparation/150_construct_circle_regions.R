@@ -76,7 +76,7 @@ regions <- region_circles %>%
 
 regions$ID <- 1:nrow(regions)
 regions$NAME <- c(
-  "Northeast France", 
+  "Northeastern France", 
   "Southern Germany", 
   "Austria and Czechia", 
   "England", "Benelux", 
