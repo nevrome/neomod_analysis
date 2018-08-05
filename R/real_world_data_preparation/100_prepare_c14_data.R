@@ -166,10 +166,10 @@ save(bronze15, file = "data_analysis/bronze15.RData")
 
 load("data_analysis/bronze15.RData")
 
-# replace uncomplete labnrs with random hash
+# identify dates without correct labnr
 ids_incomplete_labnrs <- bronze15$id[grepl('n/a', bronze15$labnr)]
 
-# mark labnr duplicates 
+# remove labnr duplicates, except for those with incorrect labnrs
 duplicates_removed_bronze15_ids <- bronze15 %>% 
   dplyr::filter(
     !(id %in% ids_incomplete_labnrs)
@@ -179,12 +179,56 @@ duplicates_removed_bronze15_ids <- bronze15 %>%
   c14bazAAR::remove_duplicates() %$%
   id
 
+# merge removed selection with incorrect labnr selection
 bronze16 <- bronze15 %>%
   dplyr::filter(
     id %in% c(duplicates_removed_bronze15_ids, indezes_incomplete_labnrs)
   )
 
-save(bronze15, file = "data_analysis/bronze16.RData")
+save(bronze16, file = "data_analysis/bronze16.RData")
+
+
+
+#### merge dates of one grave ####
+
+load("data_analysis/bronze16.RData")
+
+# take a look at the dates per feature
+bronze16 %>% dplyr::group_by(site, feature) %>% dplyr::filter(n()>1)
+
+threshold <- (1 - 0.9545) / 2
+
+# 
+bronze16
+bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
+  lapply(function(x){
+    # check if there's a Number or a single letter in the feature variable
+    if (grepl("[0-9]|^[A-Za-z] | [A-Za-z] | [A-Za-z]$", x$feature[1])) {
+      res <- x %>% 
+        dplyr::select(-calage_density_distribution) %>% 
+        dplyr::group_by(site) %>%
+        dplyr::summarise_all(
+          .funs = dplyr::funs(c14bazAAR:::compare_and_combine_data_frame_values)
+        ) %>%
+        dplyr::ungroup()
+      
+      merge_dens <- Bchron::BchronDensity(
+        ages = x$c14age, 
+        ageSds = x$c14std, 
+        calCurves = rep("intcal13", nrow(x))
+      ) 
+      merge_dens$densities %>% cumsum -> a      # cumulated density
+      bottom <- merge_dens$ageGrid[which(a <= threshold) %>% max]
+      top <- merge_dens$ageGrid[which(a > 1-threshold) %>% min]
+      res$calage_density_distribution[[1]] <- tibble::tibble(
+        age = merge_dens$ageGrid, 
+        dens_dist = as.vector(merge_dens$densities),
+        norm_dens = as.vector(merge_dens$densities/max(merge_dens$densities)),
+        two_sigma = merge_dens$ageGrid >= bottom & merge_dens$ageGrid <= top
+      )
+      return(res)
+    }
+  })
 
 
 #### unnest dates ####
