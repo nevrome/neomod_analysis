@@ -104,7 +104,7 @@ load("data_analysis/bronze0.RData")
 bronze1 <- bronze0 %>%
   # reduce variable selection to necessary information
   dplyr::select(
-    -sourcedb, -c14age, -c14std, -c13val, -country, -shortref
+    -sourcedb, -c13val, -country, -shortref
   ) %>%
   # filter by relevant sitetypes
   dplyr::filter(
@@ -139,6 +139,52 @@ bronze1 <- bronze0 %>%
 
 save(bronze1, file = "data_analysis/bronze1.RData")
 
+
+
+#### crop date selection to research area ####
+
+load("data_analysis/bronze1.RData")
+load("data_analysis/research_area.RData")
+
+# transform data to sf and the correct CRS
+bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
+sf::st_crs(bronze1) <- 4326
+bronze1 %<>% sf::st_transform(102013)
+
+# get dates within research area
+bronze15 <- sf::st_intersection(bronze1, research_area) %>%
+  sf::st_set_geometry(NULL) %>%
+  dplyr::mutate(
+    id = 1:nrow(.)
+  )
+
+save(bronze15, file = "data_analysis/bronze15.RData")
+
+
+
+#### remove labnr duplicates ####
+
+load("data_analysis/bronze15.RData")
+
+# replace uncomplete labnrs with random hash
+ids_incomplete_labnrs <- bronze15$id[grepl('n/a', bronze15$labnr)]
+
+# mark labnr duplicates 
+duplicates_removed_bronze15_ids <- bronze15 %>% 
+  dplyr::filter(
+    !(id %in% ids_incomplete_labnrs)
+  ) %>%
+  dplyr::select(-calage_density_distribution) %>%
+  c14bazAAR::as.c14_date_list() %>%
+  c14bazAAR::remove_duplicates() %$%
+  id
+
+bronze16 <- bronze15 %>%
+  dplyr::filter(
+    id %in% c(duplicates_removed_bronze15_ids, indezes_incomplete_labnrs)
+  )
+
+save(bronze15, file = "data_analysis/bronze16.RData")
 
 
 #### unnest dates ####
