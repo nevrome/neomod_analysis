@@ -1,6 +1,30 @@
-load("../neomod_datapool/bronze_age/bronze1.RData")
+load("data_analysis/dates_per_region.RData")
 
-bronze1 %>% nrow()
+# how many dates
+dates_per_region %>% nrow()
+
+# how many labnrs
+dates_per_region$labnr %>% unique %>% length
+
+# how many labnrs are doubles
+dates_per_region %>% 
+  dplyr::filter(
+    !grepl('n/a', labnr)
+  ) %>%
+  dplyr::group_by(labnr) %>% 
+  dplyr::filter(n()>1)
+
+# how many graves with multiple dates
+dates_per_region %>%
+  dplyr::group_by(site, feature) %>% 
+  dplyr::filter(n()>1) 
+
+# distribution of these by burial_type and burial_construction
+dates_per_region %>%
+  dplyr::group_by(site, feature) %>% 
+  dplyr::filter(n()>1) %$%
+  #  burial_type %>% table()
+  burial_construction %>% table()
 
 # get some counts
 bronze1 %>%
