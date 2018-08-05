@@ -141,15 +141,6 @@ save(bronze1, file = "data_analysis/bronze1.RData")
 
 
 
-# export dates as shapefile
-bronze1 %>% sf::st_as_sf(
-  coords = c("lon", "lat"),
-  crs = 4326
-) %>% 
-  sf::write_sf("data_analysis/bronze1.shp")
-
-
-
 #### unnest dates ####
 
 load("data_analysis/bronze1.RData")
