@@ -31,18 +31,24 @@ schnu <- sf::st_intersection(gu, region_circles)
 #   geom_sf(data = region_circles, fill = NA) +
 #   geom_sf(data = schnu)
 
-regions_with_enough_graves <- schnu %>% 
+number_of_dates_per_circle <- schnu %>% 
   dplyr::group_by(ID) %>%
   dplyr::summarise(
     n = n()
-  ) %>%
+  )
+
+regions_with_enough_graves <- number_of_dates_per_circle %>%
   dplyr::filter(
     n >= 70
   ) %$%
   ID
 
 regions <- region_circles %>%
+  dplyr::mutate(
+    number_of_dates = number_of_dates_per_circle$n
+  ) %>%
   dplyr::filter(ID %in% regions_with_enough_graves)
+
 
 # ggplot() +
 #   geom_sf(data = area) +
@@ -81,3 +87,4 @@ regions$NAME <- c(
 #   geom_text(aes(x = x, y = y, label = NAME))
 
 save(regions, file = "data_analysis/regions.RData")
+
