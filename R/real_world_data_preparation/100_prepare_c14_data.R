@@ -75,6 +75,12 @@ save(bronze, file = "data_analysis/bronze.RData")
 
 load("data_analysis/bronze.RData")
 
+# add artifical id
+bronze <- bronze %>%
+  dplyr::mutate(
+    id = 1:nrow(.)
+  )
+
 # filter dates to only include dates in in time range of interest
 bronze0 <- bronze %>% 
   dplyr::mutate(
@@ -132,10 +138,15 @@ bronze1 <- bronze0 %>%
       )
     )
   ) %>%
-  # remove dates without coordinates
-  dplyr::filter(
-   !is.na(lat) | !is.na(lon)
-  )
+  # reduce variable selection to necessary information
+  dplyr::select(
+    -sitetype
+  ) 
+
+# remove dates without coordinates
+bronze1 %<>% dplyr::filter(
+  !is.na(lat) | !is.na(lon)
+)
 
 save(bronze1, file = "data_analysis/bronze1.RData")
 
@@ -147,15 +158,19 @@ load("data_analysis/bronze1.RData")
 load("data_analysis/research_area.RData")
 
 # transform data to sf and the correct CRS
-bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
-sf::st_crs(bronze1) <- 4326
-bronze1 %<>% sf::st_transform(102013)
+bronze12 <- bronze1 %>% sf::st_as_sf(coords = c("lon", "lat"))
+sf::st_crs(bronze12) <- 4326
+bronze12 %<>% sf::st_transform(102013)
 
 # get dates within research area
-bronze15 <- sf::st_intersection(bronze1, research_area) %>%
+bronze15 <- sf::st_intersection(bronze12, research_area) %>%
   sf::st_set_geometry(NULL) %>%
-  dplyr::mutate(
-    id = 1:nrow(.)
+  dplyr::select(-id.1)
+
+# add lon and lat columns again
+bronze15 %<>%
+  dplyr::left_join(
+    bronze1[, c("id", "lat", "lon")]
   )
 
 save(bronze15, file = "data_analysis/bronze15.RData")
@@ -182,7 +197,7 @@ duplicates_removed_bronze15_ids <- bronze15 %>%
 # merge removed selection with incorrect labnr selection
 bronze16 <- bronze15 %>%
   dplyr::filter(
-    id %in% c(duplicates_removed_bronze15_ids, indezes_incomplete_labnrs)
+    id %in% c(duplicates_removed_bronze15_ids, ids_incomplete_labnrs)
   )
 
 save(bronze16, file = "data_analysis/bronze16.RData")
@@ -197,7 +212,7 @@ load("data_analysis/bronze16.RData")
 # bronze16 %>% dplyr::group_by(site, feature) %>% dplyr::filter(n()>1)
 
 # merge information
-bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
+bronze17 <- bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
   pbapply::pblapply(function(x){
     
     # check if there are multiple dates for one feature and if there's 
@@ -235,13 +250,15 @@ bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
   do.call(rbind, .) %>%
   # replace missing values (NA) in the major variables
   dplyr::mutate(
-    burial_type = tidyr::replace_na("unknown"),
-    burial_construction = tidyr::replace_na("unknown")
+    burial_type = tidyr::replace_na(burial_type, "unknown"),
+    burial_construction = tidyr::replace_na(burial_construction, "unknown")
   ) %>%
   # remove graves without coordinates
   dplyr::filter(
     !is.na(lat) | !is.na(lon)
   )
+
+save(bronze17, file = "data_analysis/bronze17.RData")
 
 # compare results of group calibration with single date calibration
 # library(ggplot2)
@@ -252,11 +269,11 @@ bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
 
 #### unnest dates ####
 
-load("data_analysis/bronze1.RData")
+load("data_analysis/bronze17.RData")
 
 # unnest calage_density_distribution to have per year information: 
 # a diachron perspective
-bronze2 <- bronze1 %>%
+bronze2 <- bronze17 %>%
   tidyr::unnest(calage_density_distribution) %>%
   dplyr::filter(
     two_sigma == TRUE
