@@ -12,11 +12,11 @@ region_circles <- tibble::tibble(
 region_circles <- sf::st_intersection(region_circles, research_area)
 region_circles %<>% sf::st_buffer(dist = 240000)
 
-load("data_analysis/bronze1.RData")
-bronze1 %<>% sf::st_as_sf(coords = c("lon", "lat"))
-sf::st_crs(bronze1) <- 4326
-bronze1 %<>% sf::st_transform(102013)
-gu <- sf::st_intersection(bronze1, research_area)
+load("data_analysis/bronze17.RData")
+bronze17 %<>% sf::st_as_sf(coords = c("lon", "lat"))
+sf::st_crs(bronze17) <- 4326
+bronze17 %<>% sf::st_transform(102013)
+gu <- sf::st_intersection(bronze17, research_area)
 
 # library(ggplot2)
 # ggplot() +
@@ -39,7 +39,7 @@ number_of_dates_per_circle <- schnu %>%
 
 regions_with_enough_graves <- number_of_dates_per_circle %>%
   dplyr::filter(
-    n >= 70
+    n >= 45
   ) %$%
   ID
 
