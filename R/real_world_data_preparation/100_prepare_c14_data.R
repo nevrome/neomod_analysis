@@ -194,16 +194,17 @@ save(bronze16, file = "data_analysis/bronze16.RData")
 load("data_analysis/bronze16.RData")
 
 # take a look at the dates per feature
-bronze16 %>% dplyr::group_by(site, feature) %>% dplyr::filter(n()>1)
+# bronze16 %>% dplyr::group_by(site, feature) %>% dplyr::filter(n()>1)
 
-threshold <- (1 - 0.9545) / 2
-
-# 
-bronze16
+# merge information
 bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
-  lapply(function(x){
-    # check if there's a Number or a single letter in the feature variable
-    if (grepl("[0-9]|^[A-Za-z] | [A-Za-z] | [A-Za-z]$", x$feature[1])) {
+  pbapply::pblapply(function(x){
+    
+    # check if there are multiple dates for one feature and if there's 
+    # a Number or a single letter in the feature variable
+    if (nrow(x) > 1 & grepl("[0-9]|^[A-Za-z] | [A-Za-z] | [A-Za-z]$", x$feature[1])) {
+      
+      # remove list column and apply data.frame merging function
       res <- x %>% 
         dplyr::select(-calage_density_distribution) %>% 
         dplyr::group_by(site) %>%
@@ -212,24 +213,42 @@ bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
         ) %>%
         dplyr::ungroup()
       
-      merge_dens <- Bchron::BchronDensity(
-        ages = x$c14age, 
-        ageSds = x$c14std, 
-        calCurves = rep("intcal13", nrow(x))
-      ) 
-      merge_dens$densities %>% cumsum -> a      # cumulated density
-      bottom <- merge_dens$ageGrid[which(a <= threshold) %>% max]
-      top <- merge_dens$ageGrid[which(a > 1-threshold) %>% min]
-      res$calage_density_distribution[[1]] <- tibble::tibble(
-        age = merge_dens$ageGrid, 
-        dens_dist = as.vector(merge_dens$densities),
-        norm_dens = as.vector(merge_dens$densities/max(merge_dens$densities)),
-        two_sigma = merge_dens$ageGrid >= bottom & merge_dens$ageGrid <= top
-      )
+      # combine density distribution data.frames
+      res$calage_density_distribution <- list(x$calage_density_distribution %>% purrr::reduce(
+        function(a, b) {
+          dplyr::full_join(a, b, by = "age") %>%
+            dplyr::transmute(
+              age = age,
+              dens_dist = purrr::map2_dbl(dens_dist.x, dens_dist.y, function(n, m){sum(n, m, na.rm = T)}),
+              norm_dens = dens_dist/max(dens_dist),
+              two_sigma = (two_sigma.x | two_sigma.y) %>% ifelse(is.na(.), FALSE, .)
+            )
+        }
+      ))
+      
       return(res)
+    } else {
+      return(x)
     }
-  })
+     
+  }) %>%
+  do.call(rbind, .) %>%
+  # replace missing values (NA) in the major variables
+  dplyr::mutate(
+    burial_type = tidyr::replace_na("unknown"),
+    burial_construction = tidyr::replace_na("unknown")
+  ) %>%
+  # remove graves without coordinates
+  dplyr::filter(
+    !is.na(lat) | !is.na(lon)
+  )
 
+# compare results of group calibration with single date calibration
+# library(ggplot2)
+# ggplot() +
+#   geom_line(data = a, mapping = aes(x = age, y = dens_dist), color = "green") +
+#   geom_line(data = b, mapping = aes(x = age, y = dens_dist), color = "blue") +
+#   geom_line(data = c, mapping = aes(x = age, y = dens_dist), color = "red")
 
 #### unnest dates ####
 
