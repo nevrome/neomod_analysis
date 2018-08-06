@@ -194,6 +194,21 @@ bronze15 %>%
   dplyr::group_by(site, feature) %>% 
   dplyr::filter(n() > 1)
 
+# count graves represented by multiple c14 dates 
+bronze15[!grepl('n/a', bronze15$labnr), ] %>% 
+  dplyr::group_by(labnr) %>% 
+  dplyr::filter(n() > 1) %>%
+  dplyr::ungroup() %$%
+  # burial_type %>% table
+  burial_construction %>% table
+
+bronze15 %>% 
+  dplyr::group_by(site, feature) %>% 
+  dplyr::filter(n() > 1) %>%
+  dplyr::ungroup() %$%
+  # burial_type %>% table
+  burial_construction %>% table
+
 # identify dates without correct labnr
 ids_incomplete_labnrs <- bronze15$id[grepl('n/a', bronze15$labnr)]
 
