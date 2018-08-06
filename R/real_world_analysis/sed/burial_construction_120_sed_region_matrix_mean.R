@@ -42,7 +42,7 @@ kur <- regions_grid_mean %>%
 
 kur %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/sed/regions_regions_mean_squared_euclidian_distance_burial_construction.jpeg",
+    "figures_plots/sed/regions_regions_mean_squared_euclidian_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

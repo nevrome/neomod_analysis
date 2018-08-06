@@ -110,7 +110,7 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/sed/sed_map_research_area_timeslices_burial_construction.jpeg",
+    "figures_plots/sed/sed_map_research_area_timeslices_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

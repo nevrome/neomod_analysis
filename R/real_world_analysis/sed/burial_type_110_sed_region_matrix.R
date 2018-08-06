@@ -47,7 +47,7 @@ hu <- regions_grid %>%
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/sed/regions_regions_squared_euclidian_distance_burial_type.jpeg",
+    "figures_plots/sed/regions_regions_squared_euclidian_distance_burial_type.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

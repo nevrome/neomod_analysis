@@ -15,7 +15,7 @@ regions_ordered <- c(
   "England"
 )
 
-path = "../neomod_datapool/plots/region_pictograms_colour/"
+path = "figures_plots/region_pictograms_colour/"
 
 colour_vector <- c(
   "Austria and Czechia" = "#999999", 

@@ -121,7 +121,7 @@ ju <- ggplot() +
 
 ju %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/sed_simulation/mantel_test_many_simulations.jpeg",
+    "figures_plots/sed_simulation/mantel_test_many_simulations.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,

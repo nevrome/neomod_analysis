@@ -95,7 +95,7 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "/home/clemens/neomod/neomod_datapool/plots/general_maps/general_map_research_area.jpeg",
+    "figures_plots/general_maps/general_map_research_area.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
