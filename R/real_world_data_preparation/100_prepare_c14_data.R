@@ -237,15 +237,24 @@ save(bronze16, file = "data_analysis/bronze16.RData")
 load("data_analysis/bronze16.RData")
 
 # take a look at the dates per feature
-# bronze16 %>% dplyr::group_by(site, feature) %>% dplyr::filter(n()>1)
+bronze16 %>% 
+  dplyr::group_by(site, feature) %>% 
+  dplyr::filter(n()>1)
+
+# count the dates per feature - get max
+bronze16[grepl("[0-9]", bronze16$feature), ] %>% 
+  dplyr::group_by(site, feature) %>% 
+  # dplyr::filter(n()>1)
+  dplyr::summarise(n = n()) %>%
+  dplyr::arrange(desc(n))
 
 # merge information
 bronze17 <- bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
   pbapply::pblapply(function(x){
     
     # check if there are multiple dates for one feature and if there's 
-    # a Number or a single letter in the feature variable
-    if (nrow(x) > 1 & grepl("[0-9]|^[A-Za-z] | [A-Za-z] | [A-Za-z]$", x$feature[1])) {
+    # a Number the feature variable
+    if (nrow(x) > 1 & grepl("[0-9]", x$feature[1])) {
       
       # remove list column and apply data.frame merging function
       res <- x %>% 
