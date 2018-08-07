@@ -13,6 +13,7 @@ threshold <- (1 - 0.9545) / 2
 
 # get all radon dates with c14bazAAR  
 bronze <- c14bazAAR::get_RADONB() %>%
+  tibble::as.tibble() %>%
   # remove dates without age
   dplyr::filter(!is.na(c14age) & !is.na(c14std)) %>%
   # remove dates outside of theoretical calibration range
