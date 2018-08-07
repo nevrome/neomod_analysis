@@ -250,7 +250,10 @@ bronze16[grepl("[0-9]", bronze16$feature), ] %>%
   dplyr::arrange(desc(n))
 
 # merge information
-bronze17 <- bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop = T) %>%
+bronze17 <- bronze16 %>% 
+  dplyr::group_by(site, feature) %>%
+  dplyr::do(res = tibble::as_tibble(.)) %$%
+  res %>%
   pbapply::pblapply(function(x){
     
     # check if there are multiple dates for one feature and if there's 
