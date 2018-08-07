@@ -146,7 +146,7 @@ bronze1 <- bronze0 %>%
 
 # remove dates without coordinates
 bronze1 %<>% dplyr::filter(
-  !is.na(lat) | !is.na(lon)
+  !is.na(lat) & !is.na(lon)
 )
 
 save(bronze1, file = "data_analysis/bronze1.RData")
@@ -293,7 +293,7 @@ bronze17 <- bronze16 %>% base::split(list(bronze16$site, bronze16$feature), drop
   ) %>%
   # remove graves without coordinates
   dplyr::filter(
-    !is.na(lat) | !is.na(lon)
+    !is.na(lat) & !is.na(lon)
   )
 
 save(bronze17, file = "data_analysis/bronze17.RData")
