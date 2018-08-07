@@ -39,7 +39,7 @@ number_of_graves_per_circle <- schnu %>%
 
 regions_with_enough_graves <- number_of_graves_per_circle %>%
   dplyr::filter(
-    n >= 45
+    n >= 60
   ) %$%
   ID
 
