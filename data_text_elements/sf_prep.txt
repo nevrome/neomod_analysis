@@ -1,3 +1,6 @@
 "name","value"
 "size bronze",10956
 "size bronze0",7543
+"size bronze1",2336
+"bronze1 variable amount",15
+"size bronze05",2361

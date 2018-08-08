@@ -5,10 +5,22 @@ load("data_analysis/bronze.RData")
 txtstorage::store("size bronze", nrow(bronze), storage_file)
 rm(bronze)
 
-# bronze 0
+# bronze0
 load("data_analysis/bronze0.RData")
 txtstorage::store("size bronze0", nrow(bronze0), storage_file)
 rm(bronze0)
+
+# bronze05
+load("data_analysis/bronze05.RData")
+txtstorage::store("size bronze05", nrow(bronze05), storage_file)
+txtstorage::store("bronze1 variable amount", ncol(bronze05), storage_file)
+rm(bronze05)
+
+# bronze1
+load("data_analysis/bronze1.RData")
+txtstorage::store("size bronze1", nrow(bronze1), storage_file)
+txtstorage::store("bronze1 variable amount", ncol(bronze1), storage_file)
+rm(bronze1)
 
 ###
 

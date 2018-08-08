@@ -113,7 +113,7 @@ save(bronze0, file = "data_analysis/bronze0.RData")
 
 load("data_analysis/bronze0.RData")
 
-bronze1 <- bronze0 %>%
+bronze05 <- bronze0 %>%
   # reduce variable selection to necessary information
   dplyr::select(
     -sourcedb, -c13val, -country, -shortref
@@ -149,8 +149,15 @@ bronze1 <- bronze0 %>%
     -sitetype
   ) 
 
-# remove dates without coordinates
-bronze1 %<>% dplyr::filter(
+save(bronze05, file = "data_analysis/bronze05.RData")
+
+
+
+#### remove dates without coordinates ####
+
+load("data_analysis/bronze05.RData")
+
+bronze1 <- bronze05 %>% dplyr::filter(
   !is.na(lat) & !is.na(lon)
 )
 
