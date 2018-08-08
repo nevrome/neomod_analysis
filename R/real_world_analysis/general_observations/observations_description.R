@@ -1,4 +1,4 @@
-storage_file <- "data_analysis/sf_desc.txt"
+storage_file <- "data_text_elements/sf_desc.txt"
 
 #### graves_per_region ####
 

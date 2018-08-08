@@ -1,4 +1,4 @@
-storage_file <- "data_analysis/sf_prep.txt"
+storage_file <- "data_text_elements/sf_prep.txt"
 
 # bronze
 load("data_analysis/bronze.RData")
