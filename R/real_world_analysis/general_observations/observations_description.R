@@ -43,7 +43,10 @@ txtstorage::store(
   storage_file
 )
 
-
 dpr$species %>% table(useNA = "always")
-dpr$burial_type %>% table()
-dpr$burial_construction %>% table()
+
+dprcrosstab <- table(dpr$burial_type, dpr$burial_construction)
+save(
+  dprcrosstab,
+  file = "data_text_elements/dprcrosstab.RData"
+)
