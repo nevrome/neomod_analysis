@@ -1,13 +1,13 @@
-storage_path <- "data_analysis/desc_storage.txt"
+storage_file <- "data_analysis/sf_prep.txt"
 
 # bronze
 load("data_analysis/bronze.RData")
-txtstorage::store("size bronze", nrow(bronze), storage_path)
+txtstorage::store("size bronze", nrow(bronze), storage_file)
 rm(bronze)
 
 # bronze 0
 load("data_analysis/bronze0.RData")
-txtstorage::store("size bronze0", nrow(bronze0), storage_path)
+txtstorage::store("size bronze0", nrow(bronze0), storage_file)
 rm(bronze0)
 
 ###
