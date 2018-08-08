@@ -113,7 +113,7 @@ save(bronze0, file = "data_analysis/bronze0.RData")
 
 load("data_analysis/bronze0.RData")
 
-bronze1 <- bronze0 %>%
+bronze05 <- bronze0 %>%
   # reduce variable selection to necessary information
   dplyr::select(
     -sourcedb, -c13val, -country, -shortref
@@ -149,8 +149,15 @@ bronze1 <- bronze0 %>%
     -sitetype
   ) 
 
-# remove dates without coordinates
-bronze1 %<>% dplyr::filter(
+save(bronze05, file = "data_analysis/bronze05.RData")
+
+
+
+#### remove dates without coordinates ####
+
+load("data_analysis/bronze05.RData")
+
+bronze1 <- bronze05 %>% dplyr::filter(
   !is.na(lat) & !is.na(lon)
 )
 
@@ -186,34 +193,6 @@ save(bronze15, file = "data_analysis/bronze15.RData")
 #### remove labnr duplicates ####
 
 load("data_analysis/bronze15.RData")
-
-# count indiviual labnrs
-bronze15$labnr %>% unique() %>% length()
-
-# count labnr duplicates without n/a labnrs 
-bronze15[!grepl('n/a', bronze15$labnr), ] %>% 
-  dplyr::group_by(labnr) %>% 
-  dplyr::filter(n() > 1)
-
-# count graves represented by multiple c14 dates 
-bronze15 %>% 
-  dplyr::group_by(site, feature) %>% 
-  dplyr::filter(n() > 1)
-
-# count graves represented by multiple c14 dates 
-bronze15[!grepl('n/a', bronze15$labnr), ] %>% 
-  dplyr::group_by(labnr) %>% 
-  dplyr::filter(n() > 1) %>%
-  dplyr::ungroup() %$%
-  # burial_type %>% table
-  burial_construction %>% table
-
-bronze15 %>% 
-  dplyr::group_by(site, feature) %>% 
-  dplyr::filter(n() > 1) %>%
-  dplyr::ungroup() %$%
-  # burial_type %>% table
-  burial_construction %>% table
 
 # identify dates without correct labnr
 ids_incomplete_labnrs <- bronze15$id[grepl('n/a', bronze15$labnr)]

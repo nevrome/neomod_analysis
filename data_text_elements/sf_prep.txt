@@ -1,3 +1,12 @@
 "name","value"
-"size bronze",10956
-"size bronze0",7543
+"size bronze","10956"
+"size bronze0","7543"
+"size bronze1","2336"
+"bronze1 variable amount","15"
+"size bronze05","2361"
+"size bronze15","1894"
+"bronze15 labnrs amount","1831"
+"bronze15 labnr doubles","46"
+"bronze15 multi dates one grave","498"
+"bronze15 burial_type doubles","cremation: 170, inhumation: 104, unknown: 224"
+"bronze15 burial_construction doubles","flat: 82, mound: 86, unknown: 330"
