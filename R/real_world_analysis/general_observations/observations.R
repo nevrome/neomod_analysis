@@ -1,3 +1,17 @@
+storage_path <- "data_analysis/desc_storage.txt"
+
+# bronze
+load("data_analysis/bronze.RData")
+txtstorage::store("size bronze", nrow(bronze), storage_path)
+rm(bronze)
+
+# bronze 0
+load("data_analysis/bronze0.RData")
+txtstorage::store("size bronze0", nrow(bronze0), storage_path)
+rm(bronze0)
+
+###
+
 load("data_analysis/dates_per_region.RData")
 
 # how many dates
