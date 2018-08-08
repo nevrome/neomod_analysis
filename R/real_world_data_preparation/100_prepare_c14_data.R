@@ -11,19 +11,20 @@ threshold <- (1 - 0.9545) / 2
 
 #### data download ####
 
-# get all radon dates with c14bazAAR  
-bronze <- c14bazAAR::get_RADONB() %>%
-  tibble::as.tibble() %>%
-  # remove dates without age
-  dplyr::filter(!is.na(c14age) & !is.na(c14std)) %>%
-  # remove dates outside of theoretical calibration range
-  dplyr::filter(!(c14age < 71) & !(c14age > 46401))
+radonb <- c14bazAAR::get_RADONB()
+
+save(radonb, file = "data_analysis/radonb.RData")
 
 
 
 #### calibration #### 
 
-bronze <- bronze %>%
+bronze <- radonb %>%
+  tibble::as.tibble() %>%
+  # remove dates without age
+  dplyr::filter(!is.na(c14age) & !is.na(c14std)) %>%
+  # remove dates outside of theoretical calibration range
+  dplyr::filter(!(c14age < 71) & !(c14age > 46401)) %>%
   dplyr::mutate(
     # add list column with the age density distribution for every date
     calage_density_distribution = Bchron::BchronCalibrate(
