@@ -1,14 +1,49 @@
-load("data_analysis/dates_per_region.RData")
+storage_file <- "data_analysis/sf_desc.txt"
 
+#### graves_per_region ####
+
+
+
+#### dates_per_region ####
+
+load("data_analysis/dates_per_region.RData")
 dpr <- dates_per_region 
 
-# number of sites
-dpr$site %>% unique %>% length()
-dpr$period %>% unique %>% length()
-dpr$culture %>% unique %>% length()
+txtstorage::store(
+  c(
+    "dpr sites amount", 
+    "dpr period amount", 
+    "dpr culture amount"
+  ),
+  c(
+    dpr$site %>% unique %>% length(),
+    dpr$period %>% unique %>% length(),
+    dpr$culture %>% unique %>% length()
+  ),
+  storage_file
+)
 
-# distributions
-dpr$material %>% table(useNA = "always")
+material <- dpr$material %>% table(useNA = "always") %>% as.data.frame()
+
+txtstorage::store(
+  c(
+    "dpr material bone amount", 
+    "dpr material cremated bones amount", 
+    "dpr material charcoal wood amount",
+    "dpr material other amount",
+    "dpr material unknown amount"
+  ),
+  c(
+    material$Freq[material$. %in% c("collagen, bone", "cremated bones", "dentin")] %>% sum,
+    material$Freq[material$. %in% c("cremated bones")],
+    material$Freq[material$. %in% c("bark", "charcoal", "wood")] %>% sum,
+    material$Freq[!material$. %in% c("collagen, bone", "cremated bones", "dentin", "bark", "charcoal", "wood") & !is.na(material$.)] %>% sum,
+    material$Freq[is.na(material$.)]
+  ),
+  storage_file
+)
+
+
 dpr$species %>% table(useNA = "always")
 dpr$burial_type %>% table()
 dpr$burial_construction %>% table()
