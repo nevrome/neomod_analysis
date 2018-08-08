@@ -19,12 +19,16 @@ save(radonb, file = "data_analysis/radonb.RData")
 
 #### calibration #### 
 
+load("data_analysis/radonb.RData")
+
 bronze <- radonb %>%
   tibble::as.tibble() %>%
   # remove dates without age
   dplyr::filter(!is.na(c14age) & !is.na(c14std)) %>%
   # remove dates outside of theoretical calibration range
-  dplyr::filter(!(c14age < 71) & !(c14age > 46401)) %>%
+  dplyr::filter(!(c14age < 71) & !(c14age > 46401))
+
+bronze <- bronze %>%
   dplyr::mutate(
     # add list column with the age density distribution for every date
     calage_density_distribution = Bchron::BchronCalibrate(
