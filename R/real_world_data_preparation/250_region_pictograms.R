@@ -53,7 +53,7 @@ for (i in 1:nrow(regions)) {
       yaxt = 'n',
       bg = NA)
   plot(extended_area, border = NA , col = "grey85", lwd = 2)
-  plot(one_region_buffer_geom, border = NA, col = alpha(colour_vector[i], 0.4), add = TRUE)
+  plot(one_region_buffer_geom, border = NA, col = scales::alpha(colour_vector[i], 0.4), add = TRUE)
   plot(one_region_geom, border = NA, col = colour_vector[i], add = TRUE)
   dev.off()
   
