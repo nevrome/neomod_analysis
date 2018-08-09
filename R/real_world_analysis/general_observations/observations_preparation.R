@@ -14,7 +14,7 @@ rm(bronze0)
 #### bronze05 ####
 load("data_analysis/bronze05.RData")
 txtstorage::store("size bronze05", nrow(bronze05), storage_file)
-txtstorage::store("bronze1 variable amount", ncol(bronze05), storage_file)
+txtstorage::store("bronze05 variable amount", ncol(bronze05), storage_file)
 rm(bronze05)
 
 
@@ -68,7 +68,42 @@ txtstorage::store("bronze15 burial_construction doubles", bronze15_burial_constr
 
 rm(bronze15)
 
-###
+
+
+#### bronze16 ####
+
+# size
+load("data_analysis/bronze16.RData")
+txtstorage::store("size bronze16", nrow(bronze16), storage_file)
+
+# count the dates per feature - get max
+max_dates_per_grave <- bronze16[grepl("[0-9]", bronze16$feature), ] %>% 
+  dplyr::group_by(site, feature) %>% 
+  # dplyr::filter(n()>1)
+  dplyr::summarise(n = n()) %>%
+  # dplyr::arrange(desc(n)) %>%
+  dplyr::ungroup() %$%
+  max(n)
+txtstorage::store("bronze16 max dates per grave", max_dates_per_grave, storage_file)
+
+multi_dates_one_grave <- bronze16 %>% 
+  dplyr::group_by(site, feature) %>% 
+  dplyr::filter(n() > 1)
+txtstorage::store("bronze16 multi dates one grave", nrow(multi_dates_one_grave), storage_file)
+
+with_numbers_in_feature <- multi_dates_one_grave[grepl("[0-9]", multi_dates_one_grave$feature), ]
+txtstorage::store("bronze16 multi dates one grave with numbers", nrow(with_numbers_in_feature), storage_file)
+
+rm(bronze16)
+
+
+
+#### bronze17 ####
+load("data_analysis/bronze17.RData")
+txtstorage::store("size bronze17", nrow(bronze17), storage_file)
+
+
+
 
 load("data_analysis/dates_per_region.RData")
 

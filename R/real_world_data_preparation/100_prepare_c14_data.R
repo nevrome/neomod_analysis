@@ -222,16 +222,9 @@ save(bronze16, file = "data_analysis/bronze16.RData")
 load("data_analysis/bronze16.RData")
 
 # take a look at the dates per feature
-bronze16 %>% 
-  dplyr::group_by(site, feature) %>% 
-  dplyr::filter(n()>1)
-
-# count the dates per feature - get max
-bronze16[grepl("[0-9]", bronze16$feature), ] %>% 
-  dplyr::group_by(site, feature) %>% 
-  # dplyr::filter(n()>1)
-  dplyr::summarise(n = n()) %>%
-  dplyr::arrange(desc(n))
+# bronze16 %>% 
+#   dplyr::group_by(site, feature) %>% 
+#   dplyr::filter(n()>1)
 
 # merge information
 bronze17 <- bronze16 %>% 
