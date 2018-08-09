@@ -2,12 +2,17 @@ storage_file <- "data_text_elements/sf_desc.txt"
 
 #### graves_per_region ####
 
+load("data_analysis/graves_per_region.RData")
+gpr <- graves_per_region
 
+txtstorage::store("gpr size", nrow(gpr), storage_file)
 
 #### dates_per_region ####
 
 load("data_analysis/dates_per_region.RData")
 dpr <- dates_per_region 
+
+txtstorage::store("dpr size", nrow(dpr), storage_file)
 
 txtstorage::store(
   c(

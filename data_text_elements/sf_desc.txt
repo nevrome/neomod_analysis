@@ -7,3 +7,5 @@
 "dpr material charcoal wood amount",367
 "dpr material other amount",20
 "dpr material unknown amount",154
+"gpr size",1562
+"dpr size",1701
