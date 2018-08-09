@@ -5,22 +5,35 @@ load("data_analysis/bronze.RData")
 txtstorage::store("size bronze", nrow(bronze), storage_file)
 rm(bronze)
 
+<<<<<<< HEAD
 #### bronze0 ####
+=======
+# bronze0
+>>>>>>> 292a026e548efdc3ed2eb784dfd751803a7f953f
 load("data_analysis/bronze0.RData")
 txtstorage::store("size bronze0", nrow(bronze0), storage_file)
 rm(bronze0)
 
+<<<<<<< HEAD
 #### bronze05 ####
+=======
+# bronze05
+>>>>>>> 292a026e548efdc3ed2eb784dfd751803a7f953f
 load("data_analysis/bronze05.RData")
 txtstorage::store("size bronze05", nrow(bronze05), storage_file)
 txtstorage::store("bronze1 variable amount", ncol(bronze05), storage_file)
 rm(bronze05)
 
+<<<<<<< HEAD
 #### bronze1 ####
+=======
+# bronze1
+>>>>>>> 292a026e548efdc3ed2eb784dfd751803a7f953f
 load("data_analysis/bronze1.RData")
 txtstorage::store("size bronze1", nrow(bronze1), storage_file)
 txtstorage::store("bronze1 variable amount", ncol(bronze1), storage_file)
 rm(bronze1)
+<<<<<<< HEAD
  
 #### bronze15 ####
 load("data_analysis/bronze15.RData")
@@ -65,6 +78,8 @@ bronze15_burial_construction_doubles <- bronze15 %>%
 txtstorage::store("bronze15 burial_construction doubles", bronze15_burial_construction_doubles, storage_file)
 
 rm(bronze15)
+=======
+>>>>>>> 292a026e548efdc3ed2eb784dfd751803a7f953f
 
 ###
 
