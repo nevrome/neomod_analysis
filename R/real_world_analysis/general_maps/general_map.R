@@ -35,10 +35,10 @@ hu <- ggplot() +
   #   data = regions,
   #   fill = NA, colour = "red", size = 0.5
   # # ) +
-  geom_sf(
-    data = research_area,
-    fill = NA, colour = "red", size = 0.5
-  ) +
+  # geom_sf(
+  #   data = research_area,
+  #   fill = NA, colour = "red", size = 0.5
+  # ) +
   geom_sf(
     data = bronze1_sf,
     mapping = aes(
@@ -93,7 +93,7 @@ hu <- ggplot() +
 
 hu %>%
   ggsave(
-    "figures_plots/general_maps/general_map_research_area_unzoomed.jpeg",
+    "figures_plots/general_maps/general_map.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
