@@ -1,10 +1,6 @@
-#load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-load("data_analysis/bronze1.RData")
-land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
-countries <- rnaturalearth::ne_download(scale = 50, type = 'countries', category = 'cultural') %>% sf::st_as_sf()
-rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
-lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
+list.files("data_geo", full.names = T) %>% lapply(load, .GlobalEnv)
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
+load("data_analysis/bronze1.RData")
 load("data_analysis/regions.RData")
 
 regions_name_points <- regions %>%
