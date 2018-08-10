@@ -36,7 +36,7 @@ hu <- ggplot() +
     mapping = aes(
       colour = NAME
     ),
-    fill = NA, size = 3.5
+    fill = NA, size = 2.5
   ) +
   geom_sf(
     data = bronze1_sf,
@@ -113,7 +113,7 @@ hu <- ggplot() +
     panel.grid.major = element_line(colour = "black", size = 0.3)
   ) +
   guides(
-    color = guide_legend(title = NULL, override.aes = list(size = 10), nrow = 2, byrow = TRUE),
+    color = guide_legend(title = NULL, override.aes = list(size = 8, shape = 15), nrow = 2, byrow = TRUE),
     shape = FALSE,
     size = FALSE
   )
