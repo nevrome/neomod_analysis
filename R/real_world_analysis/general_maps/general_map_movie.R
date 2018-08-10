@@ -1,11 +1,7 @@
-#load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-load("data_analysis/bronze2.RData")
-land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
-countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
-rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
-lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
+list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .GlobalEnv)
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/regions.RData")
+load("data_analysis/bronze2.RData")
 
 ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
 xlimit <- c(ex[1], ex[2])

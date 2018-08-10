@@ -1,4 +1,4 @@
-list.files("data_geo", full.names = T) %>% lapply(load, .GlobalEnv)
+list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .GlobalEnv)
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/bronze1.RData")
 load("data_analysis/regions.RData")
@@ -39,10 +39,6 @@ hu <- ggplot() +
     fill = NA, size = 3.5
   ) +
   geom_sf(
-    data = research_area,
-    fill = NA, colour = "red", size = 0.5
-  ) +
-  geom_sf(
     data = bronze1_sf,
     mapping = aes(
       color = burial_type,
@@ -51,11 +47,6 @@ hu <- ggplot() +
     ),
     show.legend = "point"
   ) +
-  # geom_text(
-  #   data = regions_name_points,
-  #   aes(x = x, y = y, label = ID),
-  #   size = 15
-  # ) +
   theme_bw() +
   coord_sf(
     xlim = xlimit, ylim = ylimit,

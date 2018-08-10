@@ -1,11 +1,7 @@
-#load("../neomod_datapool/bronze_age/space_and_network/land_outline_sf.RData")
-load("data_analysis/bronze1.RData")
-land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
-countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
-rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
-lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
+list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .GlobalEnv)
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/regions.RData")
+load("data_analysis/bronze1.RData")
 
 bronze1_sf <- bronze1 %>% sf::st_as_sf(
   coords = c("lon", "lat"),
@@ -31,14 +27,6 @@ hu <- ggplot() +
     data = lakes,
     fill = NA, colour = "black", size = 0.2
   ) +
-  # geom_sf(
-  #   data = regions,
-  #   fill = NA, colour = "red", size = 0.5
-  # # ) +
-  # geom_sf(
-  #   data = research_area,
-  #   fill = NA, colour = "red", size = 0.5
-  # ) +
   geom_sf(
     data = bronze1_sf,
     mapping = aes(

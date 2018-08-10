@@ -1,9 +1,7 @@
+list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .GlobalEnv)
+research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/regions.RData")
 load("data_analysis/distance_matrix_spatial_long.RData")
-land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
-rivers <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_rivers_lake_centerlines_scale_rank.shp")
-lakes <- sf::st_read("../neomod_datapool/geodata/rivers_lakes_shapes/ne_50m_lakes.shp")
-research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 
 region_centers <- regions %>%
   sf::st_centroid()

@@ -1,8 +1,7 @@
-load("data_analysis/bronze2.RData")
-land_outline <- sf::st_read("../neomod_datapool/geodata/land_shapes/ne_50m_land.shp")
-countries <- sf::st_read("../neomod_datapool/geodata/country_areas/ne_50m_admin_0_countries.shp")
+list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .GlobalEnv)
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/regions.RData")
+load("data_analysis/bronze2.RData")
 
 bronze2_slices <- bronze2 %>%
   dplyr::filter(
@@ -27,10 +26,6 @@ hu <- ggplot() +
     data = land_outline,
     fill = "white", colour = "black", size = 0.4
   ) +
-  # geom_sf(
-  #   data = regions,
-  #   fill = NA, colour = "red", size = 0.5
-  # ) +
   geom_sf(
     data = research_area,
     fill = NA, colour = "red", size = 0.5
@@ -101,7 +96,6 @@ hu %>%
     device = "jpeg",
     scale = 1,
     dpi = 300,
-    #width = 210, height = 297, units = "mm",
     width = 550, height = 280, units = "mm",
     limitsize = F
   )
