@@ -33,27 +33,36 @@ dt2 <- devel_table %>%
 idea_factor <- as.factor(dt2$idea)
 dt2$idea <- factor(idea_factor, levels = rev(levels(idea_factor)))
 
+dt2 %<>% dplyr::mutate(
+  vis_strength = dplyr::case_when(
+    strength == 1 ~ 15,
+    strength == 2 ~ 50,
+    strength == 3 ~ 85
+  )
+)
+
 library(ggplot2)
 spu <- ggplot() +
   geom_bar(
     data = dt2,
-    aes(x = time, y = strength, fill = idea),
+    aes(x = time, y = vis_strength, fill = idea),
     stat = "identity",
     position = "stack"
   ) +
   facet_wrap(~region, nrow = 8) +
-  xlab("Time in years calBC") +
-  ylab(" ") +
-  labs(fill = " ") + 
+  xlab("Periods") +
+  ylab("Perceived distribution") +
+  labs(fill = "Ideas") + 
   theme_bw() +
   theme(
     legend.position = "bottom",
-    panel.grid.major.x = element_line(colour = "black", size = 0.3),
     axis.text = element_text(size = 15),
     axis.title = element_text(size = 15),
     strip.text.x = element_text(size = 13),
     legend.title = element_text(size = 15, face = "bold"),
-    legend.text = element_text(size = 15)
+    legend.text = element_text(size = 15),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
   ) +
   scale_fill_manual(
     values = c(
@@ -64,11 +73,9 @@ spu <- ggplot() +
       "unknown" = "grey85"
     )
   ) +
-  coord_cartesian(
-    ylim = c(0, 4)
-  ) +
   scale_x_continuous(
-    breaks = c(-2200, -2000, -1500, -1000, -800), 
+    breaks = c(-2000, -1500, -1000), 
+    labels = c("Early Bronze Age", "Middle Bronze Age", "Late Bronze Age"), 
     limits = c(-2500, -800)
   )
 
