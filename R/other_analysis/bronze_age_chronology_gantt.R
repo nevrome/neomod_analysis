@@ -72,14 +72,14 @@ hu <- chronology %>%
     limits = c(-2550, -500)
   )
 
-hu %>%
-  ggsave(
-    paste0("/home/clemens/neomod/neomod_datapool/bronze_age/harding_chronology.jpeg"),
-    plot = .,
-    device = "jpeg",
-    scale = 1,
-    dpi = 300,
-    width = 210, height = 297, units = "mm",
-    limitsize = F
-  )
+# hu %>%
+#   ggsave(
+#     paste0("/home/clemens/neomod/neomod_datapool/bronze_age/harding_chronology.jpeg"),
+#     plot = .,
+#     device = "jpeg",
+#     scale = 1,
+#     dpi = 300,
+#     width = 210, height = 297, units = "mm",
+#     limitsize = F
+#   )
 

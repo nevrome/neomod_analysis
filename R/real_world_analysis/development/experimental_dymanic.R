@@ -75,14 +75,14 @@ spu <- spu +
     x = 0.07, y = 0.5
   )
 
-spu %>%
-  ggsave(
-    #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
-    "/home/clemens/neomod/neomod_datapool/bronze_age/derivative_proportion_cremation_1.jpeg",
-    plot = .,
-    device = "jpeg",
-    scale = 1,
-    dpi = 300,
-    width = 210, height = 297, units = "mm",
-    limitsize = F
-  )
+# spu %>%
+#   ggsave(
+#     #"/home/clemens/neomod/neomod_datapool/bronze_age/amount_development_regions_cremation_inhumation.jpeg",
+#     "/home/clemens/neomod/neomod_datapool/bronze_age/derivative_proportion_cremation_1.jpeg",
+#     plot = .,
+#     device = "jpeg",
+#     scale = 1,
+#     dpi = 300,
+#     width = 210, height = 297, units = "mm",
+#     limitsize = F
+#   )
