@@ -55,7 +55,7 @@ regions_order <- c(
   "Southern Germany",
   "Northeastern France",
   "Northern Germany",
-  "Southern Skandinavia",
+  "Southern Scandinavia",
   "Benelux",
   "England"
 )

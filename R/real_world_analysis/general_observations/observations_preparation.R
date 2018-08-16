@@ -123,7 +123,7 @@ regions_graves_amounts <- regions %>% sf::st_set_geometry(NULL) %>%
       "Southern Germany",
       "Northeastern France",
       "Northern Germany",
-      "Southern Skandinavia",
+      "Southern Scandinavia",
       "Benelux",
       "England"
     ))

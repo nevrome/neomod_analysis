@@ -26,7 +26,7 @@ dates_probability_per_year_and_region_list <- bronze2 %>%
       "Southern Germany",
       "Northeastern France",
       "Northern Germany",
-      "Southern Skandinavia",
+      "Southern Scandinavia",
       "Benelux",
       "England"
     ))

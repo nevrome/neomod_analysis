@@ -78,7 +78,7 @@ hu <- ggplot() +
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 
       "Northern Germany" = "#000000", 
-      "Southern Skandinavia" = "#0072B2", 
+      "Southern Scandinavia" = "#0072B2", 
       "Benelux" = "#D55E00", 
       "England" = "#CC79A7"
     ),
@@ -88,7 +88,7 @@ hu <- ggplot() +
       "Southern Germany", 
       "Northeastern France", 
       "Northern Germany", 
-      "Southern Skandinavia", 
+      "Southern Scandinavia", 
       "Benelux", 
       "England"
     ),
@@ -98,7 +98,7 @@ hu <- ggplot() +
       "Southern Germany", 
       "Northeastern France", 
       "Northern Germany", 
-      "Southern Skandinavia", 
+      "Southern Scandinavia", 
       "Benelux", 
       "England"
     )

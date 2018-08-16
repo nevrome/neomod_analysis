@@ -7,7 +7,7 @@ devel_table$region<- factor(regions_factor, levels = c(
   "Southern Germany",
   "Northeastern France",
   "Northern Germany",
-  "Southern Skandinavia",
+  "Southern Scandinavia",
   "Benelux",
   "England"
 ))

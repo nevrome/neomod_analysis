@@ -57,7 +57,7 @@ sed_spatial_distance$regionA <- factor(regions_factorA, levels = c(
   "Southern Germany",
   "Northeastern France",
   "Northern Germany",
-  "Southern Skandinavia",
+  "Southern Scandinavia",
   "Benelux",
   "England"
 ))
@@ -69,7 +69,7 @@ sed_spatial_distance$regionB <- factor(regions_factorB, levels = c(
   "Southern Germany",
   "Northeastern France",
   "Northern Germany",
-  "Southern Skandinavia",
+  "Southern Scandinavia",
   "Benelux",
   "England"
 ))

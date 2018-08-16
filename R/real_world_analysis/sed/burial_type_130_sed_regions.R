@@ -24,7 +24,7 @@ schnu <- regions_grid %>%
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 
       "Northern Germany" = "#000000", 
-      "Southern Skandinavia" = "#0072B2", 
+      "Southern Scandinavia" = "#0072B2", 
       "Benelux" = "#D55E00", 
       "England" = "#CC79A7"
     )

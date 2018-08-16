@@ -82,7 +82,7 @@ regions$NAME <- c(
   "England", "Benelux", 
   "Northern Germany",
   "Poland",
-  "Southern Skandinavia"
+  "Southern Scandinavia"
   )
 
 # regions %>%
