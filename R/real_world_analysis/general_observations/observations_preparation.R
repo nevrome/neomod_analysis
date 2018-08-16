@@ -118,7 +118,7 @@ load("data_analysis/regions.RData")
 regions_graves_amounts <- regions %>% sf::st_set_geometry(NULL) %>%
   dplyr::mutate(
     region_name = factor(regions$NAME, levels = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland",
       "Southern Germany",
       "Northeastern France",

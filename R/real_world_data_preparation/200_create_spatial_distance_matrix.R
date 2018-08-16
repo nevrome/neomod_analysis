@@ -50,7 +50,7 @@ distance_matrix_spatial_long_half <- distance_matrix_spatial_long[match(unique(i
 #### define factor order ####
 
 regions_order <- c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",

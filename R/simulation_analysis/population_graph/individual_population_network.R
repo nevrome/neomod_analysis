@@ -65,7 +65,7 @@ rel4 <- rel3 %>% dplyr::group_by(
 
 regions_factor <- as.factor(pop_groups$unit)
 pop_groups$unit <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",

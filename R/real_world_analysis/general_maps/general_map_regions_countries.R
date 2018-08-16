@@ -73,7 +73,7 @@ hu <- ggplot() +
       "mound" = "#CC79A7",
       "flat" = "#009E73",
       "unknown" = "darkgrey",
-      "Austria and Czechia" = "#999999", 
+      "Southeastern Central Europe" = "#999999", 
       "Poland" = "#ffe500", 
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 
@@ -83,7 +83,7 @@ hu <- ggplot() +
       "England" = "#CC79A7"
     ),
     breaks = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland", 
       "Southern Germany", 
       "Northeastern France", 
@@ -93,7 +93,7 @@ hu <- ggplot() +
       "England"
     ),
     labels = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland", 
       "Southern Germany", 
       "Northeastern France", 

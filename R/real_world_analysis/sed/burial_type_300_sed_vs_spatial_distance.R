@@ -39,7 +39,7 @@ plu <- ggplot(sed_spatial_distance) +
   ) +
   scale_color_manual(
     values = c(
-      "Austria and Czechia" = "#999999", 
+      "Southeastern Central Europe" = "#999999", 
       "Poland" = "#ffe500", 
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 
@@ -51,7 +51,7 @@ plu <- ggplot(sed_spatial_distance) +
       "h0cannotberejected" = "black"
     ),
     breaks = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland", 
       "Southern Germany", 
       "Northeastern France", 
@@ -61,7 +61,7 @@ plu <- ggplot(sed_spatial_distance) +
       "England"
     ),
     labels = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland", 
       "Southern Germany", 
       "Northeastern France", 

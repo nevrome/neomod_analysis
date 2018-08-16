@@ -21,7 +21,7 @@ dates_probability_per_year_and_region_list <- bronze2 %>%
   # add region information to bronze2
   dplyr::mutate(
     region_name = factor(regions$NAME[region_index_of_date], levels = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland",
       "Southern Germany",
       "Northeastern France",

@@ -52,7 +52,7 @@ sed_spatial_distance <- test %>% dplyr::left_join(
 
 regions_factorA <- as.factor(sed_spatial_distance$regionA)
 sed_spatial_distance$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",
@@ -64,7 +64,7 @@ sed_spatial_distance$regionA <- factor(regions_factorA, levels = c(
 
 regions_factorB <- as.factor(sed_spatial_distance$regionB)
 sed_spatial_distance$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",

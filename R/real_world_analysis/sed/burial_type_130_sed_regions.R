@@ -19,7 +19,7 @@ schnu <- regions_grid %>%
   scale_color_manual(
     guide = FALSE,
     values = c(
-      "Austria and Czechia" = "#999999", 
+      "Southeastern Central Europe" = "#999999", 
       "Poland" = "#ffe500", 
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 

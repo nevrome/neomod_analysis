@@ -4,7 +4,7 @@ amount_devel <- amount_development_burial_construction
 
 regions_factor <- as.factor(amount_devel$region_name)
 amount_devel$region_name <- factor(regions_factor, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",

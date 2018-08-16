@@ -5,7 +5,7 @@ extended_area <- extended_area$geometry
 #### colour #### 
 
 regions_ordered <- c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",
@@ -18,7 +18,7 @@ regions_ordered <- c(
 path = "figures_plots/region_pictograms_colour/"
 
 colour_vector <- c(
-  "Austria and Czechia" = "#999999", 
+  "Southeastern Central Europe" = "#999999", 
   "Poland" = "#ffe500", 
   "Southern Germany" = "#56B4E9", 
   "Northeastern France" = "#009E73", 

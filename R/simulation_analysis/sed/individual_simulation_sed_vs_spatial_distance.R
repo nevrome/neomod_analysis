@@ -49,7 +49,7 @@ hu <- test %>% dplyr::left_join(
 
 regions_factorA <- as.factor(hu$regionA)
 hu$regionA <- factor(regions_factorA, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",
@@ -61,7 +61,7 @@ hu$regionA <- factor(regions_factorA, levels = c(
 
 regions_factorB <- as.factor(hu$regionB)
 hu$regionB <- factor(regions_factorB, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",
@@ -109,7 +109,7 @@ plu <- ggplot(hu) +
   ) +
   scale_color_manual(
     values = c(
-      "Austria and Czechia" = "#999999", 
+      "Southeastern Central Europe" = "#999999", 
       "Poland" = "#ffe500", 
       "Southern Germany" = "#56B4E9", 
       "Northeastern France" = "#009E73", 
@@ -121,7 +121,7 @@ plu <- ggplot(hu) +
       "h0cannotberejected" = "black"
     ),
     breaks = c(
-      "Austria and Czechia",
+      "Southeastern Central Europe",
       "Poland", 
       "Southern Germany", 
       "Northeastern France", 

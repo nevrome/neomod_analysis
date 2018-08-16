@@ -2,7 +2,7 @@ devel_table <- readr::read_csv("data_manually_prepared/burial_traditions_pseudo.
 
 regions_factor <- as.factor(devel_table$region)
 devel_table$region<- factor(regions_factor, levels = c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",

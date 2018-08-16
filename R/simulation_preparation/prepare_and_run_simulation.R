@@ -9,11 +9,11 @@ start_proportion_5050 <- structure(
     idea_2 = c(.5, .5, .5, .5, .5, .5, .5, .5)), 
   class = "data.frame", 
   row.names = c(
-    "Austria and Czechia", "Poland", "Southern Germany", "Northeastern France", 
+    "Southeastern Central Europe", "Poland", "Southern Germany", "Northeastern France", 
     "Northern Germany", "Southern Scandinavia", "Benelux", "England"))
 
 region_factor_levels <- c(
-  "Austria and Czechia",
+  "Southeastern Central Europe",
   "Poland",
   "Southern Germany",
   "Northeastern France",
@@ -35,7 +35,7 @@ models_grid <- expand.grid(
   ),
   unit_names = list(
     list(
-      factor("Austria and Czechia", levels = region_factor_levels),
+      factor("Southeastern Central Europe", levels = region_factor_levels),
       factor("Poland", levels = region_factor_levels),
       factor("Southern Germany", levels = region_factor_levels),
       factor("Northeastern France", levels = region_factor_levels),
@@ -47,7 +47,7 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "Austria and Czechia" =  function(t) {25},
+      "Southeastern Central Europe" =  function(t) {25},
       "Poland" =               function(t) {25},
       "Southern Germany" =     function(t) {25},
       "Northeastern France" =     function(t) {25},
