@@ -8,7 +8,6 @@ lapply(
     "./R/other_analysis"
   ), 
   function(x) {
-    rm(list = ls())
     pbapply::pblapply(
       list.files(x, full.names = TRUE),
       function(y) {
