@@ -19,7 +19,7 @@ separators <- chronology %>%
     unit, dates, -sub_context, -context_general
   )
 
-line_width = 15
+line_width = 22
 
 library(ggplot2)
 hu <- ggplot() +
@@ -56,15 +56,36 @@ hu <- ggplot() +
     ),
     size = line_width
   ) +
-  # geom_segment(
-  #   data = separators,
-  #   mapping = aes(
-  #     x = as.numeric(sub_context) - 0.2,
-  #     xend = as.numeric(sub_context) + 0.2,
-  #     y = dates,
-  #     yend = dates
-  #   )
-  # ) +
+  scale_color_manual(
+    values = c(
+      "Neolithic" = "grey",
+      "Chalcolithic" = "#a6cee3",
+      "Early Bronze Age" = "#1f78b4",
+      "Middle Bronze Age" = "#b2df8a",
+      "Late Bronze Age" = "#33a02c",
+      "Iron Age" = "grey"
+    )
+  ) +
+  geom_point(
+    data = separators,
+    mapping = aes(
+      x = sub_context,
+      y = dates
+    ),
+    shape = 3,
+    size = 1,
+    position = position_dodge(preserve = "single", width = 0.65)
+  ) +
+  geom_point(
+    data = separators,
+    mapping = aes(
+      x = sub_context,
+      y = dates
+    ),
+    shape = 3,
+    size = 1,
+    position = position_dodge(preserve = "single", width = -0.65)
+  ) +
   geom_text(
     data = chronology, 
     mapping = aes(
@@ -76,7 +97,6 @@ hu <- ggplot() +
     size = 3
   ) +
   theme_bw() +
-  guides(color = FALSE) +
   xlab("") +
   ylab("Time in years calBC") +
   scale_y_reverse(
@@ -85,10 +105,15 @@ hu <- ggplot() +
   ) +
   facet_grid(cols = vars(context_general), scales = "free_x", space = "free_x") +
   theme(
-    panel.spacing = unit(0, "lines"), 
-    strip.background = element_blank(),
-    strip.placement = "outside"
-  )
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 10),
+    strip.text.x = element_text(size = 10),
+    panel.grid.major.y = element_line(colour = "black", size = 0.3),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 15)
+  ) +
+  guides(color = guide_legend(override.aes = list(size = 7)))
 
 hu %>%
   ggsave(
