@@ -19,10 +19,10 @@ separators <- chronology %>%
     unit, dates, -sub_context, -context_general
   )
 
-line_width = 20
+line_width = 15
 
 library(ggplot2)
-  ggplot() +
+hu <- ggplot() +
   geom_linerange(
     data = chronology, 
     mapping = aes(
@@ -56,15 +56,15 @@ library(ggplot2)
     ),
     size = line_width
   ) +
-  geom_segment(
-    data = separators,
-    mapping = aes(
-      x = as.numeric(sub_context) - 0.2,
-      xend = as.numeric(sub_context) + 0.2,
-      y = dates,
-      yend = dates
-    )
-  ) +
+  # geom_segment(
+  #   data = separators,
+  #   mapping = aes(
+  #     x = as.numeric(sub_context) - 0.2,
+  #     xend = as.numeric(sub_context) + 0.2,
+  #     y = dates,
+  #     yend = dates
+  #   )
+  # ) +
   geom_text(
     data = chronology, 
     mapping = aes(
@@ -82,16 +82,22 @@ library(ggplot2)
   scale_y_reverse(
     breaks = seq(-800, -2200, -200),
     limits = c(-700, -2500)
-  ) 
+  ) +
+  facet_grid(cols = vars(context_general), scales = "free_x", space = "free_x") +
+  theme(
+    panel.spacing = unit(0, "lines"), 
+    strip.background = element_blank(),
+    strip.placement = "outside"
+  )
 
-# hu %>%
-#   ggsave(
-#     paste0("/home/clemens/neomod/neomod_datapool/bronze_age/harding_chronology.jpeg"),
-#     plot = .,
-#     device = "jpeg",
-#     scale = 1,
-#     dpi = 300,
-#     width = 210, height = 297, units = "mm",
-#     limitsize = F
-#   )
+hu %>%
+  ggsave(
+    paste0("figures_plots/chronology/bronze_age_europe_chronology.jpeg"),
+    plot = .,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    width = 297, height = 210, units = "mm",
+    limitsize = F
+  )
 
