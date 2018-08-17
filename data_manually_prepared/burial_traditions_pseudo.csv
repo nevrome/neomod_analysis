@@ -1,6 +1,6 @@
 region,period,cremation,inhumation,mound,flat
-Southeastern Central Europe,Early Bronze Age,1,3,1,3
-Southeastern Central Europe,Middle Bronze Age,2,2,1,3
+Southeastern Central Europe,Early Bronze Age,2,2,1,3
+Southeastern Central Europe,Middle Bronze Age,2,2,3,1
 Southeastern Central Europe,Late Bronze Age,3,1,1,3
 Poland,Early Bronze Age,1,3,2,2
 Poland,Middle Bronze Age,2,2,2,2
@@ -22,4 +22,4 @@ Benelux,Middle Bronze Age,2,2,3,1
 Benelux,Late Bronze Age,3,1,2,2
 England,Early Bronze Age,1,3,3,1
 England,Middle Bronze Age,3,1,2,2
-England,Late Bronze Age,3,1,1,3
+England,Late Bronze Age,3,1,2,2
