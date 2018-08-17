@@ -13,7 +13,8 @@ chronology %<>% dplyr::mutate(
     "Scandinavia",
     "Netherlands", 
     "Belgium",
-    "Britain"
+    "Britain",
+    "Irland"
   )),
   unit_general = factor(as.factor(unit_general), levels = c(
     "Neolithic",
@@ -23,10 +24,7 @@ chronology %<>% dplyr::mutate(
     "Late Bronze Age",
     "Iron Age"
   )),
-  sub_context = as.factor(sub_context)
-  # sub_context = factor(as.factor(sub_context), levels = rev(c(
-  #  "Britain", "France", "Scandinavia", "Central Europe", "North and central Italy", "Spain"
-  # )))
+  sub_context = stringr::str_wrap(paste0(reference, "\n", ifelse(is.na(sub_context), "", sub_context)), width = 10)
   )
 
 separators <- chronology %>%
@@ -90,7 +88,7 @@ hu <- ggplot() +
     ),
     shape = 3,
     size = 1,
-    position = position_dodge(preserve = "single", width = 0.65)
+    position = position_dodge(preserve = "single", width = 0.8)
   ) +
   geom_point(
     data = separators,
@@ -100,7 +98,7 @@ hu <- ggplot() +
     ),
     shape = 3,
     size = 1,
-    position = position_dodge(preserve = "single", width = -0.65)
+    position = position_dodge(preserve = "single", width = -0.8)
   ) +
   geom_text(
     data = chronology, 
@@ -113,18 +111,19 @@ hu <- ggplot() +
     size = 3
   ) +
   theme_bw() +
-  xlab("") +
-  ylab("Time in years calBC") +
+  xlab(NULL) +
+  ylab(NULL) +
   scale_y_reverse(
     breaks = seq(-800, -2200, -200),
-    limits = c(-700, -2500)
+    limits = c(-700, -2500),
+    sec.axis = dup_axis(name = NULL)
   ) +
   facet_grid(cols = vars(context_general), scales = "free_x", space = "free_x") +
   theme(
     legend.position = "bottom",
     legend.title = element_blank(),
     legend.text = element_text(size = 12),
-    strip.text.x = element_text(size = 10),
+    strip.text.x = element_text(size = 8),
     panel.grid.major.y = element_line(colour = "black", size = 0.3),
     axis.text = element_text(size = 10),
     axis.title = element_text(size = 15),
