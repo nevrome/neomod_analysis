@@ -7,16 +7,16 @@ chronology %<>% dplyr::mutate(
   end_date = replace(end_date, is.na(end_date), Inf), 
   label_pos = (start_date + end_date) / 2, 
   unit_name = factor(as.factor(unit_name), levels = unique(as.factor(unit_name)[order(start_date)])),
-  spatial_context = as.factor(spatial_context)
-  # spatial_context = factor(as.factor(spatial_context), levels = rev(c(
+  sub_context = as.factor(sub_context)
+  # sub_context = factor(as.factor(sub_context), levels = rev(c(
   #  "Britain", "France", "Scandinavia", "Central Europe", "North and central Italy", "Spain"
   # )))
   )
 
 separators <- chronology %>%
-  dplyr::select(-reference, -start_date_pre, -end_date_post, -unit_name, -label_pos) %>%
+  dplyr::select(-reference, -start_date_pre, -end_date_post, -unit_name, -label_pos, -unit_general) %>%
   tidyr::gather(
-    unit, dates, -spatial_context
+    unit, dates, -sub_context, -context_general
   )
 
 line_width = 20
@@ -26,7 +26,7 @@ library(ggplot2)
   geom_linerange(
     data = chronology, 
     mapping = aes(
-      x = spatial_context,
+      x = sub_context,
       ymin = start_date_pre,
       ymax = start_date,
       group = unit_name
@@ -37,7 +37,7 @@ library(ggplot2)
   geom_linerange(
     data = chronology, 
     mapping = aes(
-      x = spatial_context,
+      x = sub_context,
       ymin = end_date,
       ymax = end_date_post,
       group = unit_name
@@ -48,19 +48,19 @@ library(ggplot2)
   geom_linerange(
     data = chronology, 
     mapping = aes(
-      x = spatial_context,
+      x = sub_context,
       ymin = start_date,
       ymax = end_date,
       group = unit_name,
-      color = spatial_context
+      color = unit_general
     ),
     size = line_width
   ) +
   geom_segment(
     data = separators,
     mapping = aes(
-      x = as.numeric(spatial_context) - 0.2,
-      xend = as.numeric(spatial_context) + 0.2,
+      x = as.numeric(sub_context) - 0.2,
+      xend = as.numeric(sub_context) + 0.2,
       y = dates,
       yend = dates
     )
@@ -68,7 +68,7 @@ library(ggplot2)
   geom_text(
     data = chronology, 
     mapping = aes(
-      x = spatial_context,
+      x = sub_context,
       y = label_pos,
       label = unit_name,
       group = unit_name
@@ -81,7 +81,7 @@ library(ggplot2)
   ylab("Time in years calBC") +
   scale_y_reverse(
     breaks = seq(-800, -2200, -200),
-    limits = c(-800, -2200)
+    limits = c(-700, -2500)
   ) 
 
 # hu %>%
