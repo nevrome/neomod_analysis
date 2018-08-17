@@ -1,42 +1,29 @@
-reference	spatial_context	unit_name	start_date_pre	start_date	end_date	end_date_post
-Harding 2000	Britain	Beakers		-2450	-1700	
-Harding 2000	Britain	Early Copper (MA I-II)		-2400	-2150	
-Harding 2000	Britain	Migdale (MA III)		-2200	-1950	
-Harding 2000	Britain	Food Vessels, Collared Urns (MA IV-V)		-2100	-1500	
-Harding 2000	Britain	Acton Park, Taunton	-1770	-1350	-1380	-1210
-Harding 2000	Britain	Penard	-1380	-1210	-1220	-1080
-Harding 2000	Britain	Wilburton	-1220	-1080	-1100	-960
-Harding 2000	Britain	Blackmoor	-1100	-960	-1000	-860
-Harding 2000	Britain	Ewart Park	-1000	-860	-880	-750
-Harding 2000 & Kristiansen 1998	Britain	Llyn Fawr	-880	-750	-600	
-Harding 2000	France	Early Bronze Age	-2300	-2200	-1600	-1500
-Harding 2000	France	Middle Bronze Age	-1800	-1700	-1500	-1400
-Harding 2000	France	Bronze final I-II		-1400	-1200	
-Harding 2000	France	Bronze final III		-1300	-800	-700
-Harding 2000	North and central Italy	Beakers		-2550	-1800	
-Harding 2000	North and central Italy	Polada		-2400	-1400	
-Harding 2000	North and central Italy	Apennine		-1690	-660	
-Harding 2000	North and central Italy	Late Bronze Age		-1500	-1140	
-Harding 2000	North and central Italy	Protovillanovan		-1430	-660	
-Harding 2000	Spain	Argaric Bronze Age, motillas	-2300	-2250	-1600	-1500
-Harding 2000	Spain	Middle-Late Bronze Age	-1600	-1500	-1300	
-Harding 2000	Spain	Bronce Final I		-1250	-1100	
-Harding 2000	Spain	Bronce Final II		-1100	-940	
-Harding 2000	Spain	Bronce Final III		-940	-750	
-Harding 2000	Spain	Iron Age (Hierro)		-800		
-Harding 2000	Central Europe	Bell Beaker/Corded Ware			-2000	
-Harding 2000	Central Europe	Singen (Br A1)		-2200	-2000	-1950
-Harding 2000	Central Europe	Bodman/Schachen, Zürich-Mozartstrasse (Br A2)	-2000	-1950	-1600	-1500
-Harding 2000	Central Europe	Tumulus Bronze Age (Br B-C)		-1500	-1300	
-Harding 2000	Central Europe	Br D		-1400	-1200	
-Harding 2000	Central Europe	Ha A1-A2		-1250	-1050	
-Harding 2000	Central Europe	Ha B1		-1100	-1000	
-Harding 2000	Central Europe	Ha B2/3		-1050	-750	
-Harding 2000	Central Europe	Ha C		-750		
-Harding 2000	Scandinavia	Late Neolithic II		-1920	-1730	
-Harding 2000	Scandinavia	Period I		-1730	-1510	
-Harding 2000	Scandinavia	Period II		-1500	-1250	
-Harding 2000	Scandinavia	Period III		-1440	-1040	
-Kristiansen 1998	Scandinavia	Period IV		-1100	-950	-900
-Harding 2000	Scandinavia	Period V		-850	-760	
-Kristiansen 1998	Scandinavia	Period VI	-750	-700	-520	
+reference,spatial_context,unit_name,start_date_pre,start_date,end_date,end_date_post
+Reinecke et al,Central Europe,Bz A1,,-2150,-2000,
+Reinecke et al,Central Europe,Bz A2,,-2000,-1580,
+Reinecke et al,Central Europe,Bz B,,-1580,-1480,
+Reinecke et al,Central Europe,Bz C1,,-1480,-1420,
+Reinecke et al,Central Europe,Bz C2,,-1420,-1320,
+Reinecke et al,Central Europe,Bz D,,-1320,-1200,
+Reinecke et al,Central Europe,Ha A1,,-1200,-1120,
+Reinecke et al,Central Europe,Ha A2,,-1120,-1020,
+Reinecke et al,Central Europe,Ha B1,,-1020,-920,
+Reinecke et al,Central Europe,Ha B2/3,,-920,-800,
+Hatt,Central/Eastern France,Br. ancien I,,-2150,-1950,
+Hatt,Central/Eastern France,Br. ancien II,,-1950,-1780,
+Hatt,Central/Eastern France,Br. ancien III,,-1780,-1580,
+Hatt,Central/Eastern France,Br. moyen I,,-1580,-1450,
+Hatt,Central/Eastern France,Br. moyen II,,-1450,-1380,
+Hatt,Central/Eastern France,Br. moyen III,,-1380,-1300,
+Hatt,Central/Eastern France,Br. final I,,-1300,-1200,
+Hatt,Central/Eastern France,Br. final IIa,,-1200,-1120,
+Hatt,Central/Eastern France,Br. final IIb,,-1120,-1020,
+Hatt,Central/Eastern France,Br. final IIIa,,-1020,-950,
+Hatt,Central/Eastern France,Br. final IIIb,,-950,-800,
+Needham,Britain,Period 1,,-2450,-2200,-2150
+Needham,Britain,Period 2,-2200,-2150,-1950,
+Needham,Britain,Period 3 (Wessex I),,-1950,-1750,-1700
+Needham,Britain,Period 4 (Wessex II),-1750,-1700,-1550,-1500
+Needham,Britain,Period 5,-1550,-1500,-1140,-1100
+Needham,Britain,Period 6,-1140,-1100,-950,-920
+Needham,Britain,Period 7,-950,-920,-780,
