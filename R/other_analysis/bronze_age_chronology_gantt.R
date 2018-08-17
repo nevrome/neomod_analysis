@@ -7,6 +7,22 @@ chronology %<>% dplyr::mutate(
   end_date = replace(end_date, is.na(end_date), Inf), 
   label_pos = (start_date + end_date) / 2, 
   unit_name = factor(as.factor(unit_name), levels = unique(as.factor(unit_name)[order(start_date)])),
+  context_general = factor(as.factor(context_general), levels = c(
+    "Central Europe",
+    "France",
+    "Scandinavia",
+    "Netherlands", 
+    "Belgium",
+    "Britain"
+  )),
+  unit_general = factor(as.factor(unit_general), levels = c(
+    "Neolithic",
+    "Chalcolithic",
+    "Early Bronze Age",
+    "Middle Bronze Age", 
+    "Late Bronze Age",
+    "Iron Age"
+  )),
   sub_context = as.factor(sub_context)
   # sub_context = factor(as.factor(sub_context), levels = rev(c(
   #  "Britain", "France", "Scandinavia", "Central Europe", "North and central Italy", "Spain"
@@ -107,13 +123,16 @@ hu <- ggplot() +
   theme(
     legend.position = "bottom",
     legend.title = element_blank(),
-    legend.text = element_text(size = 10),
+    legend.text = element_text(size = 12),
     strip.text.x = element_text(size = 10),
     panel.grid.major.y = element_line(colour = "black", size = 0.3),
     axis.text = element_text(size = 10),
-    axis.title = element_text(size = 15)
+    axis.title = element_text(size = 15),
+    legend.spacing.x = unit(.3, 'cm')
   ) +
-  guides(color = guide_legend(override.aes = list(size = 7)))
+  guides(
+    color = guide_legend(nrow = 1, override.aes = list(size = 8))
+  )
 
 hu %>%
   ggsave(
