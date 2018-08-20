@@ -15,6 +15,9 @@ schnu <- regions_grid %>%
     breaks = c(-2200, -2000, -1500, -1000, -800), 
     limits = c(-2500, -800)
   ) +
+  scale_y_continuous(
+    limits = c(0, 2)
+  ) +
   theme_bw() +
   scale_color_manual(
     guide = FALSE,
