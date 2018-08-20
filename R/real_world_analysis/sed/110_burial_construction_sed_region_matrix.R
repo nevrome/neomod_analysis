@@ -16,11 +16,15 @@ hu <- regions_grid %>%
   ) +
   facet_grid(
     regionA ~ regionB,
-    switch = "y"
+    switch = "y",
+    labeller = label_wrap_gen()
   ) +
   scale_x_continuous(
     breaks = c(-2000, -1500, -1000), 
     limits = c(-2200, -800)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 2)
   ) +
   theme_bw() +
   scale_color_manual(
@@ -42,7 +46,7 @@ hu <- regions_grid %>%
     axis.title = element_text(size = 15),
     strip.text = element_text(size = 9)
   ) +
-  ylab("Sqared Euclidian Distance") +
+  ylab("Squared Euclidian Distance") +
   xlab("Time")
 
 hu %>%
