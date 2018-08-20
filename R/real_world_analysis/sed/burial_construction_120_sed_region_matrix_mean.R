@@ -10,7 +10,7 @@ regions_grid_mean <- regions_grid %>%
 
 regions_grid_mean$regionB <- forcats::fct_rev(regions_grid_mean$regionB)
 
-save(regions_grid_mean, file = "data_analysis/regions_mean_sed")
+save(regions_grid_mean, file = "data_analysis/regions_mean_sed_burial_construction.RData")
 
 kur <- regions_grid_mean %>%
   ggplot() +
