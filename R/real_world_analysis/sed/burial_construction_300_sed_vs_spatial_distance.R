@@ -77,7 +77,7 @@ plu <- ggplot(sed_spatial_distance) +
 
 plu %>%
   ggsave(
-		"../neomod_datapool/plots/sed/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
+    "figures_plots/sed/squared_euclidian_distance_vs_spatial_distance_burial_construction.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
