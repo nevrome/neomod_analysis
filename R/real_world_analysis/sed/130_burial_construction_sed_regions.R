@@ -38,7 +38,7 @@ schnu <- regions_grid %>%
     legend.title = element_text(size = 15),
     legend.text = element_text(size = 15)
   ) +
-  ylab("Sqared Euclidian Distance") +
+  ylab("Squared Euclidian Distance") +
   xlab("Time")
 
 

@@ -86,7 +86,7 @@ hu <- regions_grid %>%
     axis.title = element_text(size = 15),
     strip.text = element_text(size = 9)
   ) +
-  ylab("Sqared Euclidian Distance") +
+  ylab("Squared Euclidian Distance") +
   xlab("Time")
 
 hu %>%
