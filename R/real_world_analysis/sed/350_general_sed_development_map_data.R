@@ -38,10 +38,10 @@ distance_lines <- distance %>%
   ) %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
-    x_a = st_coordinates(geometry_regionA)[,1],
-    y_a = st_coordinates(geometry_regionA)[,2],
-    x_b = st_coordinates(geometry_regionB)[,1],
-    y_b = st_coordinates(geometry_regionB)[,2]
+    x_a = sf::st_coordinates(geometry_regionA)[,1],
+    y_a = sf::st_coordinates(geometry_regionA)[,2],
+    x_b = sf::st_coordinates(geometry_regionB)[,1],
+    y_b = sf::st_coordinates(geometry_regionB)[,2]
   ) %>%
   dplyr::ungroup() %>%
   dplyr::select(
