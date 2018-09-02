@@ -2,19 +2,7 @@ library(magrittr)
 
 #### setup settings grid ####
 
-load("data_analysis/start_proportion_burial_type.RData")
-load("data_analysis/start_proportion_burial_construction.RData")
-load("data_analysis/distance_matrix_spatial.RData")
-
-start_proportion_5050 <- structure(
-  list(
-    idea_1 = c(.5, .5, .5, .5, .5, .5, .5, .5), 
-    idea_2 = c(.5, .5, .5, .5, .5, .5, .5, .5)), 
-  class = "data.frame", 
-  row.names = c(
-    "Southeastern Central Europe", "Poland", "Southern Germany", "Northeastern France", 
-    "Northern Germany", "Southern Scandinavia", "Benelux", "England"))
-
+# define factor
 region_factor_levels <- c(
   "Southeastern Central Europe",
   "Poland",
@@ -25,6 +13,24 @@ region_factor_levels <- c(
   "Benelux",
   "England"
 )
+
+# starting positions
+load("data_analysis/start_proportion_burial_type.RData")
+load("data_analysis/start_proportion_burial_construction.RData")
+start_proportion_5050 <- structure(
+  list(
+    idea_1 = c(.5, .5, .5, .5, .5, .5, .5, .5), 
+    idea_2 = c(.5, .5, .5, .5, .5, .5, .5, .5)), 
+  class = "data.frame", 
+  row.names = c(
+    "Southeastern Central Europe", "Poland", "Southern Germany", "Northeastern France", 
+    "Northern Germany", "Southern Scandinavia", "Benelux", "England"))
+
+# distance matrizes
+load("data_analysis/distance_matrix_spatial.RData")
+load("data_analysis/distance_matrix_burial_type.RData")
+load("data_analysis/distance_matrix_burial_construction.RData")
+distance_matrix_equal <- distance_matrix_spatial %>% `[<-`(1) %>% `diag<-`(0)
 
 # create models_grid data.frame
 models_grid <- expand.grid(
@@ -50,24 +56,24 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "Southeastern Central Europe" = function(t) {30},
-      "Poland" =                      function(t) {30},
-      "Southern Germany" =            function(t) {30},
-      "Northeastern France" =         function(t) {30},
-      "Northern Germany" =            function(t) {30},
-      "Southern Scandinavia" =        function(t) {30},
-      "Benelux" =                     function(t) {30},
-      "England" =                     function(t) {30}
+      "Southeastern Central Europe" = function(t) {10},
+      "Poland" =                      function(t) {10},
+      "Southern Germany" =            function(t) {10},
+      "Northeastern France" =         function(t) {10},
+      "Northern Germany" =            function(t) {10},
+      "Southern Scandinavia" =        function(t) {10},
+      "Benelux" =                     function(t) {10},
+      "England" =                     function(t) {10}
     ),
     list(
-      "Southeastern Central Europe" = function(t) {100},
-      "Poland" =                      function(t) {100},
-      "Southern Germany" =            function(t) {100},
-      "Northeastern France" =         function(t) {100},
-      "Northern Germany" =            function(t) {100},
-      "Southern Scandinavia" =        function(t) {100},
-      "Benelux" =                     function(t) {100},
-      "England" =                     function(t) {100}
+      "Southeastern Central Europe" = function(t) {50},
+      "Poland" =                      function(t) {50},
+      "Southern Germany" =            function(t) {50},
+      "Northeastern France" =         function(t) {50},
+      "Northern Germany" =            function(t) {50},
+      "Southern Scandinavia" =        function(t) {50},
+      "Benelux" =                     function(t) {50},
+      "England" =                     function(t) {50}
     ),
     list(
       "Southeastern Central Europe" = function(t) {300},
@@ -91,7 +97,10 @@ models_grid <- expand.grid(
     30
   ),
   unit_interaction_matrix = list(
-    distance_matrix_spatial
+    distance_matrix_equal,
+    distance_matrix_spatial,
+    distance_matrix_burial_type,
+    distance_matrix_burial_construction
   ),
   cross_unit_proportion_child_of = c(
     0.0001, 0.001, 0.01
@@ -112,7 +121,7 @@ models_grid <- expand.grid(
   start_distribution = list(
     start_proportion_5050,
     start_proportion_burial_type,
-    burial_construction
+    start_proportion_burial_construction
   ), 
   strength = list(
     c(1, 1) 
@@ -127,7 +136,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(100) %>%
+  tidyr::uncount(10) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
