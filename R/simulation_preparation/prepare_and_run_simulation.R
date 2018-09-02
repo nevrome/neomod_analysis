@@ -1,3 +1,5 @@
+library(magrittr)
+
 #### setup settings grid ####
 
 load("data_analysis/start_proportion_burial_type.RData")
@@ -47,14 +49,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "Southeastern Central Europe" =  function(t) {25},
-      "Poland" =               function(t) {25},
-      "Southern Germany" =     function(t) {25},
-      "Northeastern France" =     function(t) {25},
-      "Northern Germany" =     function(t) {25},
-      "Southern Scandinavia" = function(t) {25},
-      "Benelux" =              function(t) {25},
-      "England" =              function(t) {25}
+      "Southeastern Central Europe" =  function(t) {300},
+      "Poland" =               function(t) {300},
+      "Southern Germany" =     function(t) {300},
+      "Northeastern France" =     function(t) {300},
+      "Northern Germany" =     function(t) {300},
+      "Southern Scandinavia" = function(t) {300},
+      "Benelux" =              function(t) {300},
+      "England" =              function(t) {300}
     )
   ),
   age_distribution_functions = c(
@@ -65,7 +67,7 @@ models_grid <- expand.grid(
   ),
   # relations settings
   amounts_friends = list(
-    5
+    30
   ),
   unit_interaction_matrix = list(
     distance_matrix_spatial
@@ -98,7 +100,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(48) %>%
+  tidyr::uncount(6) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )

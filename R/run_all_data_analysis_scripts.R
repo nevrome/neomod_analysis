@@ -1,3 +1,5 @@
+library(magrittr)
+
 lapply(
   c(
     "./R/real_world_data_preparation",
