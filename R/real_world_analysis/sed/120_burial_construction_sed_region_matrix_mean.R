@@ -8,9 +8,18 @@ regions_grid_mean <- regions_grid %>%
     mean_sed = mean(sed, na.rm = T)
   )
 
-regions_grid_mean$regionB <- forcats::fct_rev(regions_grid_mean$regionB)
-
 save(regions_grid_mean, file = "data_analysis/regions_mean_sed_burial_construction.RData")
+
+distance_matrix_burial_construction <- regions_grid_mean %>%
+  tidyr::spread(regionA, mean_sed) %>%
+  dplyr::select(
+    -regionB
+  ) %>%
+  as.matrix()
+
+save(distance_matrix_burial_construction, file = "data_analysis/distance_matrix_burial_construction.RData")
+
+regions_grid_mean$regionB <- forcats::fct_rev(regions_grid_mean$regionB)
 
 kur <- regions_grid_mean %>%
   ggplot() +
