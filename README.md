@@ -1,0 +1,1 @@
+Analysis code and plots of my master thesis [*Ein computerbasiertes Cultural Evolution Modell zur Ausbreitungsdynamik europäisch-bronzezeitlicher Bestattungssitten*](https://github.com/nevrome/neomod_textdev).
