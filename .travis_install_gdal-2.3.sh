@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ..
 wget http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz 
 tar -xzf gdal-2.3.1.tar.gz 
 cd gdal-2.3.1
@@ -7,3 +8,4 @@ cd gdal-2.3.1
 make
 sudo make install
 cd ..
+cd neomod_analysis
