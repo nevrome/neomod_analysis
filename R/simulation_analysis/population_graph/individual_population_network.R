@@ -1,4 +1,5 @@
 load("data_simulation/sim1.RData")
+load("data_analysis/region_order.RData")
 
 models_grid$populations[[1]] -> pop
 models_grid$relations[[1]] -> rel
@@ -64,16 +65,7 @@ rel4 <- rel3 %>% dplyr::group_by(
   dplyr::ungroup()
 
 regions_factor <- as.factor(pop_groups$unit)
-pop_groups$unit <- factor(regions_factor, levels = c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-))
+pop_groups$unit <- factor(regions_factor, levels = region_order)
 
 library(ggplot2)
 pu <- ggplot() +

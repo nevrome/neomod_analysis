@@ -1,16 +1,8 @@
 devel_table <- readr::read_csv("data_manually_prepared/burial_traditions_pseudo.csv")
+load("data_analysis/region_order.RData")
 
 regions_factor <- as.factor(devel_table$region)
-devel_table$region<- factor(regions_factor, levels = c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-))
+devel_table$region<- factor(regions_factor, levels = region_order)
 
 dt2 <- devel_table %>%
   tidyr::gather(idea, strength, cremation, inhumation, mound, flat) %>%

@@ -114,19 +114,11 @@ txtstorage::store("size bronze17", nrow(bronze17), storage_file)
 
 #### regions ####
 load("data_analysis/regions.RData")
+load("data_analysis/region_order.RData")
 
 regions_graves_amounts <- regions %>% sf::st_set_geometry(NULL) %>%
   dplyr::mutate(
-    region_name = factor(regions$NAME, levels = c(
-      "Southeastern Central Europe",
-      "Poland",
-      "Southern Germany",
-      "Northeastern France",
-      "Northern Germany",
-      "Southern Scandinavia",
-      "Benelux",
-      "England"
-    ))
+    region_name = factor(regions$NAME, levels = region_order)
   ) %>%
   dplyr::arrange(region_name) %$%
   paste(paste0("*", region_name, "*"), paste0("(", number_of_graves, ")"), collapse = ", ", sep = " ")
