@@ -1,5 +1,7 @@
 load("data_analysis/mantel_sed_spatial_burial_construction.RData")
 load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
+load("data_analysis/region_order.RData")
+load("data_analysis/region_colors.RData")
 
 library(ggplot2)
 plu <- ggplot(sed_spatial_distance) +
@@ -39,37 +41,12 @@ plu <- ggplot(sed_spatial_distance) +
   ) +
   scale_color_manual(
     values = c(
-      "Southeastern Central Europe" = "#999999", 
-      "Poland" = "#ffe500", 
-      "Southern Germany" = "#56B4E9", 
-      "Northeastern France" = "#009E73", 
-      "Northern Germany" = "#000000", 
-      "Southern Scandinavia" = "#0072B2", 
-      "Benelux" = "#D55E00", 
-      "England" = "#CC79A7",
+      region_colors,
       "h0canberejected" = "red",
       "h0cannotberejected" = "black"
     ),
-    breaks = c(
-      "Southeastern Central Europe",
-      "Poland", 
-      "Southern Germany", 
-      "Northeastern France", 
-      "Northern Germany", 
-      "Southern Scandinavia", 
-      "Benelux", 
-      "England"
-    ),
-    labels = c(
-      "Southeastern Central Europe",
-      "Poland", 
-      "Southern Germany", 
-      "Northeastern France", 
-      "Northern Germany", 
-      "Southern Scandinavia", 
-      "Benelux", 
-      "England"
-    )
+    breaks = region_order,
+    labels = region_order
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +

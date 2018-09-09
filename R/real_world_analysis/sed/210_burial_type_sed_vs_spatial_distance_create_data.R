@@ -1,5 +1,6 @@
 load("data_analysis/squared_euclidian_distance_over_time_burial_type.RData")
 load("data_analysis/distance_matrix_spatial_long.RData")
+load("data_analysis/region_order.RData")
 
 test <- regions_grid %>%
   dplyr::mutate(
@@ -51,27 +52,9 @@ sed_spatial_distance <- test %>% dplyr::left_join(
   )
 
 regions_factorA <- as.factor(sed_spatial_distance$regionA)
-sed_spatial_distance$regionA <- factor(regions_factorA, levels = c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-))
+sed_spatial_distance$regionA <- factor(regions_factorA, levels = region_order)
 
 regions_factorB <- as.factor(sed_spatial_distance$regionB)
-sed_spatial_distance$regionB <- factor(regions_factorB, levels = c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-))
+sed_spatial_distance$regionB <- factor(regions_factorB, levels = region_order)
 
 save(sed_spatial_distance, file = "data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
