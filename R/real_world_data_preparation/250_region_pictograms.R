@@ -2,35 +2,16 @@ load("data_analysis/regions.RData")
 load("data_analysis/extended_area.RData")
 extended_area <- extended_area$geometry
 
-#### colour #### 
+#### plot #### 
 
-regions_ordered <- c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-)
+load("data_analysis/region_order.RData")
+load("data_analysis/region_colors.RData")
 
 path = "figures_plots/region_pictograms_colour/"
 
-colour_vector <- c(
-  "Southeastern Central Europe" = "#999999", 
-  "Poland" = "#ffe500", 
-  "Southern Germany" = "#56B4E9", 
-  "Northeastern France" = "#009E73", 
-  "Northern Germany" = "#000000", 
-  "Southern Scandinavia" = "#0072B2", 
-  "Benelux" = "#D55E00", 
-  "England" = "#CC79A7"
-)
-
 for (i in 1:nrow(regions)) {
   
-  one_region <- regions[regions$NAME == regions_ordered[i], ]
+  one_region <- regions[regions$NAME == regions_order[i], ]
   one_region_buffer <- one_region %>%
     sf::st_buffer(400000)
   
@@ -53,8 +34,8 @@ for (i in 1:nrow(regions)) {
       yaxt = 'n',
       bg = NA)
   plot(extended_area, border = NA , col = "grey85", lwd = 2)
-  plot(one_region_buffer_geom, border = NA, col = scales::alpha(colour_vector[i], 0.4), add = TRUE)
-  plot(one_region_geom, border = NA, col = colour_vector[i], add = TRUE)
+  plot(one_region_buffer_geom, border = NA, col = scales::alpha(region_colors[i], 0.4), add = TRUE)
+  plot(one_region_geom, border = NA, col = region_colors[i], add = TRUE)
   dev.off()
   
 }

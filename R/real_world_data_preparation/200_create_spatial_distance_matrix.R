@@ -49,26 +49,17 @@ distance_matrix_spatial_long_half <- distance_matrix_spatial_long[match(unique(i
 
 #### define factor order ####
 
-regions_order <- c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-)
+load("data_analysis/region_order.RData")
 
 regions_factorA <- as.factor(distance_matrix_spatial_long$regionA)
-distance_matrix_spatial_long$regionA <- factor(regions_factorA, levels = regions_order)
+distance_matrix_spatial_long$regionA <- factor(regions_factorA, levels = region_order)
 regions_factorB <- as.factor(distance_matrix_spatial_long$regionB)
-distance_matrix_spatial_long$regionB <- factor(regions_factorB, levels = regions_order)
+distance_matrix_spatial_long$regionB <- factor(regions_factorB, levels = region_order)
 
 regions_factorA <- as.factor(distance_matrix_spatial_long_half$regionA)
-distance_matrix_spatial_long_half$regionA <- factor(regions_factorA, levels = regions_order)
+distance_matrix_spatial_long_half$regionA <- factor(regions_factorA, levels = region_order)
 regions_factorB <- as.factor(distance_matrix_spatial_long_half$regionB)
-distance_matrix_spatial_long_half$regionB <- factor(regions_factorB, levels = regions_order)
+distance_matrix_spatial_long_half$regionB <- factor(regions_factorB, levels = region_order)
 
 #### transform distance information to wide format ####
 

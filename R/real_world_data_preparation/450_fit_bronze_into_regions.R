@@ -2,6 +2,7 @@
 
 load("data_analysis/regions.RData")
 load("data_analysis/bronze2.RData")
+load("data_analysis/region_order.RData")
 
 # transform to sf
 bronze_sf <- bronze2 %>%
@@ -20,16 +21,7 @@ region_index_of_date <- bronze_sf %>% sf::st_intersects(regions) %>%
 dates_probability_per_year_and_region_list <- bronze2 %>%
   # add region information to bronze2
   dplyr::mutate(
-    region_name = factor(regions$NAME[region_index_of_date], levels = c(
-      "Southeastern Central Europe",
-      "Poland",
-      "Southern Germany",
-      "Northeastern France",
-      "Northern Germany",
-      "Southern Scandinavia",
-      "Benelux",
-      "England"
-    ))
+    region_name = factor(regions$NAME[region_index_of_date], levels = region_order)
   ) %>% 
   # remove entries without (outside of) regions
   dplyr::filter(
