@@ -2,6 +2,8 @@ list.files("data_geo", pattern = "*.RData", full.names = T) %>% lapply(load, .Gl
 research_area <- sf::st_read("data_manually_prepared/research_area.shp")
 load("data_analysis/bronze1.RData")
 load("data_analysis/regions.RData")
+load("data_analysis/region_order.RData")
+load("data_analysis/region_colors.RData")
 
 regions_name_points <- regions %>%
   dplyr::mutate(
@@ -73,35 +75,10 @@ hu <- ggplot() +
       "mound" = "#CC79A7",
       "flat" = "#009E73",
       "unknown" = "darkgrey",
-      "Southeastern Central Europe" = "#999999", 
-      "Poland" = "#ffe500", 
-      "Southern Germany" = "#56B4E9", 
-      "Northeastern France" = "#009E73", 
-      "Northern Germany" = "#000000", 
-      "Southern Scandinavia" = "#0072B2", 
-      "Benelux" = "#D55E00", 
-      "England" = "#CC79A7"
+      region_colors
     ),
-    breaks = c(
-      "Southeastern Central Europe",
-      "Poland", 
-      "Southern Germany", 
-      "Northeastern France", 
-      "Northern Germany", 
-      "Southern Scandinavia", 
-      "Benelux", 
-      "England"
-    ),
-    labels = c(
-      "Southeastern Central Europe",
-      "Poland", 
-      "Southern Germany", 
-      "Northeastern France", 
-      "Northern Germany", 
-      "Southern Scandinavia", 
-      "Benelux", 
-      "England"
-    )
+    breaks = region_order,
+    labels = region_order
   ) +
   theme(
     plot.title = element_text(size = 30, face = "bold"),
