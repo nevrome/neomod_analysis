@@ -9,7 +9,11 @@ before_install:
     - # install gdal from source
     - #if gdalinfo --version | grep "GDAL 2.2."; then chmod +x .travis_install_gdal-2.3.sh && ./.travis_install_gdal-2.3.sh; fi
     - chmod +x .travis_install_gdal-2.3.sh && ./.travis_install_gdal-2.3.sh
-
+    - # use c++11 for package compilation
+    - rm ~/.R/Makevars
+    - echo "CC=gcc-4.8" >> ~/.R/Makevars
+    - echo "CXX=g++-4.8 -std=gnu++11" >> ~/.R/Makevars
+    - echo "PKG_CXXFLAGS= -stdlib=libc++ -std=c++11" >> ~/.R/Makevars
 
 script:
   - Rscript R/run_all_data_analysis_scripts.R  
