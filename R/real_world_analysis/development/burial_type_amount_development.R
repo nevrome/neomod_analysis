@@ -1,18 +1,10 @@
 load("data_analysis/development_amount_burial_type.RData")
+load("data_analysis/region_order.RData")
 
 amount_devel <- amount_development_burial_type
 
 regions_factor <- as.factor(amount_devel$region_name)
-amount_devel$region_name <- factor(regions_factor, levels = c(
-  "Southeastern Central Europe",
-  "Poland",
-  "Southern Germany",
-  "Northeastern France",
-  "Northern Germany",
-  "Southern Scandinavia",
-  "Benelux",
-  "England"
-))
+amount_devel$region_name <- factor(regions_factor, levels = region_order)
 
 idea_factor <- as.factor(amount_devel$idea)
 amount_devel$idea <- factor(idea_factor, levels = rev(levels(idea_factor)))
