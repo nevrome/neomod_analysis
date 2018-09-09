@@ -7,13 +7,8 @@ before_install:
     - sudo apt-get --yes --force-yes update -qq
     - sudo apt-get install --yes udunits-bin libproj-dev libgeos-dev libgdal-dev libgdal1-dev libudunits2-dev
     - # install gdal from source
-    - wget http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz 
-    - tar -xzf gdal-2.3.1.tar.gz 
-    - cd gdal-2.3.1
-    - ./configure
-    - make
-    - sudo make install
-    - cd ..
+    - if gdalinfo --version | grep "GDAL 2.2."; then chmod +x .travis_install_gdal-2.3.sh && ./.travis_install_gdal-2.3.sh; fi
+
 
 script:
   - Rscript R/run_all_data_analysis_scripts.R  
