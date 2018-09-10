@@ -38,6 +38,7 @@ data_analysis/*.RData
 data_simulation/*.RData
 data_simulation/gluesless_input_output/*.txt
 data_simulation/gluesless_input_output/*.paj
+data_simulation/gluesless_input_output/*.csv
 data_geo/*.RData
 development_movie/*.mp4
 development_movie/*.gif
