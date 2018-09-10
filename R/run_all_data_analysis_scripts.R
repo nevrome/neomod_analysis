@@ -13,7 +13,7 @@ lapply(
     pbapply::pblapply(
       list.files(x, full.names = TRUE),
       function(y) {
-        message("\n\n###### ", y, " ######\n\n")
+        message("\n###### ", y, " ######\n")
         source(y)
         rm(list = ls())
       }
