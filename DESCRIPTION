@@ -36,4 +36,4 @@ Imports:
   tseries (>= 0.10-45),
   vars (>= 1.5-3),
   vegan (>= 2.5-2)
-remotes: nevrome/txtstorage
+remotes: nevrome/txtstorage, ISAAKiel/c14bazAAR
