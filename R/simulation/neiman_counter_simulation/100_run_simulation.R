@@ -24,7 +24,7 @@ distance_matrix_equal <- distance_matrix_spatial %>% `[<-`(1) %>% `diag<-`(0)
 models_grid <- expand.grid(
   # general settings
   timeframe = list(
-    -2200:-800
+    1:1400
   ),
   # population settings  
   unit_amount = c(
@@ -44,26 +44,6 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "1" = function(t) {1},
-      "2" = function(t) {1},
-      "3" = function(t) {1},
-      "4" = function(t) {1},
-      "5" = function(t) {1},
-      "6" = function(t) {1},
-      "7" = function(t) {1},
-      "8" = function(t) {1}
-    ),
-    list(
-      "1" = function(t) {5},
-      "2" = function(t) {5},
-      "3" = function(t) {5},
-      "4" = function(t) {5},
-      "5" = function(t) {5},
-      "6" = function(t) {5},
-      "7" = function(t) {5},
-      "8" = function(t) {5}
-    ),
-    list(
       "1" = function(t) {30},
       "2" = function(t) {30},
       "3" = function(t) {30},
@@ -72,6 +52,26 @@ models_grid <- expand.grid(
       "6" = function(t) {30},
       "7" = function(t) {30},
       "8" = function(t) {30}
+    ),
+    list(
+      "1" = function(t) {50},
+      "2" = function(t) {50},
+      "3" = function(t) {50},
+      "4" = function(t) {50},
+      "5" = function(t) {50},
+      "6" = function(t) {50},
+      "7" = function(t) {50},
+      "8" = function(t) {50}
+    ),
+    list(
+      "1" = function(t) {10},
+      "2" = function(t) {10},
+      "3" = function(t) {10},
+      "4" = function(t) {10},
+      "5" = function(t) {10},
+      "6" = function(t) {10},
+      "7" = function(t) {10},
+      "8" = function(t) {10}
     )
   ),
   age_distribution_functions = c(
@@ -124,8 +124,10 @@ models_grid <- expand.grid(
     model_id = 1:nrow(.)
   )
 
+save(models_grid, file = "data_simulation/neiman_counter_simulation.RData")
+
 #### run simulation ####
 
-data_path <- "data_simulation/gluesless_input_output"
+data_path <- "data_simulation/neiman_counter_simulation"
 popgenerator::run_simulation(models_grid, data_path)
 
