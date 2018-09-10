@@ -11,7 +11,7 @@ path = "figures_plots/region_pictograms_colour/"
 
 for (i in 1:nrow(regions)) {
   
-  one_region <- regions[regions$NAME == regions_order[i], ]
+  one_region <- regions[regions$NAME == region_order[i], ]
   one_region_buffer <- one_region %>%
     sf::st_buffer(400000)
   
