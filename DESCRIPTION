@@ -36,6 +36,6 @@ Imports:
   tseries (>= 0.10-45),
   vars (>= 1.5-3),
   vegan (>= 2.5-2)
-Remotes: github::nevrome/txtstorage, 
-  github::ISAAKiel/c14bazAAR
+Remotes: github::ISAAKiel/c14bazAAR, github::nevrome/txtstorage 
+  
 
