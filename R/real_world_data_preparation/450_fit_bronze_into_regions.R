@@ -8,7 +8,7 @@ load("data_analysis/region_order.RData")
 bronze_sf <- bronze2 %>%
   sf::st_as_sf(
     coords = c("lon", "lat"), crs = 4326
-  ) %>% sf::st_transform(102013)
+  ) %>% sf::st_transform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
 
 
 

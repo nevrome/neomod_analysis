@@ -173,7 +173,7 @@ load("data_analysis/research_area.RData")
 # transform data to sf and the correct CRS
 bronze12 <- bronze1 %>% sf::st_as_sf(coords = c("lon", "lat"))
 sf::st_crs(bronze12) <- 4326
-bronze12 %<>% sf::st_transform(102013)
+bronze12 %<>% sf::st_transform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
 
 # get dates within research area
 bronze15 <- sf::st_intersection(bronze12, research_area) %>%

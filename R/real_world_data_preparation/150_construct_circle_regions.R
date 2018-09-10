@@ -15,7 +15,7 @@ region_circles %<>% sf::st_buffer(dist = 240000)
 load("data_analysis/bronze17.RData")
 bronze17 %<>% sf::st_as_sf(coords = c("lon", "lat"))
 sf::st_crs(bronze17) <- 4326
-bronze17 %<>% sf::st_transform(102013)
+bronze17 %<>% sf::st_transform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
 gu <- sf::st_intersection(bronze17, research_area)
 
 # library(ggplot2)

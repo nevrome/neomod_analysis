@@ -39,7 +39,7 @@ hu <- ggplot() +
   theme_bw() +
   coord_sf(
     xlim = xlimit, ylim = ylimit,
-    crs = st_crs(102013)
+    crs = st_crs("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
   ) + 
   scale_shape_manual(
     values = c(

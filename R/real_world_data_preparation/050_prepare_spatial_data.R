@@ -33,7 +33,7 @@ save(lakes, file = "data_geo/lakes.RData")
 
 research_area <- sf::st_read(
   "data_manually_prepared/research_area.shp"
-) %>% sf::st_transform(102013)
+) %>% sf::st_transform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
 save(research_area, file = "data_analysis/research_area.RData")
 
 
@@ -45,7 +45,7 @@ save(research_area, file = "data_analysis/research_area.RData")
 
 land_outline_small <- land_outline %>%
   sf::st_crop(xmin = -20, ymin = 35, xmax = 35, ymax = 65) %>%
-  sf::st_transform(102013)
+  sf::st_transform("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
 area <- sf::st_intersection(sf::st_buffer(land_outline_small, 0), research_area)
 save(area, file = "data_analysis/area.RData")
 

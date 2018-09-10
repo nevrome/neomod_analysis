@@ -19,7 +19,7 @@ bronze1_sf <- bronze1 %>% sf::st_as_sf(
 library(ggplot2)
 library(sf)
 
-ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs(102013)))
+ex <- raster::extent(research_area %>% sf::st_transform(sf::st_crs("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")))
 
 xlimit <- c(ex[1], ex[2])
 ylimit <- c(ex[3], ex[4])
@@ -60,7 +60,7 @@ hu <- ggplot() +
   theme_bw() +
   coord_sf(
     xlim = xlimit, ylim = ylimit,
-    crs = st_crs(102013)
+    crs = st_crs("+proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs")
   ) + 
   scale_shape_manual(
     values = c(
