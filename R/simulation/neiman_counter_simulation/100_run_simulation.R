@@ -44,14 +44,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "1" = function(t) {300},
-      "2" = function(t) {300},
-      "3" = function(t) {300},
-      "4" = function(t) {300},
-      "5" = function(t) {300},
-      "6" = function(t) {300},
-      "7" = function(t) {300},
-      "8" = function(t) {300}
+      "1" = function(t) {10},
+      "2" = function(t) {10},
+      "3" = function(t) {10},
+      "4" = function(t) {10},
+      "5" = function(t) {10},
+      "6" = function(t) {10},
+      "7" = function(t) {10},
+      "8" = function(t) {10}
     ),
     list(
       "1" = function(t) {50},
@@ -64,14 +64,14 @@ models_grid <- expand.grid(
       "8" = function(t) {50}
     ),
     list(
-      "1" = function(t) {10},
-      "2" = function(t) {10},
-      "3" = function(t) {10},
-      "4" = function(t) {10},
-      "5" = function(t) {10},
-      "6" = function(t) {10},
-      "7" = function(t) {10},
-      "8" = function(t) {10}
+      "1" = function(t) {300},
+      "2" = function(t) {300},
+      "3" = function(t) {300},
+      "4" = function(t) {300},
+      "5" = function(t) {300},
+      "6" = function(t) {300},
+      "7" = function(t) {300},
+      "8" = function(t) {300}
     )
   ),
   age_distribution_functions = c(
@@ -82,7 +82,7 @@ models_grid <- expand.grid(
   ),
   # relations settings
   amounts_friends = c(
-    30
+    20
   ),
   unit_interaction_matrix = list(
     distance_matrix_equal
@@ -91,7 +91,7 @@ models_grid <- expand.grid(
     0.0001, 0.001, 0.01
   ),
   cross_unit_proportion_friend = c(
-    0.01, 0.01, 0.1 
+    0.001, 0.01, 0.1
   ),
   weight_child_of = list(
     50
