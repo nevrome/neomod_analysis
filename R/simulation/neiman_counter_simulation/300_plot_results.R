@@ -8,10 +8,22 @@ models <- pbapply::pblapply(
 models_groups <- do.call(rbind, models) %>%
   base::split(.$model_group)
 
+load("data_simulation/neiman_counter_simulation.RData")
+
 library(ggplot2)
 plots <- cowplot::plot_grid(
   plotlist = lapply(models_groups, plot_by_group),
-  labels = "AUTO", 
+  labels = models_grid %>% base::split(.$model_group) %>%
+    sapply(function(x){
+      rps <- x$unit_size_functions[[1]][[1]](0)
+      cuiv <- x$cross_unit_proportion_child_of[1]
+      cuih <- x$cross_unit_proportion_friend[1]
+      paste0(
+        LETTERS[x$model_group[1]], " - ", rps, ", v:", format(cuiv, scientific = FALSE), ", h:", cuih)
+    }),
+  label_x = 0,
+  hjust = 0,
+  label_size = 10,
   ncol = 3,
   nrow = 3,
   align = "v"
