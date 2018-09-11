@@ -44,14 +44,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "1" = function(t) {30},
-      "2" = function(t) {30},
-      "3" = function(t) {30},
-      "4" = function(t) {30},
-      "5" = function(t) {30},
-      "6" = function(t) {30},
-      "7" = function(t) {30},
-      "8" = function(t) {30}
+      "1" = function(t) {300},
+      "2" = function(t) {300},
+      "3" = function(t) {300},
+      "4" = function(t) {300},
+      "5" = function(t) {300},
+      "6" = function(t) {300},
+      "7" = function(t) {300},
+      "8" = function(t) {300}
     ),
     list(
       "1" = function(t) {50},
