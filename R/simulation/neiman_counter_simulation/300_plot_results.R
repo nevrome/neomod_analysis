@@ -12,7 +12,8 @@ load("data_simulation/neiman_counter_simulation.RData")
 
 library(ggplot2)
 plots <- cowplot::plot_grid(
-  plotlist = lapply(models_groups, plot_by_group),
+  plotlist = lapply(models_groups, plot_by_group) %>% 
+    matrix(., 3, 5) %>% t %>% c(),
   labels = models_grid %>% base::split(.$model_group) %>%
     sapply(function(x){
       rps <- x$unit_size_functions[[1]][[1]](0)
@@ -20,11 +21,12 @@ plots <- cowplot::plot_grid(
       cuih <- x$cross_unit_proportion_friend[1]
       paste0(
         LETTERS[x$model_group[1]], " - ", rps, ", v:", format(cuiv, scientific = FALSE), ", h:", cuih)
-    }),
+    }) %>% 
+    matrix(., 3, 5) %>% t %>% c(),
   label_x = 0,
   hjust = 0,
   label_size = 10,
-  ncol = 3,
+  ncol = 5,
   nrow = 3,
   align = "v"
 )

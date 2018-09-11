@@ -64,14 +64,14 @@ models_grid <- expand.grid(
       "8" = function(t) {50}
     ),
     list(
-      "1" = function(t) {300},
-      "2" = function(t) {300},
-      "3" = function(t) {300},
-      "4" = function(t) {300},
-      "5" = function(t) {300},
-      "6" = function(t) {300},
-      "7" = function(t) {300},
-      "8" = function(t) {300}
+      "1" = function(t) {200},
+      "2" = function(t) {200},
+      "3" = function(t) {200},
+      "4" = function(t) {200},
+      "5" = function(t) {200},
+      "6" = function(t) {200},
+      "7" = function(t) {200},
+      "8" = function(t) {200}
     )
   ),
   age_distribution_functions = c(
@@ -82,16 +82,16 @@ models_grid <- expand.grid(
   ),
   # relations settings
   amounts_friends = c(
-    20
+    10
   ),
   unit_interaction_matrix = list(
     distance_matrix_equal
   ),
   cross_unit_proportion_child_of = c(
-    0.0001, 0.001, 0.01
+    0, 0.01, 0.1, 0.5, 1
   ),
   cross_unit_proportion_friend = c(
-    0.001, 0.01, 0.1
+    0, 0.01, 0.1, 0.5, 1
   ),
   weight_child_of = list(
     50
@@ -113,7 +113,7 @@ models_grid <- expand.grid(
 ) %>% tibble::as.tibble() %>%
   # remove unnecessary repetition
   dplyr::filter(
-    10 * cross_unit_proportion_child_of == cross_unit_proportion_friend
+    cross_unit_proportion_child_of == cross_unit_proportion_friend
   ) %>%
   # add relevant model ids
   dplyr::mutate(
