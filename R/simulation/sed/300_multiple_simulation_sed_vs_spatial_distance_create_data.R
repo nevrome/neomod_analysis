@@ -1,7 +1,11 @@
+load("data_analysis/region_order.RData")
 load("data_simulation/sed_simulation_regions_grid.RData")
 load("data_analysis/distance_matrix_spatial_long.RData")
 
 #### half regions_grid -- removal of double entries ####
+
+regions_grid$regionA <- as.character(regions_grid$regionA)
+regions_grid$regionB <- as.character(regions_grid$regionB)
 
 regions_grid_half <- pbapply::pblapply(
   base::split(regions_grid, f = regions_grid$model_group), function(z) { 
@@ -20,6 +24,9 @@ regions_grid_half <- pbapply::pblapply(
       do.call(rbind, .)    
   }) %>%
   do.call(rbind, .)
+
+regions_grid_half$regionA <- factor(regions_grid_half$regionA, levels = region_order)
+regions_grid_half$regionB <- factor(regions_grid_half$regionB, levels = region_order)
 
 #### combine spatial and cultural distance into one data.frame ####
 

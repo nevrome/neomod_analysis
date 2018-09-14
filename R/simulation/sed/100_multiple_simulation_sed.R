@@ -1,3 +1,5 @@
+load("data_analysis/region_order.RData")
+
 ##### read simulation output data #####
 
 models <- pbapply::pblapply(
@@ -60,5 +62,8 @@ regions_grid$sed <- unlist(pbapply::pblapply(
 regions_grid %<>% dplyr::select(
     regionA, regionB, time, sed, model_id, model_group
   )
+
+regions_grid$regionA <- factor(regions_grid$regionA, levels = region_order)
+regions_grid$regionB <- factor(regions_grid$regionB, levels = region_order)
 
 save(regions_grid, file = "data_simulation/sed_simulation_regions_grid.RData")
