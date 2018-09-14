@@ -1,4 +1,6 @@
-load("data_simulation/squared_euclidian_distance_over_time_sim_multiple.RData")
+load("data_simulation/sed_simulation_regions_grid.RData")
+
+##### cut sed regions grid into timeslices ####
 
 modelid_time_regions_grid <- regions_grid %>% dplyr::mutate(
   time = base::cut(
@@ -19,6 +21,8 @@ modelid_time_regions_grid <- regions_grid %>% dplyr::mutate(
     mean_sed = tidyr::replace_na(mean_sed, 0)
   )
 
+#### create list of matrizes from timesliced regions grid ####
+
 distance_matrizes_sed <- lapply(
   base::split(modelid_time_regions_grid, modelid_time_regions_grid$model_id), function(time_regions_grid) {
     lapply(
@@ -37,4 +41,4 @@ distance_matrizes_sed <- lapply(
   }
 )
 
-save(distance_matrizes_sed, file = "data_simulation/distance_matrizes_sed_simulation.RData")
+save(distance_matrizes_sed, file = "data_simulation/sed_regions_timeslices_matrizes.RData")
