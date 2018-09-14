@@ -1,4 +1,4 @@
-load("data_simulation/mantel_sed_spatial_simulation.RData")
+load("data_simulation/sed_simulation_mantel_sed_spatial.RData")
 mantel_simulations <- mantel_test_results
 load("data_analysis/mantel_sed_spatial_burial_type.RData")
 mantel_burial_type <- mantel_test_results
