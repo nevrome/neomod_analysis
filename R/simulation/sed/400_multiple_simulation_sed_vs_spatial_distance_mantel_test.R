@@ -1,5 +1,5 @@
 load("data_analysis/distance_matrix_spatial.RData")
-load("data_simulation/distance_matrizes_sed_simulation.RData")
+load("data_simulation/sed_simulation_regions_timeslices_matrizes.RData")
 
 mantel_test_results <- pbapply::pblapply(
   1:length(distance_matrizes_sed), function(i, x, y, model_id) {
@@ -26,5 +26,5 @@ mantel_test_results <- pbapply::pblapply(
 
 save(
   mantel_test_results, 
-  file = "data_simulation/mantel_sed_spatial_simulation.RData"
+  file = "data_simulation/sed_simulation_mantel_sed_spatial.RData"
 )

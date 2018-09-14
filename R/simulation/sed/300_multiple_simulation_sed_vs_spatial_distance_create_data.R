@@ -50,5 +50,5 @@ sed_spatial_distance <- regions_grid_half %>% dplyr::left_join(
 
 save(
   sed_spatial_distance, 
-  file = "data_simulation/sed_simulation_regions_teimslices_spatial_distance.RData"
+  file = "data_simulation/sed_simulation_regions_timeslices_spatial_distance.RData"
 )

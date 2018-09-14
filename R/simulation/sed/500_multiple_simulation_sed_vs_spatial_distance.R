@@ -1,9 +1,9 @@
-load("data_simulation/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData")
+load("data_simulation/sed_simulation_regions_timeslices_spatial_distance.RData")
 sed_simulation <- sed_spatial_distance
 load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
 sed_burial_type <- sed_spatial_distance %>% dplyr::mutate(context = "burial_type")
 load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_construction.RData")
-sed_burial_construction <-sed_spatial_distance %>% dplyr::mutate(context = "burial_construction")
+sed_burial_construction <- sed_spatial_distance %>% dplyr::mutate(context = "burial_construction")
 
 library(ggplot2)
 plu <- ggplot() +
@@ -62,7 +62,7 @@ plu <- ggplot() +
 
 plu %>%
   ggsave(
-    "../neomod_datapool/plots/sed_simulation/squared_euclidian_distance_vs_spatial_distance_sim_multiple.jpeg",
+    "figures_plots/sed_simulation/squared_euclidian_distance_vs_spatial_distance_sim_multiple.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
