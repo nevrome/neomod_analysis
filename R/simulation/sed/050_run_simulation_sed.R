@@ -69,10 +69,10 @@ models_grid <- expand.grid(
     distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = c(
-    0.02
+    0.01, 0.1
   ),
   cross_unit_proportion_friend = c(
-    0.1
+    0.01, 0.1
   ),
   weight_child_of = list(
     50
@@ -85,27 +85,27 @@ models_grid <- expand.grid(
     c("idea_1", "idea_2")
   ),
   start_distribution = list(
-    start_proportion_5050,
-    start_proportion_burial_type,
-    start_proportion_burial_construction
+    start_proportion_5050
   ), 
   strength = list(
     c(1, 1) 
   ),
   stringsAsFactors = FALSE
 ) %>% tibble::as.tibble() %>%
+  # remove unnecessary repetition
+  dplyr::filter(
+    cross_unit_proportion_child_of == cross_unit_proportion_friend
+  ) %>%
   # add relevant model ids
   dplyr::mutate(
     model_group = c(
-      "equal interaction and equal start",
-      "spatial interaction and equal start",
-      "equal interaction and burial_type start",
-      "spatial interaction and burial_type start",
-      "equal interaction and burial_construction start",
-      "spatial interaction and burial_construction start"
+      "low equal interaction",
+      "low spatial interaction",
+      "high equal interaction",
+      "high spatial interaction"
     )
   ) %>%
-  tidyr::uncount(50) %>%
+  tidyr::uncount(3) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )

@@ -1,3 +1,5 @@
+library(magrittr)
+
 load("data_simulation/sed_simulation_regions_timeslices_spatial_distance.RData")
 sed_simulation <- sed_spatial_distance
 load("data_analysis/squared_euclidian_distance_over_timeblocks_burial_type.RData")
@@ -9,6 +11,11 @@ sed_all <- sed_simulation %>%
   dplyr::select(-model_id) %>%
   rbind(sed_burial_type) %>%
   rbind(sed_burial_construction)
+
+#sed_all <- sed_all %>%
+#  dplyr::filter(mean_sed != 0)
+
+#print(sed_all)
 
 library(ggplot2)
 plu <- ggplot(sed_all) +
@@ -29,12 +36,10 @@ plu <- ggplot(sed_all) +
     values = c(
       "burial_type" = "#0072B2",
       "burial_construction" = "#009E73",
-      "equal interaction and equal start" = "black",
-      "spatial interaction and equal start" = "black",
-      "equal interaction and burial_type start" = "black",
-      "spatial interaction and burial_type start" = "black",
-      "equal interaction and burial_construction start" = "black",
-      "spatial interaction and burial_construction start" = "black"
+      "low equal interaction" = "black",
+      "low spatial interaction" = "black",
+      "high equal interaction" = "black",
+      "high spatial interaction" = "black"
     )
   ) +
   theme_bw() +

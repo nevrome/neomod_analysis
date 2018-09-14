@@ -139,12 +139,10 @@ plot_mantel <- function(title, mantel_simulations, mantel_real_world) {
 }
 
 variants <- c(
-  "equal interaction and equal start",
-  "spatial interaction and equal start",
-  "equal interaction and burial_type start",
-  "spatial interaction and burial_type start",
-  "equal interaction and burial_construction start",
-  "spatial interaction and burial_construction start"
+  "low equal interaction",
+  "low spatial interaction",
+  "high equal interaction",
+  "high spatial interaction"
 ) %>% lapply(
   function(variant) {
     plot_mantel(
