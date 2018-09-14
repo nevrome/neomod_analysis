@@ -1,13 +1,19 @@
-load("data_simulation/sim1.RData")
+##### read simulation output data #####
 
-prop <- models_grid$idea_proportions %>%
-  do.call(rbind, .)
+models <- pbapply::pblapply(
+  list.files("data_simulation/sed_simulation", full.names = TRUE),
+  function(y) {
+    read.csv(y) %>% tibble::as.tibble()
+  }
+)
 
-sed <- function(pi, pj) {
-  pi <- pi / sum(pi)
-  pj <- pj / sum(pj)
-  sum((pi - pj)^2)
-}
+prop <- do.call(rbind, models)
+
+#### load sed function ####
+
+load("data_analysis/sed_function.RData")
+
+#### data preparation ####
 
 long_prop <- prop %>%
   tidyr::spread(
@@ -55,4 +61,4 @@ regions_grid %<>% dplyr::select(
     regionA, regionB, time, sed, model_id, model_group
   )
 
-save(regions_grid, file = "data_simulation/squared_euclidian_distance_over_time_sim_multiple.RData")
+save(regions_grid, file = "data_simulation/sed_simulation_regions_grid.RData")

@@ -24,7 +24,7 @@ distance_matrix_equal <- distance_matrix_spatial %>% `[<-`(1) %>% `diag<-`(0)
 models_grid <- expand.grid(
   # general settings
   timeframe = list(
-    1:1400
+    -2200:-800
   ),
   # population settings  
   unit_amount = c(
@@ -100,7 +100,7 @@ models_grid <- expand.grid(
     model_id = 1:nrow(.)
   )
 
-save(models_grid, file = "data_simulation/sed_simulation.RData")
+save(models_grid, file = "data_simulation/sed_simulation_model_grid.RData")
 
 #### run simulation ####
 
