@@ -1,12 +1,12 @@
-load("data_simulation/squared_euclidian_distance_over_time_sim_multiple.RData")
+load("data_simulation/sed_simulation_regions_grid.RData")
 load("data_analysis/distance_matrix_spatial_long.RData")
 
-test <- regions_grid
+#### half regions_grid -- removal of double entries ####
 
-test <- pbapply::pblapply(
-  base::split(test, f = test$model_group), function(z) { 
+regions_grid_half <- pbapply::pblapply(
+  base::split(regions_grid, f = regions_grid$model_group), function(z) { 
     lapply(
-      base::split(z, f = test$model_id), function(y) { 
+      base::split(z, f = regions_grid$model_id), function(y) { 
         lapply(
           base::split(y, f = y$time), function(x) {
             mn <- pmin(x$regionA, x$regionB)
@@ -21,8 +21,9 @@ test <- pbapply::pblapply(
   }) %>%
   do.call(rbind, .)
 
+#### combine spatial and cultural distance into one data.frame ####
 
-sed_spatial_distance <- test %>% dplyr::left_join(
+sed_spatial_distance <- regions_grid_half %>% dplyr::left_join(
   distance_matrix_spatial_long, by = c("regionA", "regionB")
 ) %>% 
   dplyr::filter(
@@ -49,5 +50,5 @@ sed_spatial_distance <- test %>% dplyr::left_join(
 
 save(
   sed_spatial_distance, 
-  file = "data_simulation/squared_euclidian_distance_over_timeblocks_multiple_simulations.RData"
+  file = "data_simulation/sed_simulation_regions_teimslices_spatial_distance.RData"
 )

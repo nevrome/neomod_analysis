@@ -32,14 +32,14 @@ models_grid <- expand.grid(
   ),
   unit_names = list(
     list(
-      factor("1", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("2", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("3", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("4", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("5", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("6", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("7", as.character(c(1,2,3,4,5,6,7,8))),
-      factor("8", as.character(c(1,2,3,4,5,6,7,8)))
+      factor("Southeastern Central Europe", levels = region_order),
+      factor("Poland", levels = region_order),
+      factor("Southern Germany", levels = region_order),
+      factor("Northeastern France", levels = region_order),
+      factor("Northern Germany", levels = region_order),
+      factor("Southern Scandinavia", levels = region_order),
+      factor("Benelux", levels = region_order),
+      factor("England", levels = region_order)
     )
   ),
   unit_size_functions = list(

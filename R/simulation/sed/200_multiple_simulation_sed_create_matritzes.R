@@ -41,4 +41,4 @@ distance_matrizes_sed <- lapply(
   }
 )
 
-save(distance_matrizes_sed, file = "data_simulation/sed_regions_timeslices_matrizes.RData")
+save(distance_matrizes_sed, file = "data_simulation/sed_simulation_regions_timeslices_matrizes.RData")
