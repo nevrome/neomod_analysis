@@ -10,7 +10,7 @@ modelid_time_regions_grid <- regions_grid %>% dplyr::mutate(
     right = FALSE)
 ) %>%
   dplyr::group_by(
-    model_id, time, regionA, regionB
+    model_group, model_id, time, regionA, regionB
   ) %>%
   dplyr::summarise(
     mean_sed = mean(sed, na.rm = TRUE)
@@ -29,7 +29,7 @@ distance_matrizes_sed <- lapply(
       base::split(time_regions_grid, time_regions_grid$time), function(x){
         x %>%
           dplyr::select(
-            -model_id, -time
+            -model_group, -model_id, -time
           ) %>%
           tidyr::spread(regionA, mean_sed) %>%
           dplyr::select(
