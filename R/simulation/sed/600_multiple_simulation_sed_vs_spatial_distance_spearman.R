@@ -138,15 +138,21 @@ plot_mantel <- function(title, mantel_simulations, mantel_real_world) {
     )
 }
 
-plot_mantel(
-  "spearman_many_simulations_equal",
-  mantel_simulations %>% dplyr::filter(model_group == 1),
-  mantel_real_world
+variants <- c(
+  "equal interaction and equal start",
+  "spatial interaction and equal start",
+  "equal interaction and burial_type start",
+  "spatial interaction and burial_type start",
+  "equal interaction and burial_construction start",
+  "spatial interaction and burial_construction start"
+) %>% lapply(
+  function(variant) {
+    plot_mantel(
+      variant %>% gsub(" ", "_", .),
+      mantel_simulations %>% dplyr::filter(model_group == variant),
+      mantel_real_world
+    )
+  }
 )
 
-plot_mantel(
-  "spearman_many_simulations_spatial",
-  mantel_simulations %>% dplyr::filter(model_group == 2),
-  mantel_real_world
-)
 

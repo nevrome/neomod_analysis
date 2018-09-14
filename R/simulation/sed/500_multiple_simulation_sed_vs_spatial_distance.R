@@ -24,13 +24,17 @@ plu <- ggplot(sed_all) +
     nrow = 2,
     ~time
   ) +
-  scale_colour_manual(
+  scale_fill_manual(
     name = "Real world context",
     values = c(
       "burial_type" = "#0072B2",
       "burial_construction" = "#009E73",
-      "1" = "#0072B2",
-      "2" = "#009E73"
+      "equal interaction and equal start" = "black",
+      "spatial interaction and equal start" = "black",
+      "equal interaction and burial_type start" = "black",
+      "spatial interaction and burial_type start" = "black",
+      "equal interaction and burial_construction start" = "black",
+      "spatial interaction and burial_construction start" = "black"
     )
   ) +
   theme_bw() +
@@ -42,6 +46,9 @@ plu <- ggplot(sed_all) +
     strip.text.x = element_text(size = 20),
     axis.text = element_text(size = 20),
     axis.title = element_text(size = 20)
+  ) +
+  guides(
+    fill = guide_legend(nrow = 3, byrow = TRUE)
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
