@@ -1,12 +1,7 @@
+load("data_analysis/sed_function.RData")
 load("data_analysis/development_proportions_burial_construction.RData")
 
 prop <- proportion_development_burial_construction
-
-sed <- function(pi, pj) {
-  pi <- pi / sum(pi)
-  pj <- pj / sum(pj)
-  sum((pi - pj)^2)
-}
 
 long_prop <- prop %>%
   tidyr::spread(

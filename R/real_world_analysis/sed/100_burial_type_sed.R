@@ -1,3 +1,4 @@
+load("data_analysis/sed_function.RData")
 load("data_analysis/development_proportions_burial_type.RData")
 
 prop <- proportion_development_burial_type
@@ -7,12 +8,6 @@ prop <- proportion_development_burial_type
 #     region_name, timestep, idea,
 #     fill = list(proportion = as.integer(0))
 #   )
-
-sed <- function(pi, pj) {
-  pi <- pi / sum(pi)
-  pj <- pj / sum(pj)
-  sum((pi - pj)^2)
-}
 
 long_prop <- prop %>%
   tidyr::spread(
