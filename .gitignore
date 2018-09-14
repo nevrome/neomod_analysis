@@ -40,6 +40,7 @@ data_simulation/gluesless_input_output/*.txt
 data_simulation/gluesless_input_output/*.paj
 data_simulation/gluesless_input_output/*.csv
 data_simulation/neiman_counter_simulation/*
+data_simulation/sed_simulation/*
 data_geo/*.RData
 development_movie/*.mp4
 development_movie/*.gif
