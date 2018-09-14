@@ -44,14 +44,14 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
-      "1" = function(t) {10},
-      "2" = function(t) {10},
-      "3" = function(t) {10},
-      "4" = function(t) {10},
-      "5" = function(t) {10},
-      "6" = function(t) {10},
-      "7" = function(t) {10},
-      "8" = function(t) {10}
+      "1" = function(t) {50},
+      "2" = function(t) {50},
+      "3" = function(t) {50},
+      "4" = function(t) {50},
+      "5" = function(t) {50},
+      "6" = function(t) {50},
+      "7" = function(t) {50},
+      "8" = function(t) {50}
     )
   ),
   age_distribution_functions = c(
@@ -65,10 +65,11 @@ models_grid <- expand.grid(
     10
   ),
   unit_interaction_matrix = list(
-    distance_matrix_equal
+    distance_matrix_equal,
+    distance_matrix_spatial
   ),
   cross_unit_proportion_child_of = c(
-   0.01
+    0.02
   ),
   cross_unit_proportion_friend = c(
     0.1
@@ -84,7 +85,9 @@ models_grid <- expand.grid(
     c("idea_1", "idea_2")
   ),
   start_distribution = list(
-    start_proportion_5050
+    start_proportion_5050,
+    start_proportion_burial_type,
+    start_proportion_burial_construction
   ), 
   strength = list(
     c(1, 1) 
@@ -93,9 +96,16 @@ models_grid <- expand.grid(
 ) %>% tibble::as.tibble() %>%
   # add relevant model ids
   dplyr::mutate(
-    model_group = 1:nrow(.)
+    model_group = c(
+      "equal interaction and equal start",
+      "spatial interaction and equal start",
+      "equal interaction and burial_type start",
+      "spatial interaction and burial_type start",
+      "equal interaction and burial_construction start",
+      "spatial interaction and burial_construction start"
+    )
   ) %>%
-  tidyr::uncount(5) %>%
+  tidyr::uncount(50) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
