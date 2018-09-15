@@ -1,3 +1,5 @@
+library(magrittr)
+
 load("data_simulation/sed_simulation_mantel_sed_spatial.RData")
 mantel_simulations <- mantel_test_results %>% dplyr::mutate(model_id = as.integer(model_id))
 load("data_simulation/sed_simulation_model_grid.RData")
@@ -124,7 +126,7 @@ plot_mantel <- function(title, mantel_simulations, mantel_real_world) {
     ) +
     ylab("Spearman's rank correlation coefficient") +
     xlab("time blocks calBC") +
-    ylim(c(-0.6, 0.6))
+    ylim(c(-0.6, 0.75))
   
   ju %>%
     ggsave(
