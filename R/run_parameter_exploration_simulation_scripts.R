@@ -1,5 +1,9 @@
 library(magrittr)
 
+if (!dir.exists("../simulationdata")) {
+  dir.create("../simulationdata")
+}
+
 lapply(
   c(
     "R/simulation/parameter_exploration/popsize_crossregions"

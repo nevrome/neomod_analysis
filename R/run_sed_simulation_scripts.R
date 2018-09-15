@@ -1,5 +1,9 @@
 library(magrittr)
 
+if (!dir.exists("../simulationdata")) {
+  dir.create("../simulationdata")
+}
+
 path_to_sed_sim_scripts <- "R/simulation/sed"
 
 empty <- lapply(
