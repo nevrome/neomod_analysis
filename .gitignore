@@ -45,6 +45,7 @@ data_geo/*.RData
 development_movie/*.mp4
 development_movie/*.gif
 development_movie/frames/*.jpeg
+Rplots.pdf
 
 # rstudio faulty creation of .Rbuildignore file
 .Rbuildignore
