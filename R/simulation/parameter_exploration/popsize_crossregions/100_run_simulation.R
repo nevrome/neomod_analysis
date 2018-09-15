@@ -124,10 +124,10 @@ models_grid <- expand.grid(
     model_id = 1:nrow(.)
   )
 
-save(models_grid, file = "data_simulation/neiman_counter_simulation.RData")
+save(models_grid, file = "data_simulation/pe_popsize_crossregions.RData")
 
 #### run simulation ####
 
-data_path <- "data_simulation/neiman_counter_simulation"
+data_path <- "../simulationdata/pe_popsize_crossregions"
 popgenerator::run_simulation(models_grid, data_path)
 

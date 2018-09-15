@@ -1,5 +1,5 @@
 models <- pbapply::pblapply(
-  list.files("data_simulation/neiman_counter_simulation", full.names = TRUE),
+  list.files("../simulationdata/pe_popsize_crossregions", full.names = TRUE),
   function(y) {
     read.csv(y) %>% tibble::as.tibble()
   }
@@ -8,7 +8,7 @@ models <- pbapply::pblapply(
 models_groups <- do.call(rbind, models) %>%
   base::split(.$model_group)
 
-load("data_simulation/neiman_counter_simulation.RData")
+load("data_simulation/pe_popsize_crossregions.RData")
 
 library(ggplot2)
 plots <- cowplot::plot_grid(
@@ -33,7 +33,7 @@ plots <- cowplot::plot_grid(
 
 plots %>%
   ggsave(
-    "figures_plots/simulation_counter_neiman/counter_neiman_general.jpeg",
+    "figures_plots/simulation_parameter_exploration/popsize_crossregions.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
