@@ -3,7 +3,7 @@ load("data_analysis/region_order.RData")
 ##### read simulation output data #####
 
 models <- pbapply::pblapply(
-  list.files("data_simulation/sed_simulation", full.names = TRUE),
+  list.files("../simulationdata/sed_simulation", full.names = TRUE),
   function(y) {
     read.csv(y) %>% tibble::as.tibble()
   }

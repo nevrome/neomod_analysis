@@ -105,7 +105,7 @@ models_grid <- expand.grid(
       "high spatial interaction"
     )
   ) %>%
-  tidyr::uncount(3) %>%
+  tidyr::uncount(100) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
@@ -114,6 +114,7 @@ save(models_grid, file = "data_simulation/sed_simulation_model_grid.RData")
 
 #### run simulation ####
 
-data_path <- "data_simulation/sed_simulation"
+#data_path <- "data_simulation/sed_simulation"
+data_path <- "../simulationdata/sed_simulation"
 popgenerator::run_simulation(models_grid, data_path)
 
