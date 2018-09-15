@@ -10,7 +10,7 @@ plot_by_group <- function(x) {
     geom_line(
       aes(x = timestep, y = proportion, color = as.factor(model_id), group = model_id),
       size = 0.2,
-      alpha = 0.8
+      alpha = 1
     ) +
     facet_wrap(~region, nrow = 8) +
     theme_bw() +
