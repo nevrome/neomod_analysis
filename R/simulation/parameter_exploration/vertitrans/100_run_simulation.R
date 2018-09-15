@@ -74,7 +74,7 @@ models_grid <- expand.grid(
     0
   ),
   weight_child_of = list(
-    30, 60, 90
+    5, 20, 100
   ),
   weight_friend = list(
     0
