@@ -119,7 +119,7 @@ models_grid <- expand.grid(
   dplyr::mutate(
     model_group = 1:nrow(.)
   ) %>%
-  tidyr::uncount(5) %>%
+  tidyr::uncount(8) %>%
   dplyr::mutate(
     model_id = 1:nrow(.)
   )
