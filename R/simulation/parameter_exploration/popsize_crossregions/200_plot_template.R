@@ -8,8 +8,10 @@ plot_by_group <- function(x) {
     ggplot() +
     # geom_area(aes(x = timestep, y = proportion, fill = idea, group = idea)) +
     geom_line(
-      aes(x = timestep, y = proportion, color = as.factor(model_id), group = model_id),
-      size = 0.2
+      aes(x = timestep, y = proportion, group = model_id),
+      size = 0.2,
+      alpha = 0.5,
+      color = "black"
     ) +
     facet_wrap(~region, nrow = 8) +
     theme_bw() +
@@ -30,6 +32,5 @@ plot_by_group <- function(x) {
     scale_x_continuous(
       breaks = seq(0, 1400, 200), 
       limits = c(0, 1400)
-    ) +
-    ggthemes::scale_colour_colorblind()
+    )
 }
