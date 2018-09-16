@@ -88,7 +88,7 @@ models_grid <- expand.grid(
     distance_matrix_equal
   ),
   cross_unit_proportion_child_of = c(
-    0, 0.01, 0.1, 0.5, 1
+    0, 0.002, 0.02, 0.1, 0.2
   ),
   cross_unit_proportion_friend = c(
     0, 0.01, 0.1, 0.5, 1
@@ -97,7 +97,7 @@ models_grid <- expand.grid(
     50
   ),
   weight_friend = list(
-    5
+    10
   ),
   # ideas settings
   names = list(
@@ -113,7 +113,7 @@ models_grid <- expand.grid(
 ) %>% tibble::as.tibble() %>%
   # remove unnecessary repetition
   dplyr::filter(
-    cross_unit_proportion_child_of == cross_unit_proportion_friend
+    5 * cross_unit_proportion_child_of == cross_unit_proportion_friend
   ) %>%
   # add relevant model ids
   dplyr::mutate(
