@@ -112,7 +112,7 @@ pu <- ggplot() +
   ) +
   theme(
     panel.grid.major.y = element_line(size = 0.5, colour = "black"),
-    axis.text.x = element_text(size = 10, angle = 45, vjust = 0, hjust = 0),
+    axis.text.x = element_text(size = 10, angle = 45, vjust = 1, hjust = 1),
     axis.text.y = element_text(size = 10, angle = 45, vjust = 0, hjust = 1)
   ) +
   ylab(NULL) +
