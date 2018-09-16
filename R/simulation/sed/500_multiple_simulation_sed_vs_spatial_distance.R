@@ -12,8 +12,8 @@ sed_all <- sed_simulation %>%
   rbind(sed_burial_type) %>%
   rbind(sed_burial_construction)
 
-#sed_all <- sed_all %>%
-#  dplyr::filter(mean_sed != 0)
+sed_all <- sed_all %>%
+  dplyr::filter(mean_sed != 0)
 
 #print(sed_all)
 
@@ -25,7 +25,7 @@ plu <- ggplot(sed_all) +
       y = mean_sed,
       fill = model_group
     ),
-    width = 0.8
+    width = 0.9
   ) +
   facet_wrap(
     nrow = 2,
@@ -36,10 +36,10 @@ plu <- ggplot(sed_all) +
     values = c(
       "burial_type" = "#0072B2",
       "burial_construction" = "#009E73",
-      "low equal interaction" = "black",
-      "low spatial interaction" = "black",
-      "high equal interaction" = "black",
-      "high spatial interaction" = "black"
+      "low equal interaction" = "#fb9a99",
+      "low spatial interaction" = "#ffff33",
+      "high equal interaction" = "#e31a1c",
+      "high spatial interaction" = "#ff7f00"
     )
   ) +
   theme_bw() +
