@@ -7,8 +7,8 @@ if (!dir.exists("../simulationdata")) {
 lapply(
   c(
     "R/simulation/parameter_exploration/popsize_crossregions",
-    "R/simulation/parameter_exploration/startprop_distancemat",
-    "R/simulation/parameter_exploration/vertitrans"
+    "R/simulation/parameter_exploration/vertitrans",
+    "R/simulation/parameter_exploration/startprop_distancemat"
   ), 
   function(x) {
     pbapply::pblapply(
