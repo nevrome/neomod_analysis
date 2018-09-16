@@ -57,7 +57,12 @@ plu <- ggplot(distance) +
   ) +
   xlab("Squared Euclidian Distance Burial Type") +
   ylab("Squared Euclidian Distance Burial Construction") +
-  ylim(0, 2.3) 
+  ylim(0, 2.3) +
+  guides(
+    color = guide_legend(title = NULL, override.aes = list(size = 8, shape = 15), nrow = 2, byrow = TRUE),
+    shape = FALSE,
+    size = FALSE
+  )
 
 plu %>%
   ggsave(

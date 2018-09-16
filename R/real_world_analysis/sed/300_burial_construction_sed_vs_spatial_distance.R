@@ -50,7 +50,12 @@ plu <- ggplot(sed_spatial_distance) +
   ) +
   xlab("Spatial Distance Classes") +
   ylab("Squared Euclidian Distance") +
-  ylim(0, 2.3)
+  ylim(0, 2.3) +
+  guides(
+    color = guide_legend(title = NULL, override.aes = list(size = 8, shape = 15), nrow = 2, byrow = TRUE),
+    shape = FALSE,
+    size = FALSE
+  )
 
 plu %>%
   ggsave(
