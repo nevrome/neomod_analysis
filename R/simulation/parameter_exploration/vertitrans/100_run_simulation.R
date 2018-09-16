@@ -44,6 +44,16 @@ models_grid <- expand.grid(
   ),
   unit_size_functions = list(
     list(
+      "1" = function(t) {10},
+      "2" = function(t) {10},
+      "3" = function(t) {10},
+      "4" = function(t) {10},
+      "5" = function(t) {10},
+      "6" = function(t) {10},
+      "7" = function(t) {10},
+      "8" = function(t) {10}
+    ),
+    list(
       "1" = function(t) {50},
       "2" = function(t) {50},
       "3" = function(t) {50},
@@ -52,6 +62,16 @@ models_grid <- expand.grid(
       "6" = function(t) {50},
       "7" = function(t) {50},
       "8" = function(t) {50}
+    ),
+    list(
+      "1" = function(t) {200},
+      "2" = function(t) {200},
+      "3" = function(t) {200},
+      "4" = function(t) {200},
+      "5" = function(t) {200},
+      "6" = function(t) {200},
+      "7" = function(t) {200},
+      "8" = function(t) {200}
     )
   ),
   age_distribution_functions = c(
@@ -74,7 +94,7 @@ models_grid <- expand.grid(
     0
   ),
   weight_child_of = list(
-    5, 20, 100
+    50
   ),
   weight_friend = list(
     0
