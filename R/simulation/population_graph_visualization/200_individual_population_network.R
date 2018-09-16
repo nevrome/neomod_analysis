@@ -1,8 +1,6 @@
-load("data_simulation/sim1.RData")
+load("data_simulation/example_sim_pop.RData")
+load("data_simulation/example_sim_rel.RData")
 load("data_analysis/region_order.RData")
-
-models_grid$populations[[1]] -> pop
-models_grid$relations[[1]] -> rel
 
 pop_groups <- pop %>% 
   dplyr::group_by(unit) %>%
@@ -112,7 +110,7 @@ pu <- ggplot() +
 
 pu %>%
   ggsave(
-    "../neomod_datapool/plots/simulation_population_graph/population_group_graph.jpeg",
+    "figures_plots/simulation_population_graph/population_group_graph.jpeg",
     plot = .,
     device = "jpeg",
     scale = 1,
