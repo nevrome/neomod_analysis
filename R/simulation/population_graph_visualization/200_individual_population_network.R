@@ -83,18 +83,26 @@ pu <- ggplot() +
       color = type,
       alpha = type
     ),
-    size = 1
+    size = 0.6
   ) +
   scale_color_manual(
     values = c(
       "child_of" = "red",
       "friend" = "blue"
+    ),
+    labels = c(
+      "child_of" = "vertical",
+      "friend" = "horizontal"
     )
   ) +
   scale_alpha_manual(
     values = c(
       "child_of" = 0.4,
       "friend" = 0.1
+    ),
+    labels = c(
+      "child_of" = "vertical",
+      "friend" = "horizontal"
     )
   ) +
   theme_bw() +
@@ -103,7 +111,9 @@ pu <- ggplot() +
     breaks = seq(min(pop_groups$timeblock), max(pop_groups$timeblock), 100)
   ) +
   theme(
-    panel.grid.major.y = element_line(size = 0.5, colour = "black")
+    panel.grid.major.y = element_line(size = 0.5, colour = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, vjust = 0, hjust = 0),
+    axis.text.y = element_text(size = 10, angle = 45, vjust = 0, hjust = 1)
   ) +
   ylab(NULL) +
   xlab("timeblock in calBC")
